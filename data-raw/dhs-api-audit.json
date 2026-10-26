@@ -1,0 +1,20 @@
+{
+  "retrieved_date": "2026-10-26",
+  "api_version": "8.1",
+  "raw_rows": 321440,
+  "exact_duplicates_removed": 10912,
+  "exact_duplicates_by_survey": {
+    "BD2022DHS": 10912
+  },
+  "rows_not_preferred": 73426,
+  "rows_in_cells_without_preferred": 10049,
+  "catalog_rows_from_bd_list": 2576,
+  "catalog_rows_from_global_list": 31,
+  "data_pairs_without_catalog": 0,
+  "rows": {
+    "bdhs_indicators": 310528,
+    "bdhs_indicator_catalog": 2607,
+    "bdhs_surveys": 13,
+    "bdhs_datasets": 441
+  }
+}
