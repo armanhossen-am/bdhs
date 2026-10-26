@@ -1,0 +1,127 @@
+---
+title: "Official estimates: trends and maps"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Official estimates: trends and maps}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 4.5,
+  out.width = "100%",
+  dpi = 96
+)
+has_ggplot2 <- requireNamespace("ggplot2", quietly = TRUE)
+has_sf <- has_ggplot2 && requireNamespace("sf", quietly = TRUE)
+```
+
+Everything in this article works straight after installing bdhs. You don't
+need a DHS account or any downloads, because the package ships every official
+estimate the DHS Program publishes for Bangladesh. These are the numbers in
+the BDHS final reports and in STATcompiler.
+
+```{r setup}
+library(bdhs)
+```
+
+## What is bundled
+
+`bdhs_indicators` holds about 310,000 official values. That covers every
+indicator, every survey round from 1993-94 to 2022, and every published
+breakdown: national, division and background characteristics such as
+residence, education and wealth.
+`bdhs_indicator_catalog` describes each indicator (definition, denominator,
+topic and the rounds it covers).
+
+```{r}
+nrow(bdhs_indicators)
+dplyr::count(bdhs_indicator_catalog, topic, sort = TRUE)
+```
+
+## Finding an indicator
+
+`bdhs_search()` looks through indicator labels and definitions, survey
+variables and harmonized variables at once. Restrict it to indicators with
+`where = "indicators"`:
+
+```{r}
+bdhs_search("stunt", where = "indicators")
+```
+
+## Pulling official values
+
+`bdhs_official()` returns tidy rows for one or more indicators. By default it
+gives the national headline value for every round:
+
+```{r}
+bdhs_official("CN_NUTS_C_HA2")[, c("year_label", "indicator", "value", "ci_low", "ci_high")]
+```
+
+Ask for a breakdown to get subgroup values, for example by division in 2022:
+
+```{r}
+stunting_div <- bdhs_official("CN_NUTS_C_HA2", survey = 2022, breakdown = "subnational")
+stunting_div[, c("characteristic_label", "value", "denom_unweighted")]
+```
+
+Besides the eight current divisions, the DHS Program also publishes the
+older groupings, such as "Chattogram/Sylhet", "Dhaka before 2015" (Dhaka
+plus Mymensingh) and "Rajshahi/Rangpur". These match the division layout of
+earlier rounds, so they are the values to use for long-run regional trends.
+
+The `survey` argument accepts years, year ranges, DHS ids and file codes, so
+`2017`, `"2017-18"`, `"BD2017DHS"` and `"7R"` all mean the 2017-18 survey.
+
+## Trends
+
+`bdhs_plot_trend()` draws an indicator across all rounds. Give it a
+characteristic category to split the trend:
+
+```{r, eval = has_ggplot2}
+bdhs_plot_trend("FE_FRTR_W_TFR", by = "Residence")
+```
+
+Several indicators can share one chart:
+
+```{r, eval = has_ggplot2, fig.height = 5}
+bdhs_plot_trend(c("CN_NUTS_C_HA2", "CN_NUTS_C_WH2", "CN_NUTS_C_WA2"))
+```
+
+## Maps
+
+`bdhs_boundaries()` returns the division boundaries used by a given survey,
+as an `sf` object. They come from the DHS Program Spatial Data Repository
+under the Open Database License. The number of divisions changed over time:
+5 in 1993-94, 6 from 1996-97, 7 from 2011 (Rangpur) and 8 from 2017-18
+(Mymensingh).
+
+```{r, eval = has_sf}
+b <- bdhs_boundaries(2022)
+b[, c("region_code", "region_name")]
+```
+
+`bdhs_map()` draws an official indicator by division:
+
+```{r, eval = has_sf, fig.height = 6.5, fig.width = 5.5}
+bdhs_map("CN_NUTS_C_HA2", survey = 2022)
+```
+
+It also maps your own estimates. Any data frame with division codes (`v024`,
+`hv024`, `region_code`) or division names works, including the output of
+`bdhs_estimate(..., by = "v024")`.
+
+## Notes on comparability
+
+* Division layouts differ between rounds, so division-level trends are only
+  comparable after back-mapping to a common layout. `bdhs_regions` gives the
+  crosswalk, and `bdhs_harmonize()` creates `division_trend6` and
+  `division_trend5` for microdata.
+* Official values are rounded the way the DHS Program publishes them. Values
+  you compute from microdata with `bdhs_estimate()` keep full precision.
+* Please cite the DHS Program API when you use these values
+  (`citation("bdhs")`).
