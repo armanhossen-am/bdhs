@@ -1,0 +1,52 @@
+citHeader("To cite bdhs in publications, please use:")
+
+bibentry(
+  bibtype = "Manual",
+  title = "{bdhs}: Tools and Data for the Bangladesh Demographic and Health Survey",
+  author = person("Arman", "Hossen"),
+  year = "2026",
+  note = paste("R package version", meta$Version),
+  url = "https://github.com/armanhossen-am/bdhs",
+  textVersion = paste0(
+    "Hossen A (2026). bdhs: Tools and Data for the Bangladesh Demographic ",
+    "and Health Survey. R package version ", meta$Version, ". ",
+    "https://github.com/armanhossen-am/bdhs"
+  )
+)
+
+bibentry(
+  bibtype = "Misc",
+  title = "The {DHS} Program Indicator Data {API}",
+  author = person("ICF"),
+  organization = "The Demographic and Health Surveys (DHS) Program",
+  year = "2026",
+  url = "https://api.dhsprogram.com",
+  note = "Source of the official estimates bundled in bdhs (bdhs_indicators). Originally funded by USAID.",
+  textVersion = paste(
+    "The DHS Program Indicator Data API, The Demographic and Health Surveys (DHS) Program.",
+    "ICF. Originally funded by the United States Agency for International Development (USAID).",
+    "Available from api.dhsprogram.com."
+  )
+)
+
+bibentry(
+  bibtype = "Misc",
+  title = "Spatial Data Repository",
+  author = person("ICF"),
+  organization = "The Demographic and Health Surveys (DHS) Program",
+  year = "2026",
+  url = "https://spatialdata.dhsprogram.com",
+  note = "Source of the division boundaries bundled in bdhs (ODbL 1.0).",
+  textVersion = paste(
+    "Spatial Data Repository, The Demographic and Health Surveys Program. ICF International.",
+    "spatialdata.dhsprogram.com."
+  )
+)
+
+citFooter(paste(
+  "Analyses of BDHS microdata must also cite the survey's final report,",
+  "e.g. 'National Institute of Population Research and Training (NIPORT) and ICF.",
+  "Bangladesh Demographic and Health Survey 2022: Final Report. Dhaka, Bangladesh,",
+  "and Rockville, Maryland, USA: NIPORT and ICF.' The DHS conditions of use for",
+  "Bangladesh also ask that a copy of each publication be sent to the NIPORT library."
+))

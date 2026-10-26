@@ -1,0 +1,91 @@
+url: https://armanhossen-am.github.io/bdhs/
+template:
+  bootstrap: 5
+  bslib:
+    primary: "#006a4e"
+    navbar-bg: "#006a4e"
+
+navbar:
+  structure:
+    left: [intro, reference, articles, news]
+    right: [search, github]
+
+articles:
+- title: Get started
+  navbar: ~
+  contents:
+  - bdhs
+  - microdata
+- title: Analysis
+  navbar: Analysis
+  contents:
+  - survey-design
+  - harmonization
+  - indicators
+- title: Exploring official estimates
+  navbar: Explore
+  contents:
+  - maps-and-trends
+
+reference:
+- title: Official estimates and metadata (bundled)
+  desc: Ready to use, no DHS account needed.
+  contents:
+  - bdhs_indicators
+  - bdhs_indicator_catalog
+  - bdhs_official
+  - bdhs_plot_trend
+  - bdhs_surveys
+  - bdhs_datasets
+  - bdhs_rounds
+  - bdhs_survey_id
+  - bdhs_recodes
+- title: Codebooks and search
+  contents:
+  - bdhs_search
+  - bdhs_variable
+  - bdhs_describe
+  - bdhs_codebook
+  - bdhs_value_labels
+- title: Your microdata
+  desc: Import and read the files you downloaded from the DHS Program.
+  contents:
+  - bdhs_data_dir
+  - bdhs_import
+  - bdhs_identify_file
+  - bdhs_inventory
+  - bdhs_read
+  - bdhs_read_file
+  - bdhs_download
+  - bdhs_forget
+  - bdhs_sitrep
+- title: Harmonizing, pooling and merging
+  contents:
+  - bdhs_harmonize
+  - bdhs_harmonized_vars
+  - bdhs_pool
+  - bdhs_pool_population
+  - bdhs_merge
+  - bdhs_na
+- title: Survey design and estimation
+  contents:
+  - bdhs_design
+  - bdhs_design_info
+  - bdhs_estimate
+  - bdhs_add_indicators
+  - bdhs_indicator_list
+  - bdhs_fertility
+  - bdhs_mortality
+  - bdhs_validate
+  - plot.bdhs_estimate
+- title: Maps
+  contents:
+  - bdhs_boundaries
+  - bdhs_map
+  - bdhs_regions
+- title: Synthetic data
+  contents:
+  - bdhs_simulate
+- title: Package
+  contents:
+  - bdhs-package
