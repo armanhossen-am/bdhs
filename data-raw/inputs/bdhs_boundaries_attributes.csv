@@ -1,59 +1,59 @@
 "survey_id","survey_type","year","survey_year_label","region_code","region_name","region_var","unit_id","reg_id","sdr_region_name","sdr_regcode","sdr_regname","code_verified"
-"BD1994DHS","DHS",1994,"1993-94",1,"Barishal","hv024","0001","BDDHS1994360001","Barisal",1,"barishal",TRUE
-"BD1994DHS","DHS",1994,"1993-94",2,"Chattogram (incl. Sylhet)","hv024","0002","BDDHS1994360002","Chittagong",2,"chittagong",TRUE
-"BD1994DHS","DHS",1994,"1993-94",3,"Dhaka (incl. Mymensingh)","hv024","0005","BDDHS1994360005","Dhaka",3,"dhaka",TRUE
-"BD1994DHS","DHS",1994,"1993-94",4,"Khulna","hv024","0006","BDDHS1994360006","Khulna",4,"khulna",TRUE
-"BD1994DHS","DHS",1994,"1993-94",5,"Rajshahi (incl. Rangpur)","hv024","0007","BDDHS1994360007","Rajshahi",5,"rajshani",TRUE
-"BD1997DHS","DHS",1997,"1996-97",1,"Barishal","hv024","0001","BDDHS1997360001","Barisal",1,"barisal",FALSE
-"BD1997DHS","DHS",1997,"1996-97",2,"Chattogram","hv024","0003","BDDHS1997360003","Chittagong",2,"chittagong",FALSE
-"BD1997DHS","DHS",1997,"1996-97",3,"Dhaka (incl. Mymensingh)","hv024","0005","BDDHS1997360005","Dhaka",3,"dhaka",FALSE
-"BD1997DHS","DHS",1997,"1996-97",4,"Khulna","hv024","0006","BDDHS1997360006","Khulna",4,"khulna",FALSE
-"BD1997DHS","DHS",1997,"1996-97",5,"Rajshahi (incl. Rangpur)","hv024","0007","BDDHS1997360007","Rajshahi",5,"rajashahi",FALSE
-"BD1997DHS","DHS",1997,"1996-97",6,"Sylhet","hv024","0004","BDDHS1997360004","Sylhet",6,"sylhet",FALSE
+"BD1994DHS","DHS",1994,"1993-94",1,"Barishal","v024","0001","BDDHS1994360001","Barisal",1,"barishal",TRUE
+"BD1994DHS","DHS",1994,"1993-94",2,"Chattogram (incl. Sylhet)","v024","0002","BDDHS1994360002","Chittagong",2,"chittagong",TRUE
+"BD1994DHS","DHS",1994,"1993-94",3,"Dhaka (incl. Mymensingh)","v024","0005","BDDHS1994360005","Dhaka",3,"dhaka",TRUE
+"BD1994DHS","DHS",1994,"1993-94",4,"Khulna","v024","0006","BDDHS1994360006","Khulna",4,"khulna",TRUE
+"BD1994DHS","DHS",1994,"1993-94",5,"Rajshahi (incl. Rangpur)","v024","0007","BDDHS1994360007","Rajshahi",5,"rajshani",TRUE
+"BD1997DHS","DHS",1997,"1996-97",1,"Barishal","v024","0001","BDDHS1997360001","Barisal",1,"barisal",FALSE
+"BD1997DHS","DHS",1997,"1996-97",2,"Chattogram","v024","0003","BDDHS1997360003","Chittagong",2,"chittagong",FALSE
+"BD1997DHS","DHS",1997,"1996-97",3,"Dhaka (incl. Mymensingh)","v024","0005","BDDHS1997360005","Dhaka",3,"dhaka",FALSE
+"BD1997DHS","DHS",1997,"1996-97",4,"Khulna","v024","0006","BDDHS1997360006","Khulna",4,"khulna",FALSE
+"BD1997DHS","DHS",1997,"1996-97",5,"Rajshahi (incl. Rangpur)","v024","0007","BDDHS1997360007","Rajshahi",5,"rajashahi",FALSE
+"BD1997DHS","DHS",1997,"1996-97",6,"Sylhet","v024","0004","BDDHS1997360004","Sylhet",6,"sylhet",FALSE
 "BD1999SPA","SPA",1999,"1999-2000",1,"Barishal","codiv","0001",NA,"Barisal",1,"barisal",FALSE
 "BD1999SPA","SPA",1999,"1999-2000",2,"Chattogram","codiv","0003",NA,"Chittagong",2,"chittagong",FALSE
 "BD1999SPA","SPA",1999,"1999-2000",3,"Dhaka (incl. Mymensingh)","codiv","0005",NA,"Dhaka",3,"dhaka",FALSE
 "BD1999SPA","SPA",1999,"1999-2000",4,"Khulna","codiv","0006",NA,"Khulna",4,"khulna",FALSE
 "BD1999SPA","SPA",1999,"1999-2000",5,"Rajshahi (incl. Rangpur)","codiv","0007",NA,"Rajshahi",5,"rasjhahi",FALSE
 "BD1999SPA","SPA",1999,"1999-2000",6,"Sylhet","codiv","0004",NA,"Sylhet",6,"sylhet",FALSE
-"BD2000DHS","DHS",2000,"1999-2000",1,"Barishal","hv024","0001","BDDHS2000360001","Barisal",1,"barisal",TRUE
-"BD2000DHS","DHS",2000,"1999-2000",2,"Chattogram","hv024","0003","BDDHS2000360003","Chittagong",2,"chittagong",TRUE
-"BD2000DHS","DHS",2000,"1999-2000",3,"Dhaka (incl. Mymensingh)","hv024","0005","BDDHS2000360005","Dhaka",3,"dhaka",TRUE
-"BD2000DHS","DHS",2000,"1999-2000",4,"Khulna","hv024","0006","BDDHS2000360006","Khulna",4,"khulna",TRUE
-"BD2000DHS","DHS",2000,"1999-2000",5,"Rajshahi (incl. Rangpur)","hv024","0007","BDDHS2000360007","Rajshahi",5,"rajashahi",TRUE
-"BD2000DHS","DHS",2000,"1999-2000",6,"Sylhet","hv024","0004","BDDHS2000360004","Sylhet",6,"sylhet",TRUE
+"BD2000DHS","DHS",2000,"1999-2000",1,"Barishal","v024","0001","BDDHS2000360001","Barisal",1,"barisal",TRUE
+"BD2000DHS","DHS",2000,"1999-2000",2,"Chattogram","v024","0003","BDDHS2000360003","Chittagong",2,"chittagong",TRUE
+"BD2000DHS","DHS",2000,"1999-2000",3,"Dhaka (incl. Mymensingh)","v024","0005","BDDHS2000360005","Dhaka",3,"dhaka",TRUE
+"BD2000DHS","DHS",2000,"1999-2000",4,"Khulna","v024","0006","BDDHS2000360006","Khulna",4,"khulna",TRUE
+"BD2000DHS","DHS",2000,"1999-2000",5,"Rajshahi (incl. Rangpur)","v024","0007","BDDHS2000360007","Rajshahi",5,"rajashahi",TRUE
+"BD2000DHS","DHS",2000,"1999-2000",6,"Sylhet","v024","0004","BDDHS2000360004","Sylhet",6,"sylhet",TRUE
 "BD2001OTH","OTH",2001,"2001",1,"Barishal","qhregion","0001",NA,"Barisal",1,"barisal",FALSE
 "BD2001OTH","OTH",2001,"2001",2,"Chattogram","qhregion","0003",NA,"Chittagong",2,"chittagong",FALSE
 "BD2001OTH","OTH",2001,"2001",3,"Dhaka (incl. Mymensingh)","qhregion","0005",NA,"Dhaka",3,"dhaka",FALSE
 "BD2001OTH","OTH",2001,"2001",4,"Khulna","qhregion","0006",NA,"Khulna",4,"khulna",FALSE
 "BD2001OTH","OTH",2001,"2001",5,"Rajshahi (incl. Rangpur)","qhregion","0007",NA,"Rajshahi",5,"rajshahi",FALSE
 "BD2001OTH","OTH",2001,"2001",6,"Sylhet","qhregion","0004",NA,"Sylhet",6,"sylhet",FALSE
-"BD2004DHS","DHS",2004,"2004",1,"Barishal","hv024","0001","BDDHS2004360001","Barisal",1,"barisal",TRUE
-"BD2004DHS","DHS",2004,"2004",2,"Chattogram","hv024","0003","BDDHS2004360003","Chittagong",2,"chittagong",TRUE
-"BD2004DHS","DHS",2004,"2004",3,"Dhaka (incl. Mymensingh)","hv024","0005","BDDHS2004360005","Dhaka",3,"dhaka",TRUE
-"BD2004DHS","DHS",2004,"2004",4,"Khulna","hv024","0006","BDDHS2004360006","Khulna",4,"khulna",TRUE
-"BD2004DHS","DHS",2004,"2004",5,"Rajshahi (incl. Rangpur)","hv024","0007","BDDHS2004360007","Rajshahi",5,"rajshahi",TRUE
-"BD2004DHS","DHS",2004,"2004",6,"Sylhet","hv024","0004","BDDHS2004360004","Sylhet",6,"sylhet",TRUE
-"BD2007DHS","DHS",2007,"2007",1,"Barishal","hv024","0001","BDDHS2007360001","Barisal",1,"barisal",TRUE
-"BD2007DHS","DHS",2007,"2007",2,"Chattogram","hv024","0003","BDDHS2007360003","Chittagong",2,"chittagong",TRUE
-"BD2007DHS","DHS",2007,"2007",3,"Dhaka (incl. Mymensingh)","hv024","0005","BDDHS2007360005","Dhaka",3,"dhaka",TRUE
-"BD2007DHS","DHS",2007,"2007",4,"Khulna","hv024","0006","BDDHS2007360006","Khulna",4,"khulna",TRUE
-"BD2007DHS","DHS",2007,"2007",5,"Rajshahi (incl. Rangpur)","hv024","0007","BDDHS2007360007","Rajshahi",5,"rajshahi",TRUE
-"BD2007DHS","DHS",2007,"2007",6,"Sylhet","hv024","0004","BDDHS2007360004","Sylhet",6,"sylhet",TRUE
-"BD2011DHS","DHS",2011,"2011",1,"Barishal","hv024","0001","BDDHS2011360001","Barisal",1,"barisal",TRUE
-"BD2011DHS","DHS",2011,"2011",2,"Chattogram","hv024","0003","BDDHS2011360003","Chittagong",2,"chittagong",TRUE
-"BD2011DHS","DHS",2011,"2011",3,"Dhaka (incl. Mymensingh)","hv024","0005","BDDHS2011360005","Dhaka",3,"dhaka",TRUE
-"BD2011DHS","DHS",2011,"2011",4,"Khulna","hv024","0006","BDDHS2011360006","Khulna",4,"khulna",TRUE
-"BD2011DHS","DHS",2011,"2011",5,"Rajshahi","hv024","0009","BDDHS2011360009","Rajshahi",5,"rajshahi",TRUE
-"BD2011DHS","DHS",2011,"2011",6,"Rangpur","hv024","0008","BDDHS2011360008","Rangpur",6,"rangpur",TRUE
-"BD2011DHS","DHS",2011,"2011",7,"Sylhet","hv024","0004","BDDHS2011360004","Sylhet",7,"sylhet",TRUE
-"BD2014DHS","DHS",2014,"2014",1,"Barishal","hv024","0001","BDDHS2014360001","Barisal",1,"barisal",TRUE
-"BD2014DHS","DHS",2014,"2014",2,"Chattogram","hv024","0003","BDDHS2014360003","Chittagong",2,"chittagong",TRUE
-"BD2014DHS","DHS",2014,"2014",3,"Dhaka (incl. Mymensingh)","hv024","0005","BDDHS2014360005","Dhaka",3,"dhaka",TRUE
-"BD2014DHS","DHS",2014,"2014",4,"Khulna","hv024","0006","BDDHS2014360006","Khulna",4,"khulna",TRUE
-"BD2014DHS","DHS",2014,"2014",5,"Rajshahi","hv024","0009","BDDHS2014360009","Rajshahi",5,"rajshahi",TRUE
-"BD2014DHS","DHS",2014,"2014",6,"Rangpur","hv024","0008","BDDHS2014360008","Rangpur",6,"rangpur",TRUE
-"BD2014DHS","DHS",2014,"2014",7,"Sylhet","hv024","0004","BDDHS2014360004","Sylhet",7,"sylhet",TRUE
+"BD2004DHS","DHS",2004,"2004",1,"Barishal","v024","0001","BDDHS2004360001","Barisal",1,"barisal",TRUE
+"BD2004DHS","DHS",2004,"2004",2,"Chattogram","v024","0003","BDDHS2004360003","Chittagong",2,"chittagong",TRUE
+"BD2004DHS","DHS",2004,"2004",3,"Dhaka (incl. Mymensingh)","v024","0005","BDDHS2004360005","Dhaka",3,"dhaka",TRUE
+"BD2004DHS","DHS",2004,"2004",4,"Khulna","v024","0006","BDDHS2004360006","Khulna",4,"khulna",TRUE
+"BD2004DHS","DHS",2004,"2004",5,"Rajshahi (incl. Rangpur)","v024","0007","BDDHS2004360007","Rajshahi",5,"rajshahi",TRUE
+"BD2004DHS","DHS",2004,"2004",6,"Sylhet","v024","0004","BDDHS2004360004","Sylhet",6,"sylhet",TRUE
+"BD2007DHS","DHS",2007,"2007",1,"Barishal","v024","0001","BDDHS2007360001","Barisal",1,"barisal",TRUE
+"BD2007DHS","DHS",2007,"2007",2,"Chattogram","v024","0003","BDDHS2007360003","Chittagong",2,"chittagong",TRUE
+"BD2007DHS","DHS",2007,"2007",3,"Dhaka (incl. Mymensingh)","v024","0005","BDDHS2007360005","Dhaka",3,"dhaka",TRUE
+"BD2007DHS","DHS",2007,"2007",4,"Khulna","v024","0006","BDDHS2007360006","Khulna",4,"khulna",TRUE
+"BD2007DHS","DHS",2007,"2007",5,"Rajshahi (incl. Rangpur)","v024","0007","BDDHS2007360007","Rajshahi",5,"rajshahi",TRUE
+"BD2007DHS","DHS",2007,"2007",6,"Sylhet","v024","0004","BDDHS2007360004","Sylhet",6,"sylhet",TRUE
+"BD2011DHS","DHS",2011,"2011",1,"Barishal","v024","0001","BDDHS2011360001","Barisal",1,"barisal",TRUE
+"BD2011DHS","DHS",2011,"2011",2,"Chattogram","v024","0003","BDDHS2011360003","Chittagong",2,"chittagong",TRUE
+"BD2011DHS","DHS",2011,"2011",3,"Dhaka (incl. Mymensingh)","v024","0005","BDDHS2011360005","Dhaka",3,"dhaka",TRUE
+"BD2011DHS","DHS",2011,"2011",4,"Khulna","v024","0006","BDDHS2011360006","Khulna",4,"khulna",TRUE
+"BD2011DHS","DHS",2011,"2011",5,"Rajshahi","v024","0009","BDDHS2011360009","Rajshahi",5,"rajshahi",TRUE
+"BD2011DHS","DHS",2011,"2011",6,"Rangpur","v024","0008","BDDHS2011360008","Rangpur",6,"rangpur",TRUE
+"BD2011DHS","DHS",2011,"2011",7,"Sylhet","v024","0004","BDDHS2011360004","Sylhet",7,"sylhet",TRUE
+"BD2014DHS","DHS",2014,"2014",1,"Barishal","v024","0001","BDDHS2014360001","Barisal",1,"barisal",TRUE
+"BD2014DHS","DHS",2014,"2014",2,"Chattogram","v024","0003","BDDHS2014360003","Chittagong",2,"chittagong",TRUE
+"BD2014DHS","DHS",2014,"2014",3,"Dhaka (incl. Mymensingh)","v024","0005","BDDHS2014360005","Dhaka",3,"dhaka",TRUE
+"BD2014DHS","DHS",2014,"2014",4,"Khulna","v024","0006","BDDHS2014360006","Khulna",4,"khulna",TRUE
+"BD2014DHS","DHS",2014,"2014",5,"Rajshahi","v024","0009","BDDHS2014360009","Rajshahi",5,"rajshahi",TRUE
+"BD2014DHS","DHS",2014,"2014",6,"Rangpur","v024","0008","BDDHS2014360008","Rangpur",6,"rangpur",TRUE
+"BD2014DHS","DHS",2014,"2014",7,"Sylhet","v024","0004","BDDHS2014360004","Sylhet",7,"sylhet",TRUE
 "BD2014SPA","SPA",2014,"2014",1,"Barishal","region","0001",NA,"Barisal",1,"barisal",FALSE
 "BD2014SPA","SPA",2014,"2014",2,"Chattogram","region","0003",NA,"Chittagong",2,"chittagong",FALSE
 "BD2014SPA","SPA",2014,"2014",3,"Dhaka (incl. Mymensingh)","region","0005",NA,"Dhaka",3,"dhaka",FALSE
@@ -61,14 +61,14 @@
 "BD2014SPA","SPA",2014,"2014",5,"Rajshahi","region","0009",NA,"Rajshahi",5,"rajshahi",FALSE
 "BD2014SPA","SPA",2014,"2014",6,"Rangpur","region","0008",NA,"Rangpur",6,"rangpur",FALSE
 "BD2014SPA","SPA",2014,"2014",7,"Sylhet","region","0004",NA,"Sylhet",7,"sylhet",FALSE
-"BD2017DHS","DHS",2017,"2017-18",1,"Barishal","hv024","0001","BDDHS2017360001","Barishal",1,"barisal",TRUE
-"BD2017DHS","DHS",2017,"2017-18",2,"Chattogram","hv024","0003","BDDHS2017360003","Chattogram",2,"chattogram",TRUE
-"BD2017DHS","DHS",2017,"2017-18",3,"Dhaka","hv024","0010","BDDHS2017360010","Dhaka",3,"dhaka",TRUE
-"BD2017DHS","DHS",2017,"2017-18",4,"Khulna","hv024","0006","BDDHS2017360006","Khulna",4,"khulna",TRUE
-"BD2017DHS","DHS",2017,"2017-18",5,"Mymensingh","hv024","0011","BDDHS2017360011","Mymensingh",8,"mymensingh",TRUE
-"BD2017DHS","DHS",2017,"2017-18",6,"Rajshahi","hv024","0009","BDDHS2017360009","Rajshahi",5,"rajshahi",TRUE
-"BD2017DHS","DHS",2017,"2017-18",7,"Rangpur","hv024","0008","BDDHS2017360008","Rangpur",6,"rangpur",TRUE
-"BD2017DHS","DHS",2017,"2017-18",8,"Sylhet","hv024","0004","BDDHS2017360004","Sylhet",7,"sylhet",TRUE
+"BD2017DHS","DHS",2017,"2017-18",1,"Barishal","v024","0001","BDDHS2017360001","Barishal",1,"barisal",TRUE
+"BD2017DHS","DHS",2017,"2017-18",2,"Chattogram","v024","0003","BDDHS2017360003","Chattogram",2,"chattogram",TRUE
+"BD2017DHS","DHS",2017,"2017-18",3,"Dhaka","v024","0010","BDDHS2017360010","Dhaka",3,"dhaka",TRUE
+"BD2017DHS","DHS",2017,"2017-18",4,"Khulna","v024","0006","BDDHS2017360006","Khulna",4,"khulna",TRUE
+"BD2017DHS","DHS",2017,"2017-18",5,"Mymensingh","v024","0011","BDDHS2017360011","Mymensingh",8,"mymensingh",TRUE
+"BD2017DHS","DHS",2017,"2017-18",6,"Rajshahi","v024","0009","BDDHS2017360009","Rajshahi",5,"rajshahi",TRUE
+"BD2017DHS","DHS",2017,"2017-18",7,"Rangpur","v024","0008","BDDHS2017360008","Rangpur",6,"rangpur",TRUE
+"BD2017DHS","DHS",2017,"2017-18",8,"Sylhet","v024","0004","BDDHS2017360004","Sylhet",7,"sylhet",TRUE
 "BD2017SPA","SPA",2017,"2017",1,"Barishal","region","0001","BDSPA2017360001","Barishal",1,"barishal",FALSE
 "BD2017SPA","SPA",2017,"2017",2,"Chattogram","region","0003","BDSPA2017360003","Chattogram",2,"chattogram",FALSE
 "BD2017SPA","SPA",2017,"2017",3,"Dhaka","region","0010","BDSPA2017360010","Dhaka",3,"dhaka",FALSE
@@ -77,11 +77,11 @@
 "BD2017SPA","SPA",2017,"2017",6,"Rangpur","region","0008","BDSPA2017360008","Rangpur",6,"rangpur",FALSE
 "BD2017SPA","SPA",2017,"2017",7,"Sylhet","region","0004","BDSPA2017360004","Sylhet",7,"sylhet",FALSE
 "BD2017SPA","SPA",2017,"2017",8,"Mymensingh","region","0011","BDSPA2017360011","Mymensingh",8,"mymensingh",FALSE
-"BD2022DHS","DHS",2022,"2022",1,"Barishal","hv024","0001","BDDHS2022360001","Barishal",1,"Barishal",TRUE
-"BD2022DHS","DHS",2022,"2022",2,"Chattogram","hv024","0003","BDDHS2022360003","Chattogram",2,"Chattogram",TRUE
-"BD2022DHS","DHS",2022,"2022",3,"Dhaka","hv024","0010","BDDHS2022360010","Dhaka",3,"Dhaka",TRUE
-"BD2022DHS","DHS",2022,"2022",4,"Khulna","hv024","0006","BDDHS2022360006","Khulna",4,"Khulna",TRUE
-"BD2022DHS","DHS",2022,"2022",5,"Mymensingh","hv024","0011","BDDHS2022360011","Mymensingh",5,"Mymensingh",TRUE
-"BD2022DHS","DHS",2022,"2022",6,"Rajshahi","hv024","0009","BDDHS2022360009","Rajshahi",6,"Rajshahi",TRUE
-"BD2022DHS","DHS",2022,"2022",7,"Rangpur","hv024","0008","BDDHS2022360008","Rangpur",7,"Rangpur",TRUE
-"BD2022DHS","DHS",2022,"2022",8,"Sylhet","hv024","0004","BDDHS2022360004","Sylhet",8,"Sylhet",TRUE
+"BD2022DHS","DHS",2022,"2022",1,"Barishal","v024","0001","BDDHS2022360001","Barishal",1,"Barishal",TRUE
+"BD2022DHS","DHS",2022,"2022",2,"Chattogram","v024","0003","BDDHS2022360003","Chattogram",2,"Chattogram",TRUE
+"BD2022DHS","DHS",2022,"2022",3,"Dhaka","v024","0010","BDDHS2022360010","Dhaka",3,"Dhaka",TRUE
+"BD2022DHS","DHS",2022,"2022",4,"Khulna","v024","0006","BDDHS2022360006","Khulna",4,"Khulna",TRUE
+"BD2022DHS","DHS",2022,"2022",5,"Mymensingh","v024","0011","BDDHS2022360011","Mymensingh",5,"Mymensingh",TRUE
+"BD2022DHS","DHS",2022,"2022",6,"Rajshahi","v024","0009","BDDHS2022360009","Rajshahi",6,"Rajshahi",TRUE
+"BD2022DHS","DHS",2022,"2022",7,"Rangpur","v024","0008","BDDHS2022360008","Rangpur",7,"Rangpur",TRUE
+"BD2022DHS","DHS",2022,"2022",8,"Sylhet","v024","0004","BDDHS2022360004","Sylhet",8,"Sylhet",TRUE

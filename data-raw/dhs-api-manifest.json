@@ -1,0 +1,42 @@
+{
+  "retrieved_at": "2026-10-26T17:09:22-0400",
+  "retrieved_date": "2026-10-26",
+  "api_base": "https://api.dhsprogram.com/rest/dhs",
+  "api_version": "8.1",
+  "api_citation": "The DHS Program Indicator Data API, The Demographic and Health Surveys (DHS) Program. ICF. Originally funded by the United States Agency for International Development (USAID). Available from api.dhsprogram.com. [Accessed 10-26-2026]",
+  "user_agent": "bdhs R package data-raw (https://github.com/armanhossen-am/bdhs)",
+  "country": "BD",
+  "perpage": 5000,
+  "api_key_used": false,
+  "n_requests": 194,
+  "total_mb": 263.3,
+  "data_surveys": ["BD1994DHS", "BD1997DHS", "BD2000DHS", "BD2004DHS", "BD2007DHS", "BD2011DHS", "BD2014DHS", "BD2017DHS", "BD2022DHS"],
+  "no_data_surveys": [
+    {
+      "SurveyId": "BD1999SPA",
+      "RecordCount": 0
+    },
+    {
+      "SurveyId": "BD2001OTH",
+      "RecordCount": 0
+    },
+    {
+      "SurveyId": "BD2014SPA",
+      "RecordCount": 0
+    },
+    {
+      "SurveyId": "BD2017SPA",
+      "RecordCount": 0
+    }
+  ],
+  "data_rows_raw": 321440,
+  "counts": {
+    "indicators": 2577,
+    "indicators_global": 4655,
+    "surveys": 13,
+    "datasets": 441,
+    "publications": 18,
+    "tags": 50,
+    "surveycharacteristics": 116
+  }
+}

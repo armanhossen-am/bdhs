@@ -1,0 +1,3 @@
+# Local caches written by the data-raw scripts (re-creatable; never commit)
+cache/
+boundaries/cache/
