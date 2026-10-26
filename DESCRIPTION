@@ -1,0 +1,52 @@
+Package: bdhs
+Title: Tools and Data for the Bangladesh Demographic and Health Survey
+Version: 0.1.0.9000
+Authors@R:
+    person("Arman", "Hossen", , "hossena@miamioh.edu", role = c("aut", "cre", "cph"))
+Description: A complete toolkit for every round of the Bangladesh Demographic
+    and Health Survey (BDHS; 1993-94 to 2022) and related DHS Program surveys
+    for Bangladesh. Ships official aggregate indicators from the DHS Program
+    API, survey and dataset catalogues, cross-round codebooks, region
+    crosswalks and subnational boundaries. For survey microdata, which the
+    DHS Program licenses to registered users and does not allow to be
+    redistributed, it imports a user's own downloads into a fast local store,
+    harmonizes variables across rounds, builds correct complex survey designs,
+    and computes indicators that are validated against official DHS
+    estimates. See <https://dhsprogram.com>.
+License: MIT + file LICENSE
+URL: https://github.com/armanhossen-am/bdhs
+BugReports: https://github.com/armanhossen-am/bdhs/issues
+Depends:
+    R (>= 4.1.0)
+Imports:
+    cli (>= 3.6.0),
+    dplyr (>= 1.1.0),
+    haven (>= 2.5.0),
+    rlang (>= 1.1.0),
+    stats,
+    survey (>= 4.2),
+    tibble (>= 3.2.0),
+    tools,
+    utils
+Suggests:
+    arrow,
+    DHS.rates,
+    ggplot2 (>= 3.4.0),
+    httr2,
+    jsonlite,
+    knitr,
+    labelled,
+    rdhs,
+    rmarkdown,
+    sf (>= 1.0.0),
+    srvyr (>= 1.2.0),
+    testthat (>= 3.0.0),
+    withr
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+Config/roxygen2/version: 8.1.1
+Encoding: UTF-8
+Language: en-US
+LazyData: true
+LazyDataCompression: xz
+Roxygen: list(markdown = TRUE)

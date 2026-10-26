@@ -1,0 +1,21 @@
+.Rproj.user
+.Rhistory
+.RData
+.DS_Store
+docs/
+inst/doc
+
+# ---- NEVER commit DHS microdata (DHS terms of use forbid redistribution) ----
+*.dta
+*.DTA
+*.sav
+*.SAV
+*.sas7bdat
+*.SAS7BDAT
+*.zip
+*.ZIP
+*.dat
+*.DAT
+*.parquet
+data-local/
+.bdhs-cache/
