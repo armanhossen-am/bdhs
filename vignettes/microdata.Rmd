@@ -1,0 +1,146 @@
+---
+title: "Working with your BDHS microdata"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Working with your BDHS microdata}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+```{r setup}
+library(bdhs)
+```
+
+## Why bdhs does not ship the microdata
+
+The DHS Program gives respondent-level data free of charge to registered
+researchers. Its terms of use say the data must not be passed on to others or
+redistributed "directly or within any tool". So bdhs never bundles, uploads or
+shares microdata, and you should keep your files somewhere private: not in a
+public GitHub repository and preferably not in a synced cloud folder.
+
+Getting access is quick:
+
+1. Create an account at
+   <https://dhsprogram.com/data/new-user-registration.cfm>.
+2. Describe your research project and request the Bangladesh surveys.
+3. Once approved, download the datasets. The **Stata** format (`.DTA`, in
+   files like `BDIR81DT.ZIP`) is recommended because it keeps all variable and
+   value labels.
+
+Analyses published from BDHS data must cite the survey's final report. The
+Bangladesh conditions of use also ask for a copy of each publication to be
+sent to the NIPORT library.
+
+## What exists
+
+`bdhs_inventory()` lists every dataset the DHS Program distributes for
+Bangladesh and marks which ones you already have:
+
+```{r, eval = FALSE}
+bdhs_inventory()
+```
+
+The main recode files are:
+
+```{r}
+bdhs_recodes()[1:10, ]
+```
+
+Not every recode exists for every round. For example, men were last
+interviewed in 2011, and the pregnancy (`GR`) and postnatal care (`NR`)
+recodes are new in 2022.
+
+## Importing your downloads
+
+Point `bdhs_import()` at the files, zips or folders you downloaded.
+
+```{r, eval = FALSE}
+bdhs_import("~/Downloads/BDHS")
+```
+
+`bdhs_import()` does the following:
+
+* Recognises DHS files by name (`BDIR81FL.DTA`), inside zips (`BDIR81DT.ZIP`),
+  with prefixes (`2022BDPR81FL.DTA`), and even when you renamed them
+  (`BDHS2018KR.DTA`). In that case it checks the file's contents.
+* Skips files that are not original DHS recodes, such as your own merged or
+  appended datasets.
+* Stores a fast copy in the bdhs data directory. With the arrow package
+  installed this is a column-oriented copy, so reading a few variables from a
+  5,000-column file is quick. Use `copy = FALSE` to leave files where they are
+  and only register them.
+* Warns if the data directory is inside a git repository or a cloud-sync
+  folder.
+
+The data directory defaults to `tools::R_user_dir("bdhs", "data")`. Use
+`bdhs_data_dir("path")` to change it for the session, or set the
+`BDHS_DATA_DIR` environment variable in your `.Renviron` to change it for good.
+`bdhs_sitrep()` summarises your setup.
+
+## A complete example with synthetic files
+
+The chunk below runs the full workflow on synthetic files written to a
+temporary folder, so you can see each step without real data.
+
+```{r}
+# A temporary data directory and some fake DHS files
+old <- Sys.getenv("BDHS_DATA_DIR")
+store <- file.path(tempdir(), "bdhs-store")
+Sys.setenv(BDHS_DATA_DIR = store)
+
+downloads <- file.path(tempdir(), "downloads")
+dir.create(downloads, showWarnings = FALSE)
+haven::write_dta(bdhs_simulate(2022, "IR"), file.path(downloads, "BDIR81FL.DTA"))
+haven::write_dta(bdhs_simulate(2022, "KR"), file.path(downloads, "BDKR81FL.DTA"))
+haven::write_dta(bdhs_simulate(2017, "HR"), file.path(downloads, "BDHS2018HR.DTA"))
+```
+
+```{r}
+bdhs_import(downloads)
+```
+
+```{r}
+ir <- bdhs_read(2022, "IR", vars = c("v012", "v106", "v313"))
+ir
+attr(ir, "bdhs_survey_id")
+```
+
+When you ask for specific variables, `bdhs_read()` always adds the identifiers
+and design variables (cluster, strata, weight, region, residence and the
+all-woman factors). That way the result can go straight into `bdhs_design()`
+or `bdhs_merge()`. Use `labels = "factor"` to get factors instead of labelled
+numbers.
+
+```{r, include = FALSE}
+Sys.setenv(BDHS_DATA_DIR = old)
+```
+
+## Downloading with your DHS account (experimental)
+
+`bdhs_download()` can log in to the DHS website with **your** account and
+fetch files directly:
+
+```{r, eval = FALSE}
+bdhs_download(2022, c("IR", "KR"), email = "you@university.edu", project = "Your project title")
+```
+
+Your password is never stored by bdhs. It is read from the system keyring
+(keyring package, service `"bdhs-dhs"`), the `DHS_PASSWORD` environment
+variable, or an interactive prompt. The DHS website can change without
+notice, so if the downloader fails, download the files in your browser and use
+`bdhs_import()`.
+
+## Reading one-off files
+
+`bdhs_read_file()` reads any DHS file without registering it and applies the
+same conventions: lower-case names, preserved labels and detected survey and
+recode.
+
+```{r, eval = FALSE}
+pr <- bdhs_read_file("~/Downloads/BDPR81FL.DTA", vars = c("hv104", "hv105"))
+```

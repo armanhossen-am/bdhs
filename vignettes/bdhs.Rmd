@@ -1,0 +1,133 @@
+---
+title: "Get started with bdhs"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Get started with bdhs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 4.5, out.width = "100%", dpi = 96)
+has_ggplot2 <- requireNamespace("ggplot2", quietly = TRUE)
+```
+
+The Bangladesh Demographic and Health Survey (BDHS) has been run nine times
+since 1993. bdhs gives you all of it in one place: the official estimates
+right away, and your own copy of the microdata in one line once you have DHS
+access.
+
+```{r setup}
+library(bdhs)
+```
+
+## The surveys
+
+```{r}
+bdhs_rounds()
+```
+
+Functions take a `survey` argument, and you can refer to a round however you
+like. Years, year ranges, DHS ids and DHS file codes all work:
+
+```{r}
+bdhs_survey_id(c(2022, "2017-18", 2018, "BD2014DHS", "4J", "1999-2000"))
+```
+
+`bdhs_surveys` adds fieldwork dates, sample sizes and implementing agencies,
+and `bdhs_datasets` lists every one of the 441 data files the DHS Program
+distributes for Bangladesh:
+
+```{r}
+bdhs_surveys[, c("survey_id", "survey_label", "fieldwork_start", "n_households", "n_women", "n_men")]
+```
+
+## Official estimates: no account needed
+
+Every published DHS estimate for Bangladesh is bundled. `bdhs_official()`
+returns tidy rows, and `bdhs_plot_trend()` draws them:
+
+```{r}
+bdhs_official("FP_CUSM_W_MOD")[, c("year_label", "indicator", "value")]
+```
+
+```{r, eval = has_ggplot2}
+bdhs_plot_trend("FP_CUSM_W_MOD", by = "Wealth quintile")
+```
+
+See `vignette("maps-and-trends")` for subgroups, maps and more.
+
+## Finding variables
+
+`bdhs_search()` searches variable labels in the bundled codebooks, indicator
+definitions and the harmonized variables together. `bdhs_variable()` shows one
+variable across rounds and flags when its labels changed:
+
+```{r}
+bdhs_search("anemia|anaemia", where = "indicators")
+bdhs_variable("v024", recode = "KR")
+```
+
+The codebooks contain names and labels only, never respondents' values.
+
+## Microdata: the two-minute version
+
+1. Register at <https://dhsprogram.com/data/new-user-registration.cfm> and
+   request the Bangladesh surveys. It is free for research.
+2. Download the files you need. The Stata format is recommended.
+3. Point bdhs at them once:
+
+```{r, eval = FALSE}
+bdhs_import("~/Downloads/BDHS")
+```
+
+From then on, any round and recode is one line away:
+
+```{r, eval = FALSE}
+ir <- bdhs_read(2022, "IR")
+kr <- bdhs_read(2017, "KR", vars = c("m14", "m15", "m17"))
+```
+
+`vignette("microdata")` explains importing, storage and the experimental
+downloader.
+
+## Practise with synthetic data
+
+`bdhs_simulate()` generates fake data with the exact structure of a BDHS
+recode: the same variable names, codes, labels and survey design. All the
+examples in bdhs use it, and you can use it to write and test your code
+before your DHS access comes through:
+
+```{r}
+kr <- bdhs_simulate(2022, "KR")
+kr[1:5, c("caseid", "v001", "v022", "v024", "m15", "m17")]
+```
+
+Simulated values are random and must never be used for conclusions.
+
+## A first analysis
+
+Survey data need survey methods. `bdhs_design()` knows the clustering,
+stratification and weights of every round:
+
+```{r}
+des <- bdhs_design(kr)
+survey::svymean(~m17, des, na.rm = TRUE)
+```
+
+`bdhs_estimate()` goes a step further. It computes named DHS indicators with
+correct standard errors, confidence intervals and denominators:
+
+```{r}
+bdhs_estimate(kr, c("facility_delivery", "csection"), by = "v025")
+```
+
+## Where next
+
+* `vignette("microdata")`: importing, reading and storing your files.
+* `vignette("survey-design")`: weights, strata, ever-married samples and
+  pooling rounds.
+* `vignette("harmonization")`: comparable variables across 30 years.
+* `vignette("indicators")`: the indicator library, fertility and mortality
+  rates, and validation against official values.
+* `vignette("maps-and-trends")`: official estimates, trends and maps.
