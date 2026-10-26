@@ -17,7 +17,7 @@ test_that("bdhs_simulate() returns linked, reproducible synthetic recodes", {
 })
 
 test_that("bdhs_simulate() follows the round's division layout", {
-  n_div <- function(s) length(unique(bdhs_simulate(s, "HR", n_clusters = 20, households = 1)$hv024))
+  n_div <- function(s) length(unique(bdhs_simulate(s, "HR", n_clusters = 40, households = 1)$hv024))
   expect_equal(n_div(1994), 5)
   expect_equal(n_div(2004), 6)
   expect_equal(n_div(2014), 7)

@@ -133,11 +133,16 @@ sim_world <- function(survey_id, n_clusters, households) {
   n_div <- length(info$divisions)
 
   # Clusters: division, residence, stratum and a cluster-level weight.
+  # Clusters are allocated to division x residence strata in pairs, so that
+  # every stratum that is used has at least two PSUs, as in the real designs.
   cl <- data.frame(v001 = seq_len(n_clusters))
-  cl$div <- rep_len(seq_len(n_div), n_clusters)
-  cl$res <- ifelse(stats::runif(n_clusters) < 0.3, 1L, 2L)
-  cl$res[seq_len(min(n_div, n_clusters))] <- 1L # at least one urban cluster early
-  cl$strat <- (cl$div - 1L) * 2L + cl$res
+  n_strata <- 2L * n_div
+  cl$strat <- ((cl$v001 - 1L) %/% 2L) %% n_strata + 1L
+  if (n_clusters %% 2L == 1L) {
+    cl$strat[[n_clusters]] <- cl$strat[[n_clusters - 1L]]
+  }
+  cl$div <- (cl$strat - 1L) %/% 2L + 1L
+  cl$res <- (cl$strat - 1L) %% 2L + 1L
   w <- stats::rlnorm(n_clusters, 0, 0.35)
   cl$wt <- round(w / mean(w) * 1e6)
   cl$cmc <- sample(info$cmc_first:info$cmc_last, n_clusters, replace = TRUE)
