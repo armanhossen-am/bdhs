@@ -229,7 +229,8 @@ explore_theme <- function(base_size = 11) {
 #' Point-and-interval plot of the estimates returned by [bdhs_estimate()]:
 #' one panel per indicator, one row per group (when `by` was used), and one
 #' colour per survey round when several rounds are present. Intervals are
-#' the 95% confidence intervals of the estimates.
+#' the confidence intervals of the estimates (at the level used by
+#' [bdhs_estimate()]).
 #'
 #' @param x,object A `bdhs_estimate` tibble from [bdhs_estimate()].
 #' @param ... Unused.
@@ -266,6 +267,7 @@ autoplot.bdhs_estimate <- function(object, ...) {
     "n_unweighted", "n_weighted", "api_id"
   )
   by_cols <- setdiff(names(d), known)
+  ci_pct <- format(100 * (attr(object, "level", exact = TRUE) %||% 0.95))
   facet <- if ("label" %in% names(d)) d$label else if ("indicator" %in% names(d)) d$indicator else rep("Estimate", nrow(d))
   facet[is.na(facet)] <- if ("indicator" %in% names(d)) d$indicator[is.na(facet)] else "Estimate"
   d$.facet <- factor(facet, levels = unique(facet))
@@ -321,9 +323,9 @@ autoplot.bdhs_estimate <- function(object, ...) {
     ggplot2::labs(
       title = if (nlevels(d$.facet) == 1L) levels(d$.facet) else "Survey estimates",
       subtitle = survey_text,
-      x = "Estimate (95% CI)",
+      x = paste0("Estimate (", ci_pct, "% CI)"),
       y = if (length(by_cols)) paste(estimate_axis_titles(object, by_cols), collapse = " / ") else NULL,
-      caption = "Estimates computed with bdhs from DHS microdata; bars show 95% confidence intervals."
+      caption = paste0("Estimates computed with bdhs from DHS microdata; bars show ", ci_pct, "% confidence intervals.")
     ) +
     explore_theme() +
     ggplot2::theme(

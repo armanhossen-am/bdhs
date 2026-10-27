@@ -264,20 +264,35 @@ bdhs_add_indicators <- function(data, indicators, survey = NULL) {
 
 # Survey rounds in the data. A `survey_id` column with several rounds (pooled
 # data) takes precedence over a single-round attribute left over from binding.
-data_survey_ids <- function(data, survey = NULL) {
-  if (is.null(survey) && "survey_id" %in% names(data)) {
-    ids <- sort(unique(as.character(data$survey_id)))
-    if (length(ids) > 1L) {
-      return(bdhs_survey_id(ids))
+data_survey_ids <- function(data, survey = NULL, call = rlang::caller_env()) {
+  if (is_pooled(data)) {
+    ids <- bdhs_survey_id(sort(unique(as.character(data$survey_id))))
+    if (is.null(survey)) {
+      return(ids)
     }
+    # On pooled data `survey` selects rounds; it never relabels other rounds.
+    want <- intersect(bdhs_survey_id(survey), ids)
+    if (!length(want)) {
+      cli::cli_abort(
+        "None of the requested surveys are in these pooled data, which contain {.val {ids}}.",
+        call = call
+      )
+    }
+    return(want)
   }
   data_survey_id(data, survey)
 }
 
+# TRUE for data stacked from several rounds (a survey_id column with more
+# than one value).
+is_pooled <- function(data) {
+  "survey_id" %in% names(data) && length(unique(stats::na.omit(as.character(data$survey_id)))) > 1L
+}
+
 # Row groups by survey round: list of list(survey_id, rows).
-survey_row_groups <- function(data, survey = NULL) {
-  ids <- data_survey_ids(data, survey)
-  if (length(ids) == 1L) {
+survey_row_groups <- function(data, survey = NULL, call = rlang::caller_env()) {
+  ids <- data_survey_ids(data, survey, call = call)
+  if (!is_pooled(data)) {
     return(list(list(survey_id = ids, rows = seq_len(nrow(data)))))
   }
   sid <- as.character(data$survey_id)

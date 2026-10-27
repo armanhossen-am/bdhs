@@ -131,7 +131,7 @@ bdhs_mortality <- function(data, period = 5, rates = c("nnmr", "pnnmr", "imr", "
   check_by(data, by)
   births <- births_long(data, by)
   ids <- data_survey_ids(data, survey)
-  groups <- if (length(ids) == 1L) {
+  groups <- if (!is_pooled(data)) {
     list(list(survey_id = ids, rows = seq_len(nrow(births))))
   } else {
     lapply(ids, function(s) list(survey_id = s, rows = which(as.character(births$survey_id) == s)))

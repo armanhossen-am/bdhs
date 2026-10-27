@@ -118,7 +118,11 @@ empty_estimate <- function(by) {
 
 #' @export
 print.bdhs_estimate <- function(x, ...) {
-  cat(estimate_header(x), "\n", sep = "")
+  # After a column subset or a join the object may no longer look like an
+  # estimate table; then print it as a plain tibble without the header.
+  if (all(c("survey_id", "indicator") %in% names(x))) {
+    cat(estimate_header(x), "\n", sep = "")
+  }
   NextMethod()
 }
 
@@ -245,7 +249,13 @@ na_estimate <- function(vars, byn) {
   if (is.null(byn)) {
     return(base)
   }
-  base[0, , drop = FALSE]
+  # One NA row per observed group, so the indicator still shows up in the
+  # result (with n_unweighted = 0) instead of disappearing.
+  groups <- unique(vars[, byn, drop = FALSE])
+  groups <- groups[stats::complete.cases(groups), , drop = FALSE]
+  out <- cbind(groups, base[rep(1L, nrow(groups)), , drop = FALSE])
+  rownames(out) <- NULL
+  out
 }
 
 group_counts <- function(sv, byn, aw) {
