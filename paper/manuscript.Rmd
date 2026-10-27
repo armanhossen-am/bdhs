@@ -1,0 +1,258 @@
+---
+title: "Reproducing three decades of the Bangladesh Demographic and Health Survey: validated estimation, analytic pitfalls, data quality and calibrated synthetic data with the bdhs R package"
+author:
+  - Arman Hossen^1^
+date: "`r format(Sys.Date(), '%d %B %Y')`"
+output:
+  word_document: default
+  html_document:
+    toc: false
+bibliography: references.bib
+link-citations: true
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+res <- function(f) {
+  p <- file.path("results", f)
+  if (file.exists(p)) utils::read.csv(p, stringsAsFactors = FALSE) else NULL
+}
+pit <- res("pitfalls.csv")
+val <- res("validation.csv")
+vbr <- res("validation_by_round.csv")
+deff <- res("design_effects.csv")
+qual <- res("quality.csv")
+syn <- res("synthetic_fidelity.csv")
+cs_trend <- res("case_csection_trend.csv")
+cs_ineq <- res("case_csection_inequality.csv")
+cs_dec <- res("case_csection_decomposition.csv")
+n_val <- nrow(val); n_pass <- sum(val$pass)
+fmt <- function(x, d = 1) formatC(x, format = "f", digits = d)
+```
+
+^1^ Miami University, Oxford, Ohio, USA. Correspondence: hossena@miamioh.edu
+
+# Abstract
+
+**Background.** The Bangladesh Demographic and Health Survey (BDHS) has been
+fielded nine times between 1993-94 and 2022 and underpins much of the
+country's population and health evidence. Analyses of the respondent-level
+data are, however, rarely checked against the officially published
+estimates, and round-specific design features create traps that are easy to
+miss.
+
+**Methods.** We developed `bdhs`, an open-source R package that combines the
+official estimates for all rounds with tools for the licensed microdata:
+file identification, cross-round harmonization, complex survey designs, a
+library of 97 indicators, fertility and mortality rates, data-quality
+diagnostics, inequality and change analysis, and synthetic data calibrated
+to the official estimates. Every indicator with a published value was
+recomputed from the original recode files and compared with the official
+figure.
+
+**Results.** `r n_pass` of `r n_val` national comparisons across eight rounds
+reproduced the official value (median absolute difference
+`r fmt(stats::median(abs(val$computed - val$official)), 2)` percentage points). The validation exposed
+analytic pitfalls with large effects: ignoring the 2022 short questionnaire
+understates unmet need for family planning (`r fmt(pit$naive[1])`% vs
+`r fmt(pit$correct[1])`%), treating the ever-married sample as all women
+overstates child marriage by about ten points, and design effects of
+`r fmt(min(deff$deff))` to `r fmt(max(deff$deff))` mean that analyses
+ignoring the sampling design understate standard errors by up to
+`r fmt(sqrt(max(deff$deff)))`-fold.
+
+**Conclusions.** Validated, reproducible tooling removes avoidable error from
+BDHS analyses and makes them easier to verify. Calibrated synthetic data allow
+methods to be taught, tested and shared without access to the restricted
+microdata.
+
+**Keywords:** Demographic and Health Surveys; Bangladesh; survey methodology;
+reproducibility; synthetic data; R
+
+# Background
+
+Demographic and Health Surveys (DHS) are the main source of nationally
+representative data on fertility, family planning, maternal and child health
+and nutrition in low- and middle-income countries. Bangladesh has conducted
+nine DHS rounds (1993-94, 1996-97, 1999-2000, 2004, 2007, 2011, 2014,
+2017-18 and 2022), implemented by the National Institute of Population
+Research and Training (NIPORT) with ICF [@niport2024]. The official
+estimates are published in final reports and through the DHS Program's
+STATcompiler and API, while the respondent-level recode files are licensed
+to registered researchers.
+
+Secondary analyses of the BDHS are numerous, but their estimates are rarely
+reconciled with the published figures. Doing so is harder than it seems. The
+standard definitions in the *Guide to DHS Statistics* [@croft2018] interact
+with round-specific design features: ever-married women's samples that
+require all-woman factors, division boundaries and codes that changed three
+times, a short women's questionnaire in 2022, and country-specific
+questionnaire items. Errors in any of these steps propagate silently into
+published results.
+
+Existing tools address parts of the problem. `rdhs` provides access to the
+DHS API and downloads datasets [@watson2019], `DHS.rates` computes
+fertility and mortality rates [@dhsrates], `survey` implements design-based
+estimation [@lumley2004], and IPUMS-DHS distributes harmonized extracts of
+selected variables [@ipumsdhs]. None of them validates analyses of the
+original files against the official estimates, documents the
+country-specific pitfalls, or provides a way to share fully reproducible
+analyses without the restricted data.
+
+This paper describes `bdhs`, an R package for every BDHS round. It reports
+(i) a systematic validation of 97 indicators against the official estimates;
+(ii) the size of common analytic pitfalls; (iii) design effects; (iv) a
+data-quality assessment across rounds; and (v) a method for synthetic BDHS
+data calibrated to the official estimates. A case study of caesarean
+delivery between 2004 and 2022 illustrates the change and inequality tools.
+
+# Methods
+
+## Data
+
+`bdhs` bundles all `r format(310528, big.mark = ",")` official estimates
+published for Bangladesh through the DHS Program API (all indicators, rounds
+and breakdowns), the definitions of 2,607 indicators, catalogues of the
+surveys and their 441 data files, cross-round codebooks (variable names and
+labels only) and survey-specific division boundaries from the DHS Spatial
+Data Repository. No respondent-level data are distributed. For the analyses
+in this paper we used the author's licensed copies of the recode files: the
+children's recode for 1993-94, 1999-2000, 2004, 2007, 2011, 2014, 2017-18
+and 2022; the births, household, women's and household-member recodes for
+2017-18; and the women's and household-member recodes for 2022.
+
+## Software design
+
+The package reads DHS files identified by name or by content, harmonizes
+112 variables across rounds with 1,008 round-specific rules (each checked
+against the value labels in the data), and builds design objects with the
+DHS sampling-error strata, clusters and normalized weights. Pooled analyses
+keep each round's strata and clusters distinct and offer normalized,
+de-normalized and equal weighting. Indicators are defined in code with their
+denominator, reference period, weight and all-woman factor, so a single call
+estimates any of them with design-based standard errors. Fertility and
+childhood mortality rates use the DHS synthetic-cohort methods with
+jackknife standard errors.
+
+## Validation protocol
+
+For every indicator with an official value we computed the national
+estimate from each available recode file and compared it with the DHS
+Program API value for the same reference period. A comparison passed when
+the absolute difference was at most 0.5 percentage points (or the
+equivalent for rates) plus half a unit of the official value's rounding.
+
+## Pitfalls and design effects
+
+For each analytic decision that changed results during validation, we
+computed the estimate a naive analysis would give next to the correct
+estimate. Design effects were computed as the ratio of the design-based
+variance to the variance of a simple random sample of the same size.
+
+## Data-quality diagnostics
+
+```{r, results = "asis"}
+if (is.null(qual)) cat("*[To be completed: description of the data-quality checks.]*")
+```
+
+## Calibrated synthetic data
+
+```{r, results = "asis"}
+if (is.null(syn)) cat("*[To be completed: description of the calibration method.]*")
+```
+
+## Change and inequality analysis
+
+```{r, results = "asis"}
+if (is.null(cs_ineq)) cat("*[To be completed: change tests, inequality indices and decomposition.]*")
+```
+
+# Results
+
+## Validation against official estimates
+
+`r n_pass` of `r n_val` comparisons passed (Table 1). The median absolute
+difference was below 0.04 percentage points in every round. The two
+comparisons that did not pass concern women's anthropometry in 2022, which
+the DHS Program computes from the household-member recode covering all women
+in the biomarker subsample; the same indicators computed from that recode
+reproduce the official values.
+
+```{r}
+if (!is.null(vbr)) {
+  knitr::kable(vbr, col.names = c("Survey", "Recodes", "Comparisons", "Passed",
+                                  "Median |difference|", "Max |difference| (passed)"),
+               caption = "Table 1. Validation of computed national estimates against the official values.")
+}
+```
+
+## Analytic pitfalls
+
+Table 2 shows the size of each pitfall. The largest arise from the sampling
+frame: treating the ever-married sample as all women overstates child
+marriage by about ten percentage points, and ignoring the 2022 short
+questionnaire understates unmet need by a third.
+
+```{r}
+if (!is.null(pit)) {
+  knitr::kable(pit[, c("pitfall", "survey_id", "group", "naive", "correct", "official")],
+               col.names = c("Pitfall", "Survey", "Group", "Naive", "Correct", "Official"),
+               caption = "Table 2. Estimates from naive and correct analyses, with the official values.")
+}
+```
+
+## Design effects
+
+```{r}
+if (!is.null(deff)) {
+  knitr::kable(deff, col.names = c("Survey", "Indicator", "Estimate", "SE (design)",
+                                   "SE (SRS)", "Design effect", "n"),
+               caption = "Table 3. Design effects of headline indicators.")
+}
+```
+
+## Data quality
+
+```{r, results = "asis"}
+if (is.null(qual)) cat("*[To be completed.]*") else knitr::kable(qual)
+```
+
+## Synthetic data fidelity
+
+```{r, results = "asis"}
+if (is.null(syn)) cat("*[To be completed.]*") else knitr::kable(syn)
+```
+
+## Case study: caesarean delivery, 2004-2022
+
+```{r, results = "asis"}
+if (is.null(cs_trend)) cat("*[To be completed.]*") else knitr::kable(cs_trend)
+```
+
+# Discussion
+
+*[To be completed after all results are in.]*
+
+# Conclusions
+
+*[To be completed.]*
+
+# Declarations
+
+**Availability of data and materials.** The `bdhs` package is available at
+<https://github.com/armanhossen-am/bdhs> under the MIT licence; the
+analysis scripts and aggregate results are in its `paper/` folder. BDHS
+microdata are available from The DHS Program to registered users
+(<https://dhsprogram.com>).
+
+**Ethics approval and consent to participate.** Secondary analysis of
+de-identified survey data. The BDHS protocols were approved by the ICF
+Institutional Review Board and the Bangladesh Medical Research Council, and
+informed consent was obtained from all participants. Data access was granted
+by The DHS Program.
+
+**Competing interests.** None.
+
+**Funding.** None.
+
+# References
