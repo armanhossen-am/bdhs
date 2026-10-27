@@ -13,3 +13,4 @@
 ^\.bdhs-cache$
 ^docs$
 ^paper$
+^DEVELOPMENT\.md$
