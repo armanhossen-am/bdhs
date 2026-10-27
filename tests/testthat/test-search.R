@@ -83,3 +83,17 @@ test_that("bdhs_variable() errors helpfully", {
   expect_error(bdhs_variable("v024", recode = "SQ"), "appears in")
   expect_error(bdhs_variable(c("v024", "v025")), "single")
 })
+
+test_that("print.bdhs_search() collapses numbered variable series", {
+  rows <- tibble::tibble(
+    source = "variable",
+    id = c("m17_1", "m17_2", "m17_3", "v024"),
+    label = c("delivery by caesarean section", "delivery by caesarean section", "delivery by caesarean section", "region"),
+    recode = "IR",
+    surveys = "BD2022DHS"
+  )
+  out <- search_collapse_series(rows)
+  expect_equal(out$id, c("m17_1-3", "v024"))
+  res <- bdhs_search("caesarean", where = "variables", recode = "IR")
+  expect_output(print(res), "m17_1-")
+})

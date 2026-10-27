@@ -73,7 +73,7 @@ bdhs_map("CN_NUTS_C_HA2", survey = 2022)
 Not sure what an indicator or variable is called? Search everything at once:
 
 ```{r}
-bdhs_search("caesarean")
+bdhs_search("caesarean|cesarean")
 ```
 
 ## Your microdata in one line

@@ -73,8 +73,12 @@ print.bdhs_search <- function(x, ..., n = 10) {
   truncated <- FALSE
   for (src in intersect(names(titles), unique(x$source))) {
     rows <- x[x$source == src, ]
+    n_rows <- nrow(rows)
+    if (src == "variable") {
+      rows <- search_collapse_series(rows)
+    }
     cli::cat_line()
-    cli::cat_line(cli::rule(left = paste0(titles[[src]], " (", nrow(rows), ")"), width = min(width, 80)))
+    cli::cat_line(cli::rule(left = paste0(titles[[src]], " (", n_rows, ")"), width = min(width, 80)))
     shown <- utils::head(rows, n)
     id <- if (src == "variable") paste0(shown$id, " [", shown$recode, "]") else shown$id
     id <- format(id)
@@ -324,4 +328,27 @@ search_crosswalk_vars <- function() {
     .explore_cache$crosswalk_vars <- if (nzchar(path)) readRDS(path)$variables else list()
   }
   .explore_cache$crosswalk_vars
+}
+
+# Collapse numbered variable series that share a label and coverage, such as
+# the birth-history repeats m17_1 ... m17_6, into one printed row "m17_1-6".
+search_collapse_series <- function(rows) {
+  m <- regmatches(rows$id, regexec("^(.*)_([0-9]+)$", rows$id))
+  stem <- vapply(m, function(z) if (length(z)) z[[2]] else NA_character_, character(1))
+  num <- suppressWarnings(as.integer(vapply(m, function(z) if (length(z)) z[[3]] else NA_character_, character(1))))
+  key <- ifelse(
+    is.na(stem),
+    paste0("\r", seq_along(stem)),
+    paste(stem, rows$recode, rows$label, rows$surveys, sep = "\r")
+  )
+  groups <- split(seq_along(key), factor(key, levels = unique(key)))
+  keep <- vapply(groups, `[[`, integer(1), 1L)
+  out <- rows[keep, ]
+  sizes <- lengths(groups)
+  multi <- sizes > 1L
+  if (any(multi)) {
+    rng <- vapply(groups[multi], function(i) paste0(min(num[i]), "-", max(num[i])), character(1))
+    out$id[multi] <- paste0(stem[keep[multi]], "_", rng)
+  }
+  out
 }
