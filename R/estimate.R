@@ -62,6 +62,12 @@
 bdhs_estimate <- function(data, indicators = NULL, by = NULL, survey = NULL, level = 0.95, scale = 100,
                           ci_method = c("logit", "wald"), design_args = list()) {
   ci_method <- rlang::arg_match(ci_method)
+  if (!is.data.frame(data)) {
+    cli::cli_abort(c(
+      "{.arg data} must be a data frame of BDHS recode data, not {.obj_type_friendly {data}}.",
+      "i" = "Read it first, e.g. {.code kr <- bdhs_read(2022, \"KR\")}, then {.code bdhs_estimate(kr, ...)}."
+    ))
+  }
   check_by(data, by)
   by <- setdiff(by, "survey_id")
   if (!length(by)) by <- NULL

@@ -133,3 +133,7 @@ test_that("design_args are passed to bdhs_design()", {
   expect_equal(a$estimate, b$estimate)
   expect_false(isTRUE(all.equal(a$se, b$se)))
 })
+
+test_that("bdhs_estimate() explains non-data input", {
+  expect_error(bdhs_estimate(2022), "Read it first")
+})

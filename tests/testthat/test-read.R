@@ -171,3 +171,8 @@ test_that("local files can be registered in place and read", {
   old <- bdhs_read(1994, "KR", vars = "v024", labels = "factor")
   expect_equal(nlevels(old$v024), 5)
 })
+
+test_that("bdhs_read() explains a missing recode", {
+  withr::local_options(bdhs.data_dir = withr::local_tempdir())
+  expect_error(bdhs_read(2022), "Say which file to read")
+})

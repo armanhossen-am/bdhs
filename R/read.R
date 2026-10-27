@@ -87,6 +87,15 @@ bdhs_read <- function(survey, recode, vars = NULL, vars_regex = NULL, indicators
       "i" = "To combine rounds, read them one by one and use {.fn bdhs_pool}."
     ))
   }
+  if (missing(recode)) {
+    have <- tryCatch(registry_read(store_dir()), error = function(e) NULL)
+    have <- if (is.null(have)) character() else sort(unique(have$recode[have$survey_id == survey_id]))
+    cli::cli_abort(c(
+      "Say which file to read with {.arg recode}, e.g. {.code bdhs_read({survey}, \"IR\")}.",
+      "i" = if (length(have)) "You have these for {survey_label(survey_id) %|NA|% survey_id}: {.val {have}}.",
+      "i" = "IR = women, KR = children under 5, BR = births, HR = households, PR = household members. See {.fn bdhs_recodes}."
+    ))
+  }
   recode <- check_recode(recode)
   dir <- store_dir()
   reg <- registry_read(dir)
