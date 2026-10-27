@@ -104,11 +104,13 @@ youngest_with_mother <- function(d) {
 
 # Exclusively breastfed: currently breastfeeding and given no liquids or
 # solids in the last 24 hours (DHS-8 adds "don't know" = 8 as not exclusive).
+# The country-specific liquid slots v413a-v413d are not part of the DHS
+# standard definition: counting them gives 42.9% for 2007 against the
+# official 49.8% (with them left out: 49.82%, same 510 children).
 ebf_value <- function(d, s) {
   cur <- in_codes(dv(d, "m4"), 95)
   liquids <- intersect(
-    c("v409", "v409a", "v410", "v410a", "v411", "v411a", "v412", "v412a", "v412b", "v412c",
-      "v413", "v413a", "v413b", "v413c", "v413d"),
+    c("v409", "v409a", "v410", "v410a", "v411", "v411a", "v412", "v412a", "v412b", "v412c", "v413"),
     names(d)
   )
   solids <- c(letter_vars(d, "v414", letters[1:23]), intersect("m39a", names(d)))
@@ -188,10 +190,13 @@ defs_nutrition <- function() {
       value = ebf_value,
       api_id = "CN_IYCB_C_EXB", window = 6L, rounds = setdiff(.dhs_rounds, "BD2004DHS"),
       vars = c("caseid", "bidx", "b9", "b19", "b3", "v008", "m4", "m39a", "v409", "v409a", "v410", "v410a",
-               "v411", "v411a", "v412", "v412a", "v412b", "v412c", "v413", "v413a", "v413b", "v413c", "v413d",
+               "v411", "v411a", "v412", "v412a", "v412b", "v412c", "v413",
                paste0("v414", letters[1:23])),
       definition = "Percentage of youngest children under 6 months living with their mother who were exclusively breastfed (24-hour recall).",
-      notes = "The 2004 KR lacks the 24-hour feeding recall variables; the 2007 value differs from the published one (unresolved).",
+      notes = paste(
+        "The 2004 KR lacks the 24-hour feeding recall variables.",
+        "Country-specific liquids (v413a-d) are not counted, as in the DHS standard definition."
+      ),
       reference = .ref_nt
     )
   )

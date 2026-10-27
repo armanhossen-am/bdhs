@@ -7,8 +7,9 @@
 
 devtools::load_all()
 
-dir <- path.expand(Sys.getenv("BDHS_LOCAL_DIR", "~/Documents/MU/Research"))
-files <- list.files(dir, pattern = "[.]dta$", recursive = TRUE, full.names = TRUE, ignore.case = TRUE)
+# One or more folders, separated by ":" (as in 03-build-codebooks.R).
+dirs <- path.expand(strsplit(Sys.getenv("BDHS_LOCAL_DIR", "~/Documents/MU/Research"), ":", fixed = TRUE)[[1]])
+files <- list.files(dirs, pattern = "[.]dta$", recursive = TRUE, full.names = TRUE, ignore.case = TRUE)
 ids <- do.call(rbind, lapply(files, function(f) tryCatch(bdhs_identify_file(f), error = function(e) NULL)))
 ids <- ids[!is.na(ids$survey_id) & !ids$derived & ids$recode %in% c("IR", "KR", "BR", "PR", "HR"), ]
 ids <- ids[!duplicated(paste(ids$survey_id, ids$recode)), ]
