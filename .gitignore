@@ -10,6 +10,8 @@ inst/doc
 *.DTA
 *.sav
 *.SAV
+*.zsav
+*.ZSAV
 *.sas7bdat
 *.SAS7BDAT
 *.zip

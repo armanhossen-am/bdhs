@@ -88,9 +88,11 @@ The chunk below runs the full workflow on synthetic files written to a
 temporary folder, so you can see each step without real data.
 
 ```{r}
-# A temporary data directory and some fake DHS files
-old <- Sys.getenv("BDHS_DATA_DIR")
+# A temporary data directory and some fake DHS files. Both the option and
+# the environment variable are set, so your own store is never touched.
 store <- file.path(tempdir(), "bdhs-store")
+old_opt <- options(bdhs.data_dir = store)
+old_env <- Sys.getenv("BDHS_DATA_DIR", unset = NA)
 Sys.setenv(BDHS_DATA_DIR = store)
 
 downloads <- file.path(tempdir(), "downloads")
@@ -117,7 +119,8 @@ or `bdhs_merge()`. Use `labels = "factor"` to get factors instead of labelled
 numbers.
 
 ```{r, include = FALSE}
-Sys.setenv(BDHS_DATA_DIR = old)
+options(old_opt)
+if (is.na(old_env)) Sys.unsetenv("BDHS_DATA_DIR") else Sys.setenv(BDHS_DATA_DIR = old_env)
 ```
 
 ## Downloading with your DHS account (experimental)

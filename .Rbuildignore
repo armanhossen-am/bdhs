@@ -7,3 +7,8 @@
 ^README\.Rmd$
 ^\.claude$
 ^tools$
+# Never ship DHS microdata or local caches (mirrors .gitignore)
+\.([Dd][Tt][Aa]|[Ss][Aa][Vv]|[Zz][Ss][Aa][Vv]|[Ss][Aa][Ss]7[Bb][Dd][Aa][Tt]|[Zz][Ii][Pp]|[Dd][Aa][Tt]|parquet)$
+^data-local$
+^\.bdhs-cache$
+^docs$
