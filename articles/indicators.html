@@ -307,28 +307,24 @@ holds the results, which are national aggregates only:</p>
 <span><span class="co">#&gt; 1 BD1994DHS   24 / 24</span></span>
 <span><span class="co">#&gt; 2 BD2000DHS   27 / 27</span></span>
 <span><span class="co">#&gt; 3 BD2004DHS   26 / 26</span></span>
-<span><span class="co">#&gt; 4 BD2007DHS   27 / 28</span></span>
+<span><span class="co">#&gt; 4 BD2007DHS   28 / 28</span></span>
 <span><span class="co">#&gt; 5 BD2011DHS   27 / 27</span></span>
 <span><span class="co">#&gt; 6 BD2014DHS   28 / 28</span></span>
 <span><span class="co">#&gt; 7 BD2017DHS 104 / 104</span></span>
 <span><span class="co">#&gt; 8 BD2022DHS   89 / 91</span></span></code></pre></div>
-<p>The three comparisons that fail are known and documented:</p>
+<p>The comparisons that fail are known and documented:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rec</span><span class="op">[</span><span class="op">!</span><span class="va">rec</span><span class="op">$</span><span class="va">pass</span>, <span class="op">]</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 6</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 6</span></span></span>
 <span><span class="co">#&gt;   survey_id recode indicator              computed official pass </span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> BD2007DHS KR     nt_ebf                     42.9     49.8 FALSE</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> BD2022DHS IR     nt_wm_overweight_obese     36.5     35.6 FALSE</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> BD2022DHS IR     nt_wm_thin                 10.0     10.7 FALSE</span></span></code></pre></div>
-<ul>
-<li>Women’s anthropometry in 2022 must come from the household member
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> BD2022DHS IR     nt_wm_overweight_obese     36.5     35.6 FALSE</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> BD2022DHS IR     nt_wm_thin                 10.0     10.7 FALSE</span></span></code></pre></div>
+<p>Women’s anthropometry in 2022 must come from the household member
 file (PR). It covers all women in the biomarker subsample, while the
-women’s file covers ever-married women only. Use
-<code>bdhs_estimate(pr, "nt_wm_thin")</code>.</li>
-<li>Exclusive breastfeeding in 2007 is 42.9% against the official 49.8%.
-The cause is still under investigation.</li>
-</ul>
+women’s file covers ever-married women only, so the IR-based values
+above are expected to differ. Use
+<code>bdhs_estimate(pr, "nt_wm_thin")</code> instead.</p>
 <div class="section level3">
 <h3 id="things-the-validation-taught-us">Things the validation taught us<a class="anchor" aria-label="anchor" href="#things-the-validation-taught-us"></a>
 </h3>
@@ -350,6 +346,12 @@ for 2022.</li>
 <strong>Solar electricity.</strong> The 2022 electricity indicator
 includes solar home systems (<code>sh132g</code>), as in the final
 report (99.4%).</li>
+<li>
+<strong>Country-specific feeding questions.</strong> Exclusive
+breastfeeding follows the DHS standard list of liquids and foods.
+Counting the country-specific liquid items
+(<code>v413a</code>-<code>v413d</code>) as well gives 42.9% for 2007
+instead of the official 49.8%.</li>
 </ul>
 <p>The <code>validated</code> column of
 <code><a href="../reference/bdhs_indicator_list.html">bdhs_indicator_list()</a></code> lists, for each indicator, the rounds

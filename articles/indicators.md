@@ -271,32 +271,29 @@ summary_tab
 #> 1 BD1994DHS   24 / 24
 #> 2 BD2000DHS   27 / 27
 #> 3 BD2004DHS   26 / 26
-#> 4 BD2007DHS   27 / 28
+#> 4 BD2007DHS   28 / 28
 #> 5 BD2011DHS   27 / 27
 #> 6 BD2014DHS   28 / 28
 #> 7 BD2017DHS 104 / 104
 #> 8 BD2022DHS   89 / 91
 ```
 
-The three comparisons that fail are known and documented:
+The comparisons that fail are known and documented:
 
 ``` r
 
 rec[!rec$pass, ]
-#> # A tibble: 3 × 6
+#> # A tibble: 2 × 6
 #>   survey_id recode indicator              computed official pass 
 #>   <chr>     <chr>  <chr>                     <dbl>    <dbl> <lgl>
-#> 1 BD2007DHS KR     nt_ebf                     42.9     49.8 FALSE
-#> 2 BD2022DHS IR     nt_wm_overweight_obese     36.5     35.6 FALSE
-#> 3 BD2022DHS IR     nt_wm_thin                 10.0     10.7 FALSE
+#> 1 BD2022DHS IR     nt_wm_overweight_obese     36.5     35.6 FALSE
+#> 2 BD2022DHS IR     nt_wm_thin                 10.0     10.7 FALSE
 ```
 
-- Women’s anthropometry in 2022 must come from the household member file
-  (PR). It covers all women in the biomarker subsample, while the
-  women’s file covers ever-married women only. Use
-  `bdhs_estimate(pr, "nt_wm_thin")`.
-- Exclusive breastfeeding in 2007 is 42.9% against the official 49.8%.
-  The cause is still under investigation.
+Women’s anthropometry in 2022 must come from the household member file
+(PR). It covers all women in the biomarker subsample, while the women’s
+file covers ever-married women only, so the IR-based values above are
+expected to differ. Use `bdhs_estimate(pr, "nt_wm_thin")` instead.
 
 ### Things the validation taught us
 
@@ -311,6 +308,10 @@ rec[!rec$pass, ]
   vaccination estimates, so these indicators are unavailable for 2022.
 - **Solar electricity.** The 2022 electricity indicator includes solar
   home systems (`sh132g`), as in the final report (99.4%).
+- **Country-specific feeding questions.** Exclusive breastfeeding
+  follows the DHS standard list of liquids and foods. Counting the
+  country-specific liquid items (`v413a`-`v413d`) as well gives 42.9%
+  for 2007 instead of the official 49.8%.
 
 The `validated` column of
 [`bdhs_indicator_list()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_indicator_list.md)

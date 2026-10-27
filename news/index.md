@@ -35,3 +35,9 @@
 - Validated statistics: child marriage by subgroup, GFR (births to
   mothers under 15), all-woman factors for harmonized grouping variables
   and the 2017-18 MR vaccine all reproduce the official DHS values.
+  Exclusive breastfeeding leaves out country-specific liquids, as in the
+  DHS standard definition (2007: 49.8%, official 49.8%); 353 of 355
+  national comparisons now match.
+- `data-raw/00-rebuild-from-local.R` rebuilds codebooks and the
+  validation record from new DHS downloads (zips included) in one
+  command.

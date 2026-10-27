@@ -52,7 +52,9 @@
 <li>Analysis: <code><a href="../reference/bdhs_harmonize.html">bdhs_harmonize()</a></code>, <code><a href="../reference/bdhs_design.html">bdhs_design()</a></code>, <code><a href="../reference/bdhs_pool.html">bdhs_pool()</a></code>, <code><a href="../reference/bdhs_merge.html">bdhs_merge()</a></code>, <code><a href="../reference/bdhs_estimate.html">bdhs_estimate()</a></code>, <code><a href="../reference/bdhs_fertility.html">bdhs_fertility()</a></code>, <code><a href="../reference/bdhs_mortality.html">bdhs_mortality()</a></code> and <code><a href="../reference/bdhs_validate.html">bdhs_validate()</a></code>.</li>
 <li>Synthetic data for teaching and testing: <code><a href="../reference/bdhs_simulate.html">bdhs_simulate()</a></code>.</li>
 <li>Safety: microdata file types can never enter the built package (also checked in CI); renamed files must be confirmed by their contents and name/content conflicts are refused; the DHS password is only ever sent to <code>https://dhsprogram.com</code> and never kept after a failed login; imports lock the data store, so concurrent sessions cannot lose files.</li>
-<li>Validated statistics: child marriage by subgroup, GFR (births to mothers under 15), all-woman factors for harmonized grouping variables and the 2017-18 MR vaccine all reproduce the official DHS values.</li>
+<li>Validated statistics: child marriage by subgroup, GFR (births to mothers under 15), all-woman factors for harmonized grouping variables and the 2017-18 MR vaccine all reproduce the official DHS values. Exclusive breastfeeding leaves out country-specific liquids, as in the DHS standard definition (2007: 49.8%, official 49.8%); 353 of 355 national comparisons now match.</li>
+<li>
+<code>data-raw/00-rebuild-from-local.R</code> rebuilds codebooks and the validation record from new DHS downloads (zips included) in one command.</li>
 </ul></div>
   </main></div>
 

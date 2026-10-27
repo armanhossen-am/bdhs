@@ -41,7 +41,7 @@ table(rec$survey_id, rec$pass)
 #>   BD1994DHS     0   24
 #>   BD2000DHS     0   27
 #>   BD2004DHS     0   26
-#>   BD2007DHS     1   27
+#>   BD2007DHS     0   28
 #>   BD2011DHS     0   27
 #>   BD2014DHS     0   28
 #>   BD2017DHS     0  104
