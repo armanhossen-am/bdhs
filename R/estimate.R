@@ -93,13 +93,16 @@ bdhs_estimate <- function(data, indicators, by = NULL, survey = NULL, level = 0.
     )
   }
   res <- if (length(out)) dplyr::bind_rows(out) else empty_estimate(by)
-  new_bdhs_estimate(res, level = level, scale = scale)
+  by_labels <- vapply(by, function(b) var_label(data[[b]]), character(1))
+  new_bdhs_estimate(res, level = level, scale = scale, by_labels = by_labels)
 }
 
-new_bdhs_estimate <- function(x, level = 0.95, scale = 100) {
+new_bdhs_estimate <- function(x, level = 0.95, scale = 100, by_labels = NULL) {
   x <- tibble::as_tibble(x)
   attr(x, "level") <- level
   attr(x, "scale") <- scale
+  # Variable labels of the `by` columns (named by column), used by plot().
+  attr(x, "by_labels") <- by_labels
   class(x) <- c("bdhs_estimate", setdiff(class(x), "bdhs_estimate"))
   x
 }

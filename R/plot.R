@@ -322,7 +322,7 @@ autoplot.bdhs_estimate <- function(object, ...) {
       title = if (nlevels(d$.facet) == 1L) levels(d$.facet) else "Survey estimates",
       subtitle = survey_text,
       x = "Estimate (95% CI)",
-      y = if (length(by_cols)) paste(by_cols, collapse = " / ") else NULL,
+      y = if (length(by_cols)) paste(estimate_axis_titles(object, by_cols), collapse = " / ") else NULL,
       caption = "Estimates computed with bdhs from DHS microdata; bars show 95% confidence intervals."
     ) +
     explore_theme() +
@@ -348,4 +348,16 @@ explore_group_order <- function(x) {
     return(as_codes(x))
   }
   match(x, unique(x))
+}
+
+# Axis titles for by-columns: the variable label recorded by bdhs_estimate()
+# (e.g. "wealth index combined" for v190), else the column name.
+estimate_axis_titles <- function(object, by_cols) {
+  labs <- attr(object, "by_labels", exact = TRUE)
+  out <- by_cols
+  if (length(labs)) {
+    hit <- by_cols %in% names(labs) & !is.na(labs[by_cols])
+    out[hit] <- labs[by_cols[hit]]
+  }
+  out
 }
