@@ -82,7 +82,7 @@ once:
 
 ``` r
 bdhs_search("caesarean|cesarean")
-#> # bdhs search for "caesarean|cesarean": 150 matches
+#> # bdhs search for "caesarean|cesarean": 151 matches
 #> 
 #> ── Variables (145) ─────────────────────────────────────────────────────────────
 #> m17_1-6 [IR]     delivery by caesarean section                     2017-18, 2022
@@ -97,11 +97,14 @@ bdhs_search("caesarean|cesarean")
 #> s433kg_1-6 [IR]  who was called for caesarean: health assistant    2017-18
 #> ... and 50 more
 #> 
-#> ── Indicators (4) ──────────────────────────────────────────────────────────────
+#> ── Official DHS indicators (4) ─────────────────────────────────────────────────
 #> RH_DELA_C_CSC  Delivery by cesarean section         1999-00, 2004, 2007, 2011, 2014, 2017-18, 2022
 #> RH_DELA_C_CSP  Delivery by caesarean section pl...  2017-18
 #> RH_DELA_C_CSA  Delivery by caesarean section de...  2017-18
 #> RH_DELA_C_CSM  Delivery by caesarean section - ...  2017-18
+#> 
+#> ── Computable with bdhs_estimate() (1) ─────────────────────────────────────────
+#> rh_del_csection  Delivery by caesarean section ...  1996-97, 1999-00, 2004, 2007, 2011, 2014, 2017-18, 2022
 #> 
 #> ── Harmonized variables (1) ────────────────────────────────────────────────────
 #> csection  Delivery by caesarean section (m17)  1999-00, 2004, 2007, 2011, 2014, 2017-18, 2022
@@ -117,31 +120,36 @@ bdhs_import("~/Downloads/BDHS")
 bdhs_inventory()                       # what you have vs. what exists
 
 ir <- bdhs_read(2022, "IR")            # women, 2022
-kr <- bdhs_read("2017-18", "KR",       # children, only the columns you need
-                vars = c("m14", "m15", "m17", "hw70"))
+kr <- bdhs_read("2017-18", "KR")       # children, 2017-18
 
-bdhs_estimate(kr, c("anc_4plus", "facility_delivery", "csection", "stunting"),
+bdhs_estimate(kr, c("rh_anc_4plus", "rh_del_facility", "rh_del_csection"),
               by = "v025")             # correct design, SEs, CIs
-
 bdhs_validate(kr)                      # compare with official DHS values
+
+# Big files: read only what some indicators need
+ir <- bdhs_read(2022, "IR", indicators = c("fp_cpr_modern", "fp_unmet_total"))
+
+bdhs_mortality(bdhs_read(2022, "BR"))  # NMR, IMR, U5MR with jackknife SEs
 ```
 
-Everything above also works on synthetic data, which is how the
+The same code runs on synthetic data from `bdhs_simulate()`, which has
+the structure of the real files with random values. That is how the
 examples, tests and vignettes run without real files:
 
 ``` r
 kr <- bdhs_simulate(2022, "KR")
-des <- bdhs_design(kr)
-des
-#> Stratified 1 - level Cluster Sampling design (with replacement)
-#> With (40) clusters.
-#> des <- survey::svydesign(
-#>     ids = ~.bdhs_psu,
-#>     strata = if (is.null(st)) NULL else ~.bdhs_strata,
-#>     weights = ~.bdhs_wt,
-#>     data = design_data,
-#>     nest = TRUE
-#>   )
+bdhs_estimate(kr, c("rh_anc_4plus", "rh_del_facility", "rh_del_csection"), by = "v025")
+#> # BDHS estimates: 3 indicators | BD2022DHS | 95% CI
+#> # A tibble: 6 × 11
+#>   survey_id indicator     label v025  estimate    se ci_low ci_high n_unweighted
+#>   <chr>     <chr>         <chr> <fct>    <dbl> <dbl>  <dbl>   <dbl>        <int>
+#> 1 BD2022DHS rh_anc_4plus  Four… urban     43.5  5.78   32.2    55.6           70
+#> 2 BD2022DHS rh_anc_4plus  Four… rural     23.8  3.10   18.0    30.8           75
+#> 3 BD2022DHS rh_del_facil… Deli… urban     59.4  7.93   42.6    74.2           78
+#> 4 BD2022DHS rh_del_facil… Deli… rural     49.7  2.96   43.7    55.8           84
+#> 5 BD2022DHS rh_del_csect… Deli… urban     29.2  6.66   17.5    44.5           78
+#> 6 BD2022DHS rh_del_csect… Deli… rural     31.4  4.08   23.6    40.4           84
+#> # ℹ 2 more variables: n_weighted <dbl>, api_id <chr>
 ```
 
 ## What’s inside
