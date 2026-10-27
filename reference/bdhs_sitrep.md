@@ -51,7 +51,7 @@ bdhs_sitrep()
 #> 
 #> ── Packages ──
 #> 
-#> • bdhs 0.1.0.9000
+#> • bdhs 0.1.0
 #> • haven 2.5.5
 #> • arrow 26.0.0 (Parquet storage)
 #> • httr2 1.3.0 (for the experimental `bdhs_download()`)

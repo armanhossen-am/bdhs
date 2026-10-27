@@ -64,11 +64,11 @@ bdhs_data_dir()
 # Use another location for this session
 old <- options(bdhs.data_dir = NULL)
 bdhs_data_dir(file.path(tempdir(), "bdhs-data"))
-#> ✔ bdhs data directory set to /tmp/RtmppOGOQf/bdhs-data for this R session.
+#> ✔ bdhs data directory set to /tmp/RtmpoHb29v/bdhs-data for this R session.
 #> ℹ To keep it in future sessions, add this line to your .Renviron (for example
 #>   with `usethis::edit_r_environ()`):
-#>   `BDHS_DATA_DIR=/tmp/RtmppOGOQf/bdhs-data`
+#>   `BDHS_DATA_DIR=/tmp/RtmpoHb29v/bdhs-data`
 bdhs_data_dir()
-#> [1] "/tmp/RtmppOGOQf/bdhs-data"
+#> [1] "/tmp/RtmpoHb29v/bdhs-data"
 options(old)
 ```

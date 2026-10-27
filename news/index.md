@@ -1,6 +1,6 @@
 # Changelog
 
-## bdhs 0.1.0.9000
+## bdhs 0.1.0
 
 - First release. Covers all nine BDHS rounds (1993-94 to 2022), the
   three Bangladesh Service Provision Assessments and the 2001 maternal
