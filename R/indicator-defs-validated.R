@@ -3,8 +3,7 @@
 # National aggregates computed by bdhs_validate() from the maintainer's own
 # copies of the BDHS recode files, compared with the DHS Program API values
 # bundled in bdhs_indicators. Only aggregate numbers are stored (no microdata).
-# Regenerate with data-raw/07-build-validation.R (needs the local microdata).
-# Last run: 2026-10-26.
+# Regenerate with data-raw/07-build-validation.R. Last run: 2026-10-27.
 
 .indicator_validation <- tibble::tribble(
   ~survey_id, ~recode, ~indicator, ~computed, ~official, ~pass,
@@ -183,7 +182,7 @@
   "BD2017DHS", "IR", "ed_secondary_plus", 52.190, 52.20, TRUE,
   "BD2017DHS", "IR", "fe_asfr_15_19", 108.166, 108.00, TRUE,
   "BD2017DHS", "IR", "fe_ceb_mean", 2.021, 2.02, TRUE,
-  "BD2017DHS", "IR", "fe_gfr", 85.286, 86.00, TRUE,
+  "BD2017DHS", "IR", "fe_gfr", 86.090, 86.00, TRUE,
   "BD2017DHS", "IR", "fe_teen_begun_childbearing", 27.651, 27.70, TRUE,
   "BD2017DHS", "IR", "fe_teen_mothers", 21.700, 21.70, TRUE,
   "BD2017DHS", "IR", "fe_teen_pregnant_first", 5.951, 6.00, TRUE,
@@ -282,7 +281,7 @@
   "BD2022DHS", "IR", "ed_secondary_plus", 59.418, 59.40, TRUE,
   "BD2022DHS", "IR", "fe_asfr_15_19", 92.109, 92.00, TRUE,
   "BD2022DHS", "IR", "fe_ceb_mean", 1.814, 1.81, TRUE,
-  "BD2022DHS", "IR", "fe_gfr", 84.765, 85.00, TRUE,
+  "BD2022DHS", "IR", "fe_gfr", 85.081, 85.00, TRUE,
   "BD2022DHS", "IR", "fe_teen_begun_childbearing", 22.896, 22.80, TRUE,
   "BD2022DHS", "IR", "fe_teen_mothers", 17.788, 17.80, TRUE,
   "BD2022DHS", "IR", "fe_teen_pregnant_first", 5.108, 5.00, TRUE,

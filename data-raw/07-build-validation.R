@@ -15,7 +15,10 @@ ids <- ids[!duplicated(paste(ids$survey_id, ids$recode)), ]
 
 res <- lapply(seq_len(nrow(ids)), function(i) {
   message("Validating ", ids$survey_id[i], " ", ids$recode[i])
-  inds <- applicable_indicators(ids$recode[i], ids$survey_id[i])
+  inds <- applicable_indicators(ids$recode[i], ids$survey_id[i], with_api = TRUE)
+  if (!length(inds)) {
+    return(NULL)
+  }
   nm <- names(haven::read_dta(ids$path[i], n_max = 0))
   cols <- indicator_columns(inds, tolower(nm))
   d <- bdhs_read_file(ids$path[i], vars = nm[tolower(nm) %in% cols])
