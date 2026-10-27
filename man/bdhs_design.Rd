@@ -17,11 +17,18 @@ bdhs_design(
 \item{data}{A data frame of BDHS recode data (one round, or several rounds
 pooled with \code{\link[=bdhs_pool]{bdhs_pool()}}).}
 
-\item{weight}{Which weight to use. \code{"default"} is the standard weight of
-the recode (\code{v005} for women, children and births, \code{hv005} for households
-and members, \code{mv005} for men). \code{"dv"} uses the domestic violence module
-weight \code{d005}. A column name can also be given; it is divided by 1e6 when
-it is one of the DHS 6-decimal weights.}
+\item{weight}{Which weight to use.
+\itemize{
+\item \code{"default"}: \code{pool_wt} for pooled data made by \code{\link[=bdhs_pool]{bdhs_pool()}}, otherwise
+the standard weight of the recode (\code{v005} for women, children and
+births, \code{hv005} for households and members, \code{mv005} for men).
+\item \code{"dv"}: the domestic violence module weight (\code{d005}; \code{md005} for men).
+\item \code{"male"}: the household weight for the men's subsample (\code{hv028}) in
+household and member files; \code{mv005} in the men's file.
+\item \code{"household"}: the household weight \code{hv005}.
+\item A column name. DHS weights with six implied decimals (\verb{*005},
+\code{hv028}, \code{ha69}, \code{hb69}) are divided by 1e6.
+}}
 
 \item{strata}{Stratification. \code{"auto"} (default) uses the DHS sampling-error
 strata (\code{v022}/\code{hv022}/\code{mv022}), which is the DHS Program's
@@ -37,17 +44,35 @@ package.}
 }
 \value{
 A \code{survey.design2} object (or a \code{tbl_svy} when \code{srvyr = TRUE})
-with attributes \code{bdhs_survey_id} and \code{bdhs_recode}.
+with attributes \code{bdhs_survey_id}, \code{bdhs_recode}, \code{bdhs_weight} (the
+weight column used) and \code{bdhs_singleton_strata} (number of strata with
+one PSU).
 }
 \description{
 Creates a \code{\link[survey:svydesign]{survey::svydesign()}} object with the clustering, stratification
 and weights that the DHS Program uses for the given recode, so standard
 errors and confidence intervals are correct. The round and recode are
 detected automatically for data read with \code{\link[=bdhs_read]{bdhs_read()}} or
-\code{\link[=bdhs_simulate]{bdhs_simulate()}}.
+\code{\link[=bdhs_simulate]{bdhs_simulate()}}. \code{\link[=bdhs_design_info]{bdhs_design_info()}} documents the design of every
+round.
+}
+\details{
+Pooled data (several rounds, see \code{\link[=bdhs_pool]{bdhs_pool()}}) get round-specific PSU and
+strata identifiers, and the pooled weight \code{pool_wt} is used when present.
+
+Some strata can contain a single PSU (for example after subsetting, or in
+small domains). The variance of such strata cannot be estimated with the
+default \code{options(survey.lonely.psu = "fail")}; \code{bdhs_design()} tells you
+once per session when this happens. The usual fix, used by the DHS
+Program's own software (centering at the grand mean), is
+\code{options(survey.lonely.psu = "adjust")}.
 }
 \examples{
 ir <- bdhs_simulate(2022, "IR")
 des <- bdhs_design(ir)
 survey::svymean(~v201, des)
+
+# Pooled rounds: round-specific strata and PSUs, pooled weights
+p <- bdhs_pool(bdhs_simulate(2017, "IR"), bdhs_simulate(2022, "IR"))
+survey::svyby(~v201, ~survey_id, bdhs_design(p), survey::svymean)
 }

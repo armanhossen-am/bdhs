@@ -62,3 +62,8 @@ bdhs_opt <- function(name, default = NULL) {
 `%|NA|%` <- function(x, y) {
   ifelse(is.na(x), y, x)
 }
+
+# Escape braces so arbitrary text (file names, labels) can go into cli messages.
+cli_escape <- function(x) {
+  gsub("}", "}}", gsub("{", "{{", x, fixed = TRUE), fixed = TRUE)
+}

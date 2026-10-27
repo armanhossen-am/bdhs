@@ -526,6 +526,3 @@ harmonize_report <- function(cw, vars, out_vars, results, rounds, log, explicit,
 }
 
 # Escape braces so free text can go through cli.
-cli_escape <- function(x) {
-  gsub("\\}", "}}", gsub("\\{", "{{", x))
-}

@@ -433,6 +433,3 @@ import_summary <- function(res, dir) {
 }
 
 # Escape braces so that file names are printed literally by cli.
-cli_escape <- function(x) {
-  gsub("}", "}}", gsub("{", "{{", x, fixed = TRUE), fixed = TRUE)
-}

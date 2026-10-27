@@ -443,7 +443,7 @@ sim_kr <- function(wm, births, info) {
             "vaccination marked on card" = 3, "don't know" = 8)
   symp_lab <- c(no = 0, "yes, last 24 hours" = 1, "yes, last two weeks" = 2, "don't know" = 8)
   alive <- b$b5 == 1L
-  symptom <- function(p) ifelse(alive, ifelse(stats::runif(n) < p, 2L, 0L), NA)
+  symptom <- function(p, yes = 2L) ifelse(alive, ifelse(stats::runif(n) < p, yes, 0L), NA)
   m3 <- function(x, label) lbl(as.numeric(x), c(no = 0, yes = 1), label)
   tibble::as_tibble(c(
     list(caseid = num(sprintf("%12s%3d", w$hhid, w$line), "case identification"),
@@ -480,7 +480,7 @@ sim_kr <- function(wm, births, info) {
       h7 = lbl(as.numeric(vacc(0.90)), vlab, "received pentavalent 3"),
       h9 = lbl(as.numeric(vacc(0.88)), vlab, "received measles 1"),
       h11 = lbl(as.numeric(symptom(0.05)), symp_lab, "had diarrhea recently"),
-      h22 = lbl(as.numeric(symptom(0.30)), c(no = 0, yes = 1, "don't know" = 8), "had fever in last two weeks"),
+      h22 = lbl(as.numeric(symptom(0.30, yes = 1L)), c(no = 0, yes = 1, "don't know" = 8), "had fever in last two weeks"),
       h31 = lbl(as.numeric(symptom(0.25)), symp_lab, "had cough in last two weeks"),
       hw70 = num(as.numeric(ifelse(alive, round(stats::rnorm(n, -130 + 25 * w$wscore, 120)), NA)),
         "ht/a standard deviation (new who)"),
