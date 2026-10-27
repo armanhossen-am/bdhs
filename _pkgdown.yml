@@ -79,6 +79,17 @@ reference:
   - bdhs_validate
   - bdhs_validation_record
   - plot.bdhs_estimate
+- title: Change, inequality and SDG progress
+  contents:
+  - bdhs_compare
+  - bdhs_inequality
+  - bdhs_inequality_official
+  - bdhs_decompose
+  - bdhs_sdg
+- title: Data quality
+  contents:
+  - bdhs_quality
+  - plot.bdhs_quality
 - title: Maps
   contents:
   - bdhs_boundaries

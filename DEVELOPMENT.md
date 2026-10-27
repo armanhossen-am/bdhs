@@ -76,6 +76,8 @@ devtools::load_all(); devtools::document(); devtools::test()
 Sys.setenv(BDHS_LOCAL_TESTS = "true"); devtools::test()   # with real files
 ```
 
+* New exported functions must be added to `_pkgdown.yml` (the test
+  `test-pkgdown.R` and the website build fail otherwise).
 * `Rscript tools/check-duplicate-defs.R` catches top-level names defined twice
   (a later file silently overrides an earlier one).
 * `data-raw/00-rebuild-from-local.R` rebuilds codebooks and the validation
