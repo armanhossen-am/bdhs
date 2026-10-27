@@ -35,7 +35,7 @@ bibentry(
   author = person("ICF"),
   organization = "The Demographic and Health Surveys (DHS) Program",
   year = "2026",
-  url = "https://spatialdata.dhsprogram.com",
+  url = "https://spatialdata.dhsprogram.com/home/",
   note = "Source of the division boundaries bundled in bdhs (ODbL 1.0).",
   textVersion = paste(
     "Spatial Data Repository, The Demographic and Health Surveys Program. ICF International.",

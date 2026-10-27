@@ -418,7 +418,7 @@
 #' }
 #' @source Value labels of the survey files ([bdhs_value_labels]); DHS
 #'   Spatial Data Repository region attributes
-#'   (<https://spatialdata.dhsprogram.com>, accessed 2026-10-26); bdhs
+#'   (<https://spatialdata.dhsprogram.com/home/>, accessed 2026-10-26); bdhs
 #'   harmonization rules. Built by `data-raw/05-build-regions.R`.
 #' @seealso [bdhs_boundaries()] for the polygons (same `survey_id`,
 #'   `region_code`, `unit_id` and `reg_id`), [bdhs_harmonize()] for

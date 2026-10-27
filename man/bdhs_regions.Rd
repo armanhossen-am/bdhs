@@ -51,7 +51,7 @@ from.}
 \source{
 Value labels of the survey files (\link{bdhs_value_labels}); DHS
 Spatial Data Repository region attributes
-(\url{https://spatialdata.dhsprogram.com}, accessed 2026-10-26); bdhs
+(\url{https://spatialdata.dhsprogram.com/home/}, accessed 2026-10-26); bdhs
 harmonization rules. Built by \code{data-raw/05-build-regions.R}.
 }
 \usage{

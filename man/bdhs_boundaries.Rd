@@ -23,7 +23,7 @@ the round you are mapping.
 }
 \details{
 Boundaries come from the DHS Program Spatial Data Repository
-(\url{https://spatialdata.dhsprogram.com}, ICF), licensed under the Open
+(\url{https://spatialdata.dhsprogram.com/home/}, ICF), licensed under the Open
 Database License (ODbL) 1.0. \code{region_code} is the region code used in the
 recode files (\code{v024}/\code{hv024}), and \code{reg_id} links to the \code{region_id} of
 official subnational estimates in \code{\link[=bdhs_official]{bdhs_official()}}.

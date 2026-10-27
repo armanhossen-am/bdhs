@@ -8,7 +8,7 @@
 #' the round you are mapping.
 #'
 #' Boundaries come from the DHS Program Spatial Data Repository
-#' (<https://spatialdata.dhsprogram.com>, ICF), licensed under the Open
+#' (<https://spatialdata.dhsprogram.com/home/>, ICF), licensed under the Open
 #' Database License (ODbL) 1.0. `region_code` is the region code used in the
 #' recode files (`v024`/`hv024`), and `reg_id` links to the `region_id` of
 #' official subnational estimates in [bdhs_official()].
