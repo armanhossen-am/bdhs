@@ -17,8 +17,10 @@
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_add_indicators.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_boundaries.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_codebook.html</loc></url>
+<url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_compare.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_data_dir.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_datasets.html</loc></url>
+<url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_decompose.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_describe.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_design.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_design_info.html</loc></url>
@@ -33,6 +35,8 @@
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_indicator_catalog.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_indicator_list.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_indicators.html</loc></url>
+<url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_inequality.html</loc></url>
+<url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_inequality_official.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_inventory.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_map.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_merge.html</loc></url>
@@ -42,11 +46,13 @@
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_plot_trend.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_pool.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_pool_population.html</loc></url>
+<url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_quality.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_read.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_read_file.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_recodes.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_regions.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_rounds.html</loc></url>
+<url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_sdg.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_search.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_simulate.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_sitrep.html</loc></url>
@@ -58,5 +64,6 @@
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/bdhs_variable.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/index.html</loc></url>
 <url><loc>https://armanhossen-am.github.io/bdhs/reference/plot.bdhs_estimate.html</loc></url>
+<url><loc>https://armanhossen-am.github.io/bdhs/reference/plot.bdhs_quality.html</loc></url>
 </urlset>
 

@@ -132,7 +132,8 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">load_all</span><span class="op">(</span><span class="op">)</span>; <span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span>; <span class="fu">devtools</span><span class="fu">::</span><span class="fu">test</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>BDHS_LOCAL_TESTS <span class="op">=</span> <span class="st">"true"</span><span class="op">)</span>; <span class="fu">devtools</span><span class="fu">::</span><span class="fu">test</span><span class="op">(</span><span class="op">)</span>   <span class="co"># with real files</span></span></code></pre></div>
-<ul><li>
+<ul><li>New exported functions must be added to <code>_pkgdown.yml</code> (the test <code>test-pkgdown.R</code> and the website build fail otherwise).</li>
+<li>
 <code>Rscript tools/check-duplicate-defs.R</code> catches top-level names defined twice (a later file silently overrides an earlier one).</li>
 <li>
 <code>data-raw/00-rebuild-from-local.R</code> rebuilds codebooks and the validation record from the maintainer’s files (zips allowed).</li>

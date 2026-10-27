@@ -300,6 +300,33 @@ Import and read the files you downloaded from the DHS Program.
   [`autoplot(`*`<bdhs_estimate>`*`)`](https://armanhossen-am.github.io/bdhs/reference/plot.bdhs_estimate.md)
   : Plot survey estimates
 
+## Change, inequality and SDG progress
+
+- [`bdhs_compare()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_compare.md)
+  : Compare indicators between survey rounds and between subgroups
+- [`bdhs_inequality()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_inequality.md)
+  [`plot(`*`<bdhs_inequality>`*`)`](https://armanhossen-am.github.io/bdhs/reference/bdhs_inequality.md)
+  [`autoplot(`*`<bdhs_inequality>`*`)`](https://armanhossen-am.github.io/bdhs/reference/bdhs_inequality.md)
+  : Socioeconomic inequality in an indicator
+- [`bdhs_inequality_official()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_inequality_official.md)
+  : Inequality gaps from the official estimates
+- [`bdhs_decompose()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_decompose.md)
+  [`plot(`*`<bdhs_decomposition>`*`)`](https://armanhossen-am.github.io/bdhs/reference/bdhs_decompose.md)
+  [`autoplot(`*`<bdhs_decomposition>`*`)`](https://armanhossen-am.github.io/bdhs/reference/bdhs_decompose.md)
+  : Decompose the change of an indicator between two rounds
+- [`bdhs_sdg()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_sdg.md)
+  [`plot(`*`<bdhs_sdg>`*`)`](https://armanhossen-am.github.io/bdhs/reference/bdhs_sdg.md)
+  [`autoplot(`*`<bdhs_sdg>`*`)`](https://armanhossen-am.github.io/bdhs/reference/bdhs_sdg.md)
+  : SDG tracker for Bangladesh from the official DHS estimates
+
+## Data quality
+
+- [`bdhs_quality()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_quality.md)
+  : Data-quality diagnostics for DHS recode files
+- [`plot(`*`<bdhs_quality>`*`)`](https://armanhossen-am.github.io/bdhs/reference/plot.bdhs_quality.md)
+  [`autoplot(`*`<bdhs_quality>`*`)`](https://armanhossen-am.github.io/bdhs/reference/plot.bdhs_quality.md)
+  : Plot data-quality profiles
+
 ## Maps
 
 - [`bdhs_boundaries()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_boundaries.md)
