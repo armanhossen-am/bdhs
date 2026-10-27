@@ -1,0 +1,899 @@
+"survey_id","recode","check","statistic","group","value","benchmark","interpretation","n"
+"BD1994DHS","KR","birth_date_completeness","pct_month_and_year","all",99.97,100,NA,3874
+"BD1994DHS","KR","birth_date_completeness","pct_month_and_year","living",99.97,100,NA,3554
+"BD1994DHS","KR","birth_date_completeness","pct_month_and_year","dead",100,100,NA,320
+"BD1994DHS","KR","birth_date_completeness","pct_month_and_year","last_5_years",99.97,100,NA,3874
+"BD1994DHS","KR","birth_date_completeness","pct_month_and_year","last_15_years",99.97,100,NA,3874
+"BD1994DHS","KR","birth_date_completeness","pct_living_age_imputed","living",0.03,0,NA,3554
+"BD1994DHS","KR","births_by_year","years_before_ratio","1",93.48,100,NA,1234
+"BD1994DHS","KR","births_by_year","pct_last5_with_m15","births 0-59 months",99.9,NA,"place of delivery reported; m15 covers fewer than 5 years in some rounds",3874
+"BD1994DHS","KR","age_at_death","pct_reported_days","deaths",59.06,NA,NA,320
+"BD1994DHS","KR","age_at_death","pct_reported_months","deaths",35,NA,NA,320
+"BD1994DHS","KR","age_at_death","pct_reported_years","deaths",5.31,NA,NA,320
+"BD1994DHS","KR","age_at_death","pct_missing","deaths",0.62,0,NA,320
+"BD1994DHS","KR","age_at_death","heaping_12_months","reported (12 months or 1 year)",800,100,"strong heaping at 12 months",15
+"BD1994DHS","KR","age_at_death","pct_12_months_as_1_year","reported",58.33,NA,NA,12
+"BD1994DHS","KR","age_at_death","heaping_12_months","imputed months (b7)",1200,100,"strong heaping at 12 months",14
+"BD1994DHS","KR","anthropometry","pct_missing_weight","children",NA,0,NA,0
+"BD1994DHS","KR","anthropometry","pct_missing_height","children",NA,0,NA,0
+"BD1994DHS","KR","completeness","pct_na","v012",0,0,"includes rows skipped by design",3874
+"BD1994DHS","KR","completeness","pct_dk_or_missing_code","v012",0,0,NA,3874
+"BD1994DHS","KR","completeness","pct_na","v024",0,0,"includes rows skipped by design",3874
+"BD1994DHS","KR","completeness","pct_dk_or_missing_code","v024",0,0,NA,3874
+"BD1994DHS","KR","completeness","pct_na","v025",0,0,"includes rows skipped by design",3874
+"BD1994DHS","KR","completeness","pct_dk_or_missing_code","v025",0,0,NA,3874
+"BD1994DHS","KR","completeness","pct_na","v106",0,0,"includes rows skipped by design",3874
+"BD1994DHS","KR","completeness","pct_dk_or_missing_code","v106",0,0,NA,3874
+"BD1994DHS","KR","completeness","pct_na","v130",0,0,"includes rows skipped by design",3874
+"BD1994DHS","KR","completeness","pct_dk_or_missing_code","v130",0,0,NA,3874
+"BD1994DHS","KR","completeness","pct_na","b4",0,0,"includes rows skipped by design",3874
+"BD1994DHS","KR","completeness","pct_dk_or_missing_code","b4",0,0,NA,3874
+"BD1994DHS","KR","completeness","pct_na","b10",0,0,"includes rows skipped by design",3874
+"BD1994DHS","KR","completeness","pct_dk_or_missing_code","b10",0,0,NA,3874
+"BD1994DHS","KR","completeness","pct_na","m14",0.21,0,"includes rows skipped by design",3874
+"BD1994DHS","KR","completeness","pct_dk_or_missing_code","m14",0.1,0,NA,3866
+"BD1994DHS","KR","completeness","pct_na","m15",0.1,0,"includes rows skipped by design",3874
+"BD1994DHS","KR","completeness","pct_dk_or_missing_code","m15",0,0,NA,3870
+"BD1994DHS","KR","completeness","pct_na","m17",100,0,"includes rows skipped by design",3874
+"BD1994DHS","KR","completeness","pct_dk_or_missing_code","m17",NA,0,NA,0
+"BD1994DHS","KR","completeness","pct_na","h2",8.26,0,"includes rows skipped by design",3874
+"BD1994DHS","KR","completeness","pct_dk_or_missing_code","h2",0.14,0,NA,3554
+"BD1994DHS","KR","completeness","pct_na","h3",8.29,0,"includes rows skipped by design",3874
+"BD1994DHS","KR","completeness","pct_dk_or_missing_code","h3",0.65,0,NA,3553
+"BD2000DHS","KR","birth_date_completeness","pct_month_and_year","all",99.99,100,NA,6832
+"BD2000DHS","KR","birth_date_completeness","pct_month_and_year","living",100,100,NA,6326
+"BD2000DHS","KR","birth_date_completeness","pct_month_and_year","dead",99.8,100,NA,506
+"BD2000DHS","KR","birth_date_completeness","pct_month_and_year","last_5_years",99.99,100,NA,6832
+"BD2000DHS","KR","birth_date_completeness","pct_month_and_year","last_15_years",99.99,100,NA,6832
+"BD2000DHS","KR","birth_date_completeness","pct_living_age_imputed","living",0,0,NA,6326
+"BD2000DHS","KR","births_by_year","calendar_year_ratio","1997",100.11,100,NA,1383
+"BD2000DHS","KR","births_by_year","years_before_ratio","1",101.53,100,NA,1398
+"BD2000DHS","KR","births_by_year","years_before_ratio","2",103.31,100,NA,1406
+"BD2000DHS","KR","births_by_year","years_before_ratio","3",95.87,100,NA,1324
+"BD2000DHS","KR","births_by_year","births_year4_vs_year3","48-59 vs 36-47 months",102.42,100,NA,2680
+"BD2000DHS","KR","births_by_year","pct_last5_with_m15","births 0-59 months",99.69,NA,"place of delivery reported; m15 covers fewer than 5 years in some rounds",6832
+"BD2000DHS","KR","age_at_death","pct_reported_days","deaths",57.23,NA,NA,505
+"BD2000DHS","KR","age_at_death","pct_reported_months","deaths",36.44,NA,NA,505
+"BD2000DHS","KR","age_at_death","pct_reported_years","deaths",6.34,NA,NA,505
+"BD2000DHS","KR","age_at_death","pct_missing","deaths",0,0,NA,505
+"BD2000DHS","KR","age_at_death","heaping_12_months","reported (12 months or 1 year)",275,100,"strong heaping at 12 months",19
+"BD2000DHS","KR","age_at_death","pct_12_months_as_1_year","reported",18.18,NA,NA,11
+"BD2000DHS","KR","age_at_death","heaping_12_months","imputed months (b7)",250,100,"strong heaping at 12 months",18
+"BD2000DHS","KR","anthropometry","pct_missing_weight","children",5.83,0,NA,6326
+"BD2000DHS","KR","anthropometry","weight_terminal_digit_pct_0","children",10.79,10,NA,5957
+"BD2000DHS","KR","anthropometry","weight_terminal_digit_pct_0_or_5","children",20.5,20,NA,5957
+"BD2000DHS","KR","anthropometry","weight_terminal_digit_dissimilarity","children",1.93,0,NA,5957
+"BD2000DHS","KR","anthropometry","pct_missing_height","children",11.92,0,NA,6326
+"BD2000DHS","KR","anthropometry","height_terminal_digit_pct_0","children",16.91,10,NA,5572
+"BD2000DHS","KR","anthropometry","height_terminal_digit_pct_0_or_5","children",31.57,20,NA,5572
+"BD2000DHS","KR","anthropometry","height_terminal_digit_dissimilarity","children",14.61,0,NA,5572
+"BD2000DHS","KR","completeness","pct_na","v012",0,0,"includes rows skipped by design",6832
+"BD2000DHS","KR","completeness","pct_dk_or_missing_code","v012",0,0,NA,6832
+"BD2000DHS","KR","completeness","pct_na","v024",0,0,"includes rows skipped by design",6832
+"BD2000DHS","KR","completeness","pct_dk_or_missing_code","v024",0,0,NA,6832
+"BD2000DHS","KR","completeness","pct_na","v025",0,0,"includes rows skipped by design",6832
+"BD2000DHS","KR","completeness","pct_dk_or_missing_code","v025",0,0,NA,6832
+"BD2000DHS","KR","completeness","pct_na","v106",0,0,"includes rows skipped by design",6832
+"BD2000DHS","KR","completeness","pct_dk_or_missing_code","v106",0,0,NA,6832
+"BD2000DHS","KR","completeness","pct_na","v130",0,0,"includes rows skipped by design",6832
+"BD2000DHS","KR","completeness","pct_dk_or_missing_code","v130",0,0,NA,6832
+"BD2000DHS","KR","completeness","pct_na","b4",0,0,"includes rows skipped by design",6832
+"BD2000DHS","KR","completeness","pct_dk_or_missing_code","b4",0,0,NA,6832
+"BD2000DHS","KR","completeness","pct_na","b10",0,0,"includes rows skipped by design",6832
+"BD2000DHS","KR","completeness","pct_dk_or_missing_code","b10",0,0,NA,6832
+"BD2000DHS","KR","completeness","pct_na","m14",24.14,0,"includes rows skipped by design",6832
+"BD2000DHS","KR","completeness","pct_dk_or_missing_code","m14",0.12,0,NA,5183
+"BD2000DHS","KR","completeness","pct_na","m15",0.31,0,"includes rows skipped by design",6832
+"BD2000DHS","KR","completeness","pct_dk_or_missing_code","m15",0,0,NA,6811
+"BD2000DHS","KR","completeness","pct_na","m17",0.29,0,"includes rows skipped by design",6832
+"BD2000DHS","KR","completeness","pct_dk_or_missing_code","m17",0,0,NA,6812
+"BD2000DHS","KR","completeness","pct_na","h2",7.44,0,"includes rows skipped by design",6832
+"BD2000DHS","KR","completeness","pct_dk_or_missing_code","h2",0,0,NA,6324
+"BD2000DHS","KR","completeness","pct_na","h3",7.41,0,"includes rows skipped by design",6832
+"BD2000DHS","KR","completeness","pct_dk_or_missing_code","h3",0.05,0,NA,6326
+"BD2004DHS","KR","birth_date_completeness","pct_month_and_year","all",99.97,100,NA,6908
+"BD2004DHS","KR","birth_date_completeness","pct_month_and_year","living",99.98,100,NA,6424
+"BD2004DHS","KR","birth_date_completeness","pct_month_and_year","dead",99.79,100,NA,484
+"BD2004DHS","KR","birth_date_completeness","pct_month_and_year","last_5_years",99.97,100,NA,6908
+"BD2004DHS","KR","birth_date_completeness","pct_month_and_year","last_15_years",99.97,100,NA,6908
+"BD2004DHS","KR","birth_date_completeness","pct_living_age_imputed","living",0.02,0,NA,6424
+"BD2004DHS","KR","births_by_year","calendar_year_ratio","2001",104.51,100,NA,1449
+"BD2004DHS","KR","births_by_year","calendar_year_ratio","2002",95.68,100,NA,1361
+"BD2004DHS","KR","births_by_year","years_before_ratio","1",96.67,100,NA,1337
+"BD2004DHS","KR","births_by_year","years_before_ratio","2",102.88,100,NA,1431
+"BD2004DHS","KR","births_by_year","years_before_ratio","3",103.55,100,NA,1445
+"BD2004DHS","KR","births_by_year","births_year4_vs_year3","48-59 vs 36-47 months",94.12,100,NA,2805
+"BD2004DHS","KR","births_by_year","pct_last5_with_m15","births 0-59 months",99.97,NA,"place of delivery reported; m15 covers fewer than 5 years in some rounds",6908
+"BD2004DHS","KR","age_at_death","pct_reported_days","deaths",56.61,NA,NA,484
+"BD2004DHS","KR","age_at_death","pct_reported_months","deaths",39.46,NA,NA,484
+"BD2004DHS","KR","age_at_death","pct_reported_years","deaths",3.93,NA,NA,484
+"BD2004DHS","KR","age_at_death","pct_missing","deaths",0,0,NA,484
+"BD2004DHS","KR","age_at_death","heaping_12_months","reported (12 months or 1 year)",183.33,100,"strong heaping at 12 months",23
+"BD2004DHS","KR","age_at_death","pct_12_months_as_1_year","reported",0,NA,NA,11
+"BD2004DHS","KR","age_at_death","heaping_12_months","imputed months (b7)",183.33,100,"strong heaping at 12 months",23
+"BD2004DHS","KR","anthropometry","pct_missing_weight","children",3.11,0,NA,6375
+"BD2004DHS","KR","anthropometry","weight_terminal_digit_pct_0","children",11.06,10,NA,6177
+"BD2004DHS","KR","anthropometry","weight_terminal_digit_pct_0_or_5","children",20.77,20,NA,6177
+"BD2004DHS","KR","anthropometry","weight_terminal_digit_dissimilarity","children",1.9,0,NA,6177
+"BD2004DHS","KR","anthropometry","pct_missing_height","children",5.05,0,NA,6375
+"BD2004DHS","KR","anthropometry","height_terminal_digit_pct_0","children",10.82,10,NA,6053
+"BD2004DHS","KR","anthropometry","height_terminal_digit_pct_0_or_5","children",23.91,20,NA,6053
+"BD2004DHS","KR","anthropometry","height_terminal_digit_dissimilarity","children",7.55,0,NA,6053
+"BD2004DHS","KR","completeness","pct_na","v012",0,0,"includes rows skipped by design",6908
+"BD2004DHS","KR","completeness","pct_dk_or_missing_code","v012",0,0,NA,6908
+"BD2004DHS","KR","completeness","pct_na","v024",0,0,"includes rows skipped by design",6908
+"BD2004DHS","KR","completeness","pct_dk_or_missing_code","v024",0,0,NA,6908
+"BD2004DHS","KR","completeness","pct_na","v025",0,0,"includes rows skipped by design",6908
+"BD2004DHS","KR","completeness","pct_dk_or_missing_code","v025",0,0,NA,6908
+"BD2004DHS","KR","completeness","pct_na","v106",0,0,"includes rows skipped by design",6908
+"BD2004DHS","KR","completeness","pct_dk_or_missing_code","v106",0,0,NA,6908
+"BD2004DHS","KR","completeness","pct_na","v190",0,0,"includes rows skipped by design",6908
+"BD2004DHS","KR","completeness","pct_dk_or_missing_code","v190",0,0,NA,6908
+"BD2004DHS","KR","completeness","pct_na","v130",0.07,0,"includes rows skipped by design",6908
+"BD2004DHS","KR","completeness","pct_dk_or_missing_code","v130",0,0,NA,6903
+"BD2004DHS","KR","completeness","pct_na","b4",0,0,"includes rows skipped by design",6908
+"BD2004DHS","KR","completeness","pct_dk_or_missing_code","b4",0,0,NA,6908
+"BD2004DHS","KR","completeness","pct_na","b10",0,0,"includes rows skipped by design",6908
+"BD2004DHS","KR","completeness","pct_dk_or_missing_code","b10",0,0,NA,6908
+"BD2004DHS","KR","completeness","pct_na","m14",22.35,0,"includes rows skipped by design",6908
+"BD2004DHS","KR","completeness","pct_dk_or_missing_code","m14",0.02,0,NA,5364
+"BD2004DHS","KR","completeness","pct_na","m15",0.03,0,"includes rows skipped by design",6908
+"BD2004DHS","KR","completeness","pct_dk_or_missing_code","m15",0,0,NA,6906
+"BD2004DHS","KR","completeness","pct_na","m17",0.1,0,"includes rows skipped by design",6908
+"BD2004DHS","KR","completeness","pct_dk_or_missing_code","m17",0,0,NA,6901
+"BD2004DHS","KR","completeness","pct_na","h2",7.02,0,"includes rows skipped by design",6908
+"BD2004DHS","KR","completeness","pct_dk_or_missing_code","h2",0,0,NA,6423
+"BD2004DHS","KR","completeness","pct_na","h3",7.01,0,"includes rows skipped by design",6908
+"BD2004DHS","KR","completeness","pct_dk_or_missing_code","h3",0,0,NA,6424
+"BD2007DHS","KR","birth_date_completeness","pct_month_and_year","all",100,100,NA,6150
+"BD2007DHS","KR","birth_date_completeness","pct_month_and_year","living",100,100,NA,5789
+"BD2007DHS","KR","birth_date_completeness","pct_month_and_year","dead",100,100,NA,361
+"BD2007DHS","KR","birth_date_completeness","pct_month_and_year","last_5_years",100,100,NA,6150
+"BD2007DHS","KR","birth_date_completeness","pct_month_and_year","last_15_years",100,100,NA,6150
+"BD2007DHS","KR","birth_date_completeness","pct_living_age_imputed","living",0,0,NA,5789
+"BD2007DHS","KR","births_by_year","calendar_year_ratio","2004",101.49,100,NA,1264
+"BD2007DHS","KR","births_by_year","calendar_year_ratio","2005",101.58,100,NA,1252
+"BD2007DHS","KR","births_by_year","years_before_ratio","1",99.34,100,NA,1209
+"BD2007DHS","KR","births_by_year","years_before_ratio","2",103.29,100,NA,1272
+"BD2007DHS","KR","births_by_year","years_before_ratio","3",99.33,100,NA,1254
+"BD2007DHS","KR","births_by_year","births_year4_vs_year3","48-59 vs 36-47 months",99.92,100,NA,2507
+"BD2007DHS","KR","births_by_year","pct_last5_with_m15","births 0-59 months",99.92,NA,"place of delivery reported; m15 covers fewer than 5 years in some rounds",6150
+"BD2007DHS","KR","age_at_death","pct_reported_days","deaths",64.54,NA,NA,361
+"BD2007DHS","KR","age_at_death","pct_reported_months","deaths",31.58,NA,NA,361
+"BD2007DHS","KR","age_at_death","pct_reported_years","deaths",3.88,NA,NA,361
+"BD2007DHS","KR","age_at_death","pct_missing","deaths",0,0,NA,361
+"BD2007DHS","KR","age_at_death","heaping_12_months","reported (12 months or 1 year)",166.67,100,"strong heaping at 12 months",11
+"BD2007DHS","KR","age_at_death","pct_12_months_as_1_year","reported",60,NA,NA,5
+"BD2007DHS","KR","age_at_death","heaping_12_months","imputed months (b7)",166.67,100,"strong heaping at 12 months",11
+"BD2007DHS","KR","anthropometry","pct_missing_weight","children",0,0,NA,5743
+"BD2007DHS","KR","anthropometry","weight_terminal_digit_pct_0","children",10.19,10,NA,5743
+"BD2007DHS","KR","anthropometry","weight_terminal_digit_pct_0_or_5","children",19.41,20,NA,5743
+"BD2007DHS","KR","anthropometry","weight_terminal_digit_dissimilarity","children",3.95,0,NA,5743
+"BD2007DHS","KR","anthropometry","pct_missing_height","children",5.99,0,NA,5743
+"BD2007DHS","KR","anthropometry","height_terminal_digit_pct_0","children",11,10,NA,5399
+"BD2007DHS","KR","anthropometry","height_terminal_digit_pct_0_or_5","children",22.99,20,NA,5399
+"BD2007DHS","KR","anthropometry","height_terminal_digit_dissimilarity","children",7.43,0,NA,5399
+"BD2007DHS","KR","anthropometry","haz_pct_missing","children",0,0,NA,5743
+"BD2007DHS","KR","anthropometry","haz_pct_flagged","children",7.71,0,NA,5743
+"BD2007DHS","KR","anthropometry","haz_pct_out_of_who_range","children",0,0,NA,5300
+"BD2007DHS","KR","anthropometry","haz_mean","children",-1.72,NA,NA,5300
+"BD2007DHS","KR","anthropometry","haz_sd","children",1.36,1,"SD above the WHO range (1.0-1.2): possible measurement error",5300
+"BD2007DHS","KR","anthropometry","waz_pct_missing","children",0,0,NA,5743
+"BD2007DHS","KR","anthropometry","waz_pct_flagged","children",7.71,0,NA,5743
+"BD2007DHS","KR","anthropometry","waz_pct_out_of_who_range","children",0,0,NA,5300
+"BD2007DHS","KR","anthropometry","waz_mean","children",-1.7,NA,NA,5300
+"BD2007DHS","KR","anthropometry","waz_sd","children",1.12,1,"SD within the expected range",5300
+"BD2007DHS","KR","anthropometry","whz_pct_missing","children",0,0,NA,5743
+"BD2007DHS","KR","anthropometry","whz_pct_flagged","children",7.71,0,NA,5743
+"BD2007DHS","KR","anthropometry","whz_pct_out_of_who_range","children",0,0,NA,5300
+"BD2007DHS","KR","anthropometry","whz_mean","children",-1.03,NA,NA,5300
+"BD2007DHS","KR","anthropometry","whz_sd","children",1.09,1,"SD within the expected range",5300
+"BD2007DHS","KR","completeness","pct_na","v012",0,0,"includes rows skipped by design",6150
+"BD2007DHS","KR","completeness","pct_dk_or_missing_code","v012",0,0,NA,6150
+"BD2007DHS","KR","completeness","pct_na","v024",0,0,"includes rows skipped by design",6150
+"BD2007DHS","KR","completeness","pct_dk_or_missing_code","v024",0,0,NA,6150
+"BD2007DHS","KR","completeness","pct_na","v025",0,0,"includes rows skipped by design",6150
+"BD2007DHS","KR","completeness","pct_dk_or_missing_code","v025",0,0,NA,6150
+"BD2007DHS","KR","completeness","pct_na","v106",0,0,"includes rows skipped by design",6150
+"BD2007DHS","KR","completeness","pct_dk_or_missing_code","v106",0,0,NA,6150
+"BD2007DHS","KR","completeness","pct_na","v190",0,0,"includes rows skipped by design",6150
+"BD2007DHS","KR","completeness","pct_dk_or_missing_code","v190",0,0,NA,6150
+"BD2007DHS","KR","completeness","pct_na","v130",0,0,"includes rows skipped by design",6150
+"BD2007DHS","KR","completeness","pct_dk_or_missing_code","v130",0,0,NA,6150
+"BD2007DHS","KR","completeness","pct_na","b4",0,0,"includes rows skipped by design",6150
+"BD2007DHS","KR","completeness","pct_dk_or_missing_code","b4",0,0,NA,6150
+"BD2007DHS","KR","completeness","pct_na","b10",0,0,"includes rows skipped by design",6150
+"BD2007DHS","KR","completeness","pct_dk_or_missing_code","b10",0,0,NA,6150
+"BD2007DHS","KR","completeness","pct_na","m14",19.9,0,"includes rows skipped by design",6150
+"BD2007DHS","KR","completeness","pct_dk_or_missing_code","m14",0.02,0,NA,4926
+"BD2007DHS","KR","completeness","pct_na","m15",0,0,"includes rows skipped by design",6150
+"BD2007DHS","KR","completeness","pct_dk_or_missing_code","m15",0,0,NA,6150
+"BD2007DHS","KR","completeness","pct_na","m17",0,0,"includes rows skipped by design",6150
+"BD2007DHS","KR","completeness","pct_dk_or_missing_code","m17",0,0,NA,6150
+"BD2007DHS","KR","completeness","pct_na","h2",5.87,0,"includes rows skipped by design",6150
+"BD2007DHS","KR","completeness","pct_dk_or_missing_code","h2",0,0,NA,5789
+"BD2007DHS","KR","completeness","pct_na","h3",5.87,0,"includes rows skipped by design",6150
+"BD2007DHS","KR","completeness","pct_dk_or_missing_code","h3",0,0,NA,5789
+"BD2007DHS","KR","completeness","pct_na","hw70",6.62,0,"includes rows skipped by design",6150
+"BD2007DHS","KR","completeness","pct_dk_or_missing_code","hw70",0,0,NA,5743
+"BD2007DHS","KR","completeness","pct_na","hw71",6.62,0,"includes rows skipped by design",6150
+"BD2007DHS","KR","completeness","pct_dk_or_missing_code","hw71",0,0,NA,5743
+"BD2007DHS","KR","completeness","pct_na","hw72",6.62,0,"includes rows skipped by design",6150
+"BD2007DHS","KR","completeness","pct_dk_or_missing_code","hw72",0,0,NA,5743
+"BD2011DHS","KR","birth_date_completeness","pct_month_and_year","all",100,100,NA,8753
+"BD2011DHS","KR","birth_date_completeness","pct_month_and_year","living",100,100,NA,8343
+"BD2011DHS","KR","birth_date_completeness","pct_month_and_year","dead",100,100,NA,410
+"BD2011DHS","KR","birth_date_completeness","pct_month_and_year","last_5_years",100,100,NA,8753
+"BD2011DHS","KR","birth_date_completeness","pct_month_and_year","last_15_years",100,100,NA,8753
+"BD2011DHS","KR","birth_date_completeness","pct_living_age_imputed","living",0,0,NA,8343
+"BD2011DHS","KR","births_by_year","calendar_year_ratio","2009",91.95,100,NA,1604
+"BD2011DHS","KR","births_by_year","years_before_ratio","1",96.84,100,NA,1623
+"BD2011DHS","KR","births_by_year","years_before_ratio","2",91.66,100,NA,1632
+"BD2011DHS","KR","births_by_year","years_before_ratio","3",111.64,100,NA,1938
+"BD2011DHS","KR","births_by_year","births_year4_vs_year3","48-59 vs 36-47 months",94.94,100,NA,3778
+"BD2011DHS","KR","births_by_year","pct_last5_with_m15","births 0-59 months",99.95,NA,"place of delivery reported; m15 covers fewer than 5 years in some rounds",8753
+"BD2011DHS","KR","age_at_death","pct_reported_days","deaths",69.51,NA,NA,410
+"BD2011DHS","KR","age_at_death","pct_reported_months","deaths",25.61,NA,NA,410
+"BD2011DHS","KR","age_at_death","pct_reported_years","deaths",4.88,NA,NA,410
+"BD2011DHS","KR","age_at_death","pct_missing","deaths",0,0,NA,410
+"BD2011DHS","KR","age_at_death","heaping_12_months","reported (12 months or 1 year)",66.67,100,"little heaping",8
+"BD2011DHS","KR","age_at_death","pct_12_months_as_1_year","reported",0,NA,NA,2
+"BD2011DHS","KR","age_at_death","heaping_12_months","imputed months (b7)",66.67,100,"little heaping",8
+"BD2011DHS","KR","anthropometry","pct_missing_weight","children",3.88,0,NA,8281
+"BD2011DHS","KR","anthropometry","weight_terminal_digit_pct_0","children",9.86,10,NA,7960
+"BD2011DHS","KR","anthropometry","weight_terminal_digit_pct_0_or_5","children",20.1,20,NA,7960
+"BD2011DHS","KR","anthropometry","weight_terminal_digit_dissimilarity","children",2.02,0,NA,7960
+"BD2011DHS","KR","anthropometry","pct_missing_height","children",4.98,0,NA,8281
+"BD2011DHS","KR","anthropometry","height_terminal_digit_pct_0","children",9.68,10,NA,7869
+"BD2011DHS","KR","anthropometry","height_terminal_digit_pct_0_or_5","children",21.2,20,NA,7869
+"BD2011DHS","KR","anthropometry","height_terminal_digit_dissimilarity","children",7.77,0,NA,7869
+"BD2011DHS","KR","anthropometry","haz_pct_missing","children",0,0,NA,8281
+"BD2011DHS","KR","anthropometry","haz_pct_flagged","children",7.66,0,NA,8281
+"BD2011DHS","KR","anthropometry","haz_pct_out_of_who_range","children",0,0,NA,7647
+"BD2011DHS","KR","anthropometry","haz_mean","children",-1.67,NA,NA,7647
+"BD2011DHS","KR","anthropometry","haz_sd","children",1.41,1,"SD above the WHO range (1.0-1.2): possible measurement error",7647
+"BD2011DHS","KR","anthropometry","waz_pct_missing","children",0,0,NA,8281
+"BD2011DHS","KR","anthropometry","waz_pct_flagged","children",7.66,0,NA,8281
+"BD2011DHS","KR","anthropometry","waz_pct_out_of_who_range","children",0,0,NA,7647
+"BD2011DHS","KR","anthropometry","waz_mean","children",-1.59,NA,NA,7647
+"BD2011DHS","KR","anthropometry","waz_sd","children",1.15,1,"SD within the expected range",7647
+"BD2011DHS","KR","anthropometry","whz_pct_missing","children",0,0,NA,8281
+"BD2011DHS","KR","anthropometry","whz_pct_flagged","children",7.66,0,NA,8281
+"BD2011DHS","KR","anthropometry","whz_pct_out_of_who_range","children",0,0,NA,7647
+"BD2011DHS","KR","anthropometry","whz_mean","children",-0.92,NA,NA,7647
+"BD2011DHS","KR","anthropometry","whz_sd","children",1.2,1,"SD within the expected range",7647
+"BD2011DHS","KR","completeness","pct_na","v012",0,0,"includes rows skipped by design",8753
+"BD2011DHS","KR","completeness","pct_dk_or_missing_code","v012",0,0,NA,8753
+"BD2011DHS","KR","completeness","pct_na","v024",0,0,"includes rows skipped by design",8753
+"BD2011DHS","KR","completeness","pct_dk_or_missing_code","v024",0,0,NA,8753
+"BD2011DHS","KR","completeness","pct_na","v025",0,0,"includes rows skipped by design",8753
+"BD2011DHS","KR","completeness","pct_dk_or_missing_code","v025",0,0,NA,8753
+"BD2011DHS","KR","completeness","pct_na","v106",0,0,"includes rows skipped by design",8753
+"BD2011DHS","KR","completeness","pct_dk_or_missing_code","v106",0,0,NA,8753
+"BD2011DHS","KR","completeness","pct_na","v190",0,0,"includes rows skipped by design",8753
+"BD2011DHS","KR","completeness","pct_dk_or_missing_code","v190",0,0,NA,8753
+"BD2011DHS","KR","completeness","pct_na","v130",0,0,"includes rows skipped by design",8753
+"BD2011DHS","KR","completeness","pct_dk_or_missing_code","v130",0,0,NA,8753
+"BD2011DHS","KR","completeness","pct_na","b4",0,0,"includes rows skipped by design",8753
+"BD2011DHS","KR","completeness","pct_dk_or_missing_code","b4",0,0,NA,8753
+"BD2011DHS","KR","completeness","pct_na","b10",0,0,"includes rows skipped by design",8753
+"BD2011DHS","KR","completeness","pct_dk_or_missing_code","b10",0,0,NA,8753
+"BD2011DHS","KR","completeness","pct_na","m14",16.31,0,"includes rows skipped by design",8753
+"BD2011DHS","KR","completeness","pct_dk_or_missing_code","m14",0.01,0,NA,7325
+"BD2011DHS","KR","completeness","pct_na","m15",0,0,"includes rows skipped by design",8753
+"BD2011DHS","KR","completeness","pct_dk_or_missing_code","m15",0,0,NA,8753
+"BD2011DHS","KR","completeness","pct_na","m17",0,0,"includes rows skipped by design",8753
+"BD2011DHS","KR","completeness","pct_dk_or_missing_code","m17",0,0,NA,8753
+"BD2011DHS","KR","completeness","pct_na","h2",4.68,0,"includes rows skipped by design",8753
+"BD2011DHS","KR","completeness","pct_dk_or_missing_code","h2",0.11,0,NA,8343
+"BD2011DHS","KR","completeness","pct_na","h3",4.68,0,"includes rows skipped by design",8753
+"BD2011DHS","KR","completeness","pct_dk_or_missing_code","h3",0.07,0,NA,8343
+"BD2011DHS","KR","completeness","pct_na","hw70",5.39,0,"includes rows skipped by design",8753
+"BD2011DHS","KR","completeness","pct_dk_or_missing_code","hw70",0,0,NA,8281
+"BD2011DHS","KR","completeness","pct_na","hw71",5.39,0,"includes rows skipped by design",8753
+"BD2011DHS","KR","completeness","pct_dk_or_missing_code","hw71",0,0,NA,8281
+"BD2011DHS","KR","completeness","pct_na","hw72",5.39,0,"includes rows skipped by design",8753
+"BD2011DHS","KR","completeness","pct_dk_or_missing_code","hw72",0,0,NA,8281
+"BD2014DHS","KR","birth_date_completeness","pct_month_and_year","all",100,100,NA,7886
+"BD2014DHS","KR","birth_date_completeness","pct_month_and_year","living",100,100,NA,7567
+"BD2014DHS","KR","birth_date_completeness","pct_month_and_year","dead",100,100,NA,319
+"BD2014DHS","KR","birth_date_completeness","pct_month_and_year","last_5_years",100,100,NA,7886
+"BD2014DHS","KR","birth_date_completeness","pct_month_and_year","last_15_years",100,100,NA,7886
+"BD2014DHS","KR","birth_date_completeness","pct_living_age_imputed","living",0,0,NA,7567
+"BD2014DHS","KR","births_by_year","calendar_year_ratio","2011",101.55,100,NA,1606
+"BD2014DHS","KR","births_by_year","calendar_year_ratio","2012",95.15,100,NA,1560
+"BD2014DHS","KR","births_by_year","years_before_ratio","1",104.63,100,NA,1626
+"BD2014DHS","KR","births_by_year","years_before_ratio","2",100.06,100,NA,1604
+"BD2014DHS","KR","births_by_year","years_before_ratio","3",99.5,100,NA,1580
+"BD2014DHS","KR","births_by_year","births_year4_vs_year3","48-59 vs 36-47 months",99.49,100,NA,3152
+"BD2014DHS","KR","births_by_year","pct_last5_with_m15","births 0-59 months",59.9,NA,"place of delivery reported; m15 covers fewer than 5 years in some rounds",7886
+"BD2014DHS","KR","age_at_death","pct_reported_days","deaths",69.59,NA,NA,319
+"BD2014DHS","KR","age_at_death","pct_reported_months","deaths",26.96,NA,NA,319
+"BD2014DHS","KR","age_at_death","pct_reported_years","deaths",3.45,NA,NA,319
+"BD2014DHS","KR","age_at_death","pct_missing","deaths",0,0,NA,319
+"BD2014DHS","KR","age_at_death","heaping_12_months","reported (12 months or 1 year)",200,100,"strong heaping at 12 months",8
+"BD2014DHS","KR","age_at_death","pct_12_months_as_1_year","reported",0,NA,NA,4
+"BD2014DHS","KR","age_at_death","heaping_12_months","imputed months (b7)",200,100,"strong heaping at 12 months",8
+"BD2014DHS","KR","anthropometry","pct_missing_weight","children",2.62,0,NA,7507
+"BD2014DHS","KR","anthropometry","weight_terminal_digit_pct_0","children",10.53,10,NA,7310
+"BD2014DHS","KR","anthropometry","weight_terminal_digit_pct_0_or_5","children",20.37,20,NA,7310
+"BD2014DHS","KR","anthropometry","weight_terminal_digit_dissimilarity","children",2.89,0,NA,7310
+"BD2014DHS","KR","anthropometry","pct_missing_height","children",4.97,0,NA,7507
+"BD2014DHS","KR","anthropometry","height_terminal_digit_pct_0","children",10.25,10,NA,7134
+"BD2014DHS","KR","anthropometry","height_terminal_digit_pct_0_or_5","children",22.11,20,NA,7134
+"BD2014DHS","KR","anthropometry","height_terminal_digit_dissimilarity","children",6.75,0,NA,7134
+"BD2014DHS","KR","anthropometry","haz_pct_missing","children",5.01,0,NA,7507
+"BD2014DHS","KR","anthropometry","haz_pct_flagged","children",2.33,0,NA,7131
+"BD2014DHS","KR","anthropometry","haz_pct_out_of_who_range","children",0,0,NA,6965
+"BD2014DHS","KR","anthropometry","haz_mean","children",-1.54,NA,NA,6965
+"BD2014DHS","KR","anthropometry","haz_sd","children",1.34,1,"SD above the WHO range (1.0-1.2): possible measurement error",6965
+"BD2014DHS","KR","anthropometry","waz_pct_missing","children",5.01,0,NA,7507
+"BD2014DHS","KR","anthropometry","waz_pct_flagged","children",2.33,0,NA,7131
+"BD2014DHS","KR","anthropometry","waz_pct_out_of_who_range","children",0,0,NA,6965
+"BD2014DHS","KR","anthropometry","waz_mean","children",-1.49,NA,NA,6965
+"BD2014DHS","KR","anthropometry","waz_sd","children",1.12,1,"SD within the expected range",6965
+"BD2014DHS","KR","anthropometry","whz_pct_missing","children",5.01,0,NA,7507
+"BD2014DHS","KR","anthropometry","whz_pct_flagged","children",2.33,0,NA,7131
+"BD2014DHS","KR","anthropometry","whz_pct_out_of_who_range","children",0,0,NA,6965
+"BD2014DHS","KR","anthropometry","whz_mean","children",-0.89,NA,NA,6965
+"BD2014DHS","KR","anthropometry","whz_sd","children",1.14,1,"SD within the expected range",6965
+"BD2014DHS","KR","completeness","pct_na","v012",0,0,"includes rows skipped by design",7886
+"BD2014DHS","KR","completeness","pct_dk_or_missing_code","v012",0,0,NA,7886
+"BD2014DHS","KR","completeness","pct_na","v024",0,0,"includes rows skipped by design",7886
+"BD2014DHS","KR","completeness","pct_dk_or_missing_code","v024",0,0,NA,7886
+"BD2014DHS","KR","completeness","pct_na","v025",0,0,"includes rows skipped by design",7886
+"BD2014DHS","KR","completeness","pct_dk_or_missing_code","v025",0,0,NA,7886
+"BD2014DHS","KR","completeness","pct_na","v106",0,0,"includes rows skipped by design",7886
+"BD2014DHS","KR","completeness","pct_dk_or_missing_code","v106",0,0,NA,7886
+"BD2014DHS","KR","completeness","pct_na","v190",0,0,"includes rows skipped by design",7886
+"BD2014DHS","KR","completeness","pct_dk_or_missing_code","v190",0,0,NA,7886
+"BD2014DHS","KR","completeness","pct_na","v130",0,0,"includes rows skipped by design",7886
+"BD2014DHS","KR","completeness","pct_dk_or_missing_code","v130",0,0,NA,7886
+"BD2014DHS","KR","completeness","pct_na","b4",0,0,"includes rows skipped by design",7886
+"BD2014DHS","KR","completeness","pct_dk_or_missing_code","b4",0,0,NA,7886
+"BD2014DHS","KR","completeness","pct_na","b10",0,0,"includes rows skipped by design",7886
+"BD2014DHS","KR","completeness","pct_dk_or_missing_code","b10",0,0,NA,7886
+"BD2014DHS","KR","completeness","pct_na","m14",43.03,0,"includes rows skipped by design",7886
+"BD2014DHS","KR","completeness","pct_dk_or_missing_code","m14",0.11,0,NA,4493
+"BD2014DHS","KR","completeness","pct_na","m15",40.1,0,"includes rows skipped by design",7886
+"BD2014DHS","KR","completeness","pct_dk_or_missing_code","m15",0,0,NA,4724
+"BD2014DHS","KR","completeness","pct_na","m17",43.03,0,"includes rows skipped by design",7886
+"BD2014DHS","KR","completeness","pct_dk_or_missing_code","m17",0,0,NA,4493
+"BD2014DHS","KR","completeness","pct_na","h2",4.06,0,"includes rows skipped by design",7886
+"BD2014DHS","KR","completeness","pct_dk_or_missing_code","h2",0.04,0,NA,7566
+"BD2014DHS","KR","completeness","pct_na","h3",4.05,0,"includes rows skipped by design",7886
+"BD2014DHS","KR","completeness","pct_dk_or_missing_code","h3",0.13,0,NA,7567
+"BD2014DHS","KR","completeness","pct_na","hw70",9.57,0,"includes rows skipped by design",7886
+"BD2014DHS","KR","completeness","pct_dk_or_missing_code","hw70",0,0,NA,7131
+"BD2014DHS","KR","completeness","pct_na","hw71",9.57,0,"includes rows skipped by design",7886
+"BD2014DHS","KR","completeness","pct_dk_or_missing_code","hw71",0,0,NA,7131
+"BD2014DHS","KR","completeness","pct_na","hw72",9.57,0,"includes rows skipped by design",7886
+"BD2014DHS","KR","completeness","pct_dk_or_missing_code","hw72",0,0,NA,7131
+"BD2017DHS","KR","birth_date_completeness","pct_month_and_year","all",100,100,NA,8759
+"BD2017DHS","KR","birth_date_completeness","pct_month_and_year","living",100,100,NA,8402
+"BD2017DHS","KR","birth_date_completeness","pct_month_and_year","dead",100,100,NA,357
+"BD2017DHS","KR","birth_date_completeness","pct_month_and_year","last_5_years",100,100,NA,8684
+"BD2017DHS","KR","birth_date_completeness","pct_month_and_year","last_15_years",100,100,NA,8759
+"BD2017DHS","KR","birth_date_completeness","pct_living_age_imputed","living",0,0,NA,8402
+"BD2017DHS","KR","births_by_year","calendar_year_ratio","2015",99.88,100,NA,1715
+"BD2017DHS","KR","births_by_year","years_before_ratio","1",98.57,100,NA,1725
+"BD2017DHS","KR","births_by_year","years_before_ratio","2",101.26,100,NA,1726
+"BD2017DHS","KR","births_by_year","years_before_ratio","3",96.2,100,NA,1684
+"BD2017DHS","KR","births_by_year","births_year4_vs_year3","48-59 vs 36-47 months",105.4,100,NA,3459
+"BD2017DHS","KR","births_by_year","pct_last5_with_m15","births 0-59 months",61.08,NA,"place of delivery reported; m15 covers fewer than 5 years in some rounds",8684
+"BD2017DHS","KR","age_at_death","pct_reported_days","deaths",71.99,NA,NA,357
+"BD2017DHS","KR","age_at_death","pct_reported_months","deaths",24.37,NA,NA,357
+"BD2017DHS","KR","age_at_death","pct_reported_years","deaths",3.64,NA,NA,357
+"BD2017DHS","KR","age_at_death","pct_missing","deaths",0,0,NA,357
+"BD2017DHS","KR","age_at_death","heaping_12_months","reported (12 months or 1 year)",0,100,"little heaping",2
+"BD2017DHS","KR","age_at_death","pct_12_months_as_1_year","reported",NA,NA,NA,0
+"BD2017DHS","KR","age_at_death","heaping_12_months","imputed months (b7)",0,100,"little heaping",2
+"BD2017DHS","KR","anthropometry","pct_missing_weight","children",3.06,0,NA,8312
+"BD2017DHS","KR","anthropometry","weight_terminal_digit_pct_0","children",8.04,10,NA,8058
+"BD2017DHS","KR","anthropometry","weight_terminal_digit_pct_0_or_5","children",17.29,20,NA,8058
+"BD2017DHS","KR","anthropometry","weight_terminal_digit_dissimilarity","children",3.3,0,NA,8058
+"BD2017DHS","KR","anthropometry","pct_missing_height","children",4.93,0,NA,8312
+"BD2017DHS","KR","anthropometry","height_terminal_digit_pct_0","children",7.68,10,NA,7902
+"BD2017DHS","KR","anthropometry","height_terminal_digit_pct_0_or_5","children",18.08,20,NA,7902
+"BD2017DHS","KR","anthropometry","height_terminal_digit_dissimilarity","children",7.38,0,NA,7902
+"BD2017DHS","KR","anthropometry","haz_pct_missing","children",4.93,0,NA,8312
+"BD2017DHS","KR","anthropometry","haz_pct_flagged","children",0.67,0,NA,7902
+"BD2017DHS","KR","anthropometry","haz_pct_out_of_who_range","children",0,0,NA,7849
+"BD2017DHS","KR","anthropometry","haz_mean","children",-1.38,NA,NA,7849
+"BD2017DHS","KR","anthropometry","haz_sd","children",1.32,1,"SD above the WHO range (1.0-1.2): possible measurement error",7849
+"BD2017DHS","KR","anthropometry","waz_pct_missing","children",3.06,0,NA,8312
+"BD2017DHS","KR","anthropometry","waz_pct_flagged","children",0.1,0,NA,8058
+"BD2017DHS","KR","anthropometry","waz_pct_out_of_who_range","children",0,0,NA,8050
+"BD2017DHS","KR","anthropometry","waz_mean","children",-1.18,NA,NA,8050
+"BD2017DHS","KR","anthropometry","waz_sd","children",1.12,1,"SD within the expected range",8050
+"BD2017DHS","KR","anthropometry","whz_pct_missing","children",4.93,0,NA,8312
+"BD2017DHS","KR","anthropometry","whz_pct_flagged","children",0.9,0,NA,7902
+"BD2017DHS","KR","anthropometry","whz_pct_out_of_who_range","children",0,0,NA,7831
+"BD2017DHS","KR","anthropometry","whz_mean","children",-0.54,NA,NA,7831
+"BD2017DHS","KR","anthropometry","whz_sd","children",1.15,1,"SD within the expected range",7831
+"BD2017DHS","KR","completeness","pct_na","v012",0,0,"includes rows skipped by design",8759
+"BD2017DHS","KR","completeness","pct_dk_or_missing_code","v012",0,0,NA,8759
+"BD2017DHS","KR","completeness","pct_na","v024",0,0,"includes rows skipped by design",8759
+"BD2017DHS","KR","completeness","pct_dk_or_missing_code","v024",0,0,NA,8759
+"BD2017DHS","KR","completeness","pct_na","v025",0,0,"includes rows skipped by design",8759
+"BD2017DHS","KR","completeness","pct_dk_or_missing_code","v025",0,0,NA,8759
+"BD2017DHS","KR","completeness","pct_na","v106",0,0,"includes rows skipped by design",8759
+"BD2017DHS","KR","completeness","pct_dk_or_missing_code","v106",0,0,NA,8759
+"BD2017DHS","KR","completeness","pct_na","v190",0,0,"includes rows skipped by design",8759
+"BD2017DHS","KR","completeness","pct_dk_or_missing_code","v190",0,0,NA,8759
+"BD2017DHS","KR","completeness","pct_na","v130",0,0,"includes rows skipped by design",8759
+"BD2017DHS","KR","completeness","pct_dk_or_missing_code","v130",0,0,NA,8759
+"BD2017DHS","KR","completeness","pct_na","b4",0,0,"includes rows skipped by design",8759
+"BD2017DHS","KR","completeness","pct_dk_or_missing_code","b4",0,0,NA,8759
+"BD2017DHS","KR","completeness","pct_na","b10",0,0,"includes rows skipped by design",8759
+"BD2017DHS","KR","completeness","pct_dk_or_missing_code","b10",0,0,NA,8759
+"BD2017DHS","KR","completeness","pct_na","m14",42.78,0,"includes rows skipped by design",8759
+"BD2017DHS","KR","completeness","pct_dk_or_missing_code","m14",0,0,NA,5012
+"BD2017DHS","KR","completeness","pct_na","m15",39.45,0,"includes rows skipped by design",8759
+"BD2017DHS","KR","completeness","pct_dk_or_missing_code","m15",0,0,NA,5304
+"BD2017DHS","KR","completeness","pct_na","m17",39.5,0,"includes rows skipped by design",8759
+"BD2017DHS","KR","completeness","pct_dk_or_missing_code","m17",0,0,NA,5299
+"BD2017DHS","KR","completeness","pct_na","h2",41.58,0,"includes rows skipped by design",8759
+"BD2017DHS","KR","completeness","pct_dk_or_missing_code","h2",0.02,0,NA,5117
+"BD2017DHS","KR","completeness","pct_na","h3",41.58,0,"includes rows skipped by design",8759
+"BD2017DHS","KR","completeness","pct_dk_or_missing_code","h3",0.04,0,NA,5117
+"BD2017DHS","KR","completeness","pct_na","hw70",9.78,0,"includes rows skipped by design",8759
+"BD2017DHS","KR","completeness","pct_dk_or_missing_code","hw70",0,0,NA,7902
+"BD2017DHS","KR","completeness","pct_na","hw71",8,0,"includes rows skipped by design",8759
+"BD2017DHS","KR","completeness","pct_dk_or_missing_code","hw71",0,0,NA,8058
+"BD2017DHS","KR","completeness","pct_na","hw72",9.78,0,"includes rows skipped by design",8759
+"BD2017DHS","KR","completeness","pct_dk_or_missing_code","hw72",0,0,NA,7902
+"BD2022DHS","KR","birth_date_completeness","pct_month_and_year","all",99.85,100,NA,8784
+"BD2022DHS","KR","birth_date_completeness","pct_month_and_year","living",99.87,100,NA,8508
+"BD2022DHS","KR","birth_date_completeness","pct_month_and_year","dead",99.28,100,NA,276
+"BD2022DHS","KR","birth_date_completeness","pct_month_and_year","last_5_years",99.85,100,NA,8694
+"BD2022DHS","KR","birth_date_completeness","pct_month_and_year","last_15_years",99.85,100,NA,8784
+"BD2022DHS","KR","birth_date_completeness","pct_living_age_imputed","living",0.13,0,NA,8508
+"BD2022DHS","KR","births_by_year","calendar_year_ratio","2020",99.48,100,NA,1712
+"BD2022DHS","KR","births_by_year","years_before_ratio","1",94.76,100,NA,1690
+"BD2022DHS","KR","births_by_year","years_before_ratio","2",100.94,100,NA,1710
+"BD2022DHS","KR","births_by_year","years_before_ratio","3",98.46,100,NA,1698
+"BD2022DHS","KR","births_by_year","births_year4_vs_year3","48-59 vs 36-47 months",102.41,100,NA,3437
+"BD2022DHS","KR","births_by_year","pct_last5_with_m15","births 0-59 months",61.44,NA,"place of delivery reported; m15 covers fewer than 5 years in some rounds",8694
+"BD2022DHS","KR","age_at_death","pct_reported_days","deaths",71.74,NA,NA,276
+"BD2022DHS","KR","age_at_death","pct_reported_months","deaths",25.36,NA,NA,276
+"BD2022DHS","KR","age_at_death","pct_reported_years","deaths",2.9,NA,NA,276
+"BD2022DHS","KR","age_at_death","pct_missing","deaths",0,0,NA,276
+"BD2022DHS","KR","age_at_death","heaping_12_months","reported (12 months or 1 year)",120,100,"some heaping at 12 months",8
+"BD2022DHS","KR","age_at_death","pct_12_months_as_1_year","reported",0,NA,NA,3
+"BD2022DHS","KR","age_at_death","heaping_12_months","imputed months (b7)",120,100,"some heaping at 12 months",8
+"BD2022DHS","KR","anthropometry","pct_missing_weight","children",1.44,0,NA,4226
+"BD2022DHS","KR","anthropometry","weight_terminal_digit_pct_0","children",9.32,10,NA,4165
+"BD2022DHS","KR","anthropometry","weight_terminal_digit_pct_0_or_5","children",20.6,20,NA,4165
+"BD2022DHS","KR","anthropometry","weight_terminal_digit_dissimilarity","children",2.39,0,NA,4165
+"BD2022DHS","KR","anthropometry","pct_missing_height","children",2.44,0,NA,4226
+"BD2022DHS","KR","anthropometry","height_terminal_digit_pct_0","children",6.45,10,NA,4123
+"BD2022DHS","KR","anthropometry","height_terminal_digit_pct_0_or_5","children",17.44,20,NA,4123
+"BD2022DHS","KR","anthropometry","height_terminal_digit_dissimilarity","children",8.11,0,NA,4123
+"BD2022DHS","KR","anthropometry","haz_pct_missing","children",2.56,0,NA,4226
+"BD2022DHS","KR","anthropometry","haz_pct_flagged","children",0.32,0,NA,4118
+"BD2022DHS","KR","anthropometry","haz_pct_out_of_who_range","children",0,0,NA,4105
+"BD2022DHS","KR","anthropometry","haz_mean","children",-1.16,NA,NA,4105
+"BD2022DHS","KR","anthropometry","haz_sd","children",1.27,1,"SD above the WHO range (1.0-1.2): possible measurement error",4105
+"BD2022DHS","KR","anthropometry","waz_pct_missing","children",1.56,0,NA,4226
+"BD2022DHS","KR","anthropometry","waz_pct_flagged","children",0.05,0,NA,4160
+"BD2022DHS","KR","anthropometry","waz_pct_out_of_who_range","children",0,0,NA,4158
+"BD2022DHS","KR","anthropometry","waz_mean","children",-1.18,NA,NA,4158
+"BD2022DHS","KR","anthropometry","waz_sd","children",1.14,1,"SD within the expected range",4158
+"BD2022DHS","KR","anthropometry","whz_pct_missing","children",2.44,0,NA,4226
+"BD2022DHS","KR","anthropometry","whz_pct_flagged","children",0.46,0,NA,4123
+"BD2022DHS","KR","anthropometry","whz_pct_out_of_who_range","children",0,0,NA,4104
+"BD2022DHS","KR","anthropometry","whz_mean","children",-0.75,NA,NA,4104
+"BD2022DHS","KR","anthropometry","whz_sd","children",1.14,1,"SD within the expected range",4104
+"BD2022DHS","KR","completeness","pct_na","v012",0,0,"includes rows skipped by design",8784
+"BD2022DHS","KR","completeness","pct_dk_or_missing_code","v012",0,0,NA,8784
+"BD2022DHS","KR","completeness","pct_na","v024",0,0,"includes rows skipped by design",8784
+"BD2022DHS","KR","completeness","pct_dk_or_missing_code","v024",0,0,NA,8784
+"BD2022DHS","KR","completeness","pct_na","v025",0,0,"includes rows skipped by design",8784
+"BD2022DHS","KR","completeness","pct_dk_or_missing_code","v025",0,0,NA,8784
+"BD2022DHS","KR","completeness","pct_na","v106",0,0,"includes rows skipped by design",8784
+"BD2022DHS","KR","completeness","pct_dk_or_missing_code","v106",0,0,NA,8784
+"BD2022DHS","KR","completeness","pct_na","v190",0,0,"includes rows skipped by design",8784
+"BD2022DHS","KR","completeness","pct_dk_or_missing_code","v190",0,0,NA,8784
+"BD2022DHS","KR","completeness","pct_na","v130",0,0,"includes rows skipped by design",8784
+"BD2022DHS","KR","completeness","pct_dk_or_missing_code","v130",0,0,NA,8784
+"BD2022DHS","KR","completeness","pct_na","b4",0,0,"includes rows skipped by design",8784
+"BD2022DHS","KR","completeness","pct_dk_or_missing_code","b4",0,0,NA,8784
+"BD2022DHS","KR","completeness","pct_na","b10",0,0,"includes rows skipped by design",8784
+"BD2022DHS","KR","completeness","pct_dk_or_missing_code","b10",0,0,NA,8784
+"BD2022DHS","KR","completeness","pct_na","m14",42.35,0,"includes rows skipped by design",8784
+"BD2022DHS","KR","completeness","pct_dk_or_missing_code","m14",0.02,0,NA,5064
+"BD2022DHS","KR","completeness","pct_na","m15",39.18,0,"includes rows skipped by design",8784
+"BD2022DHS","KR","completeness","pct_dk_or_missing_code","m15",0,0,NA,5342
+"BD2022DHS","KR","completeness","pct_na","m17",39.31,0,"includes rows skipped by design",8784
+"BD2022DHS","KR","completeness","pct_dk_or_missing_code","m17",0,0,NA,5331
+"BD2022DHS","KR","completeness","pct_na","h2",100,0,"includes rows skipped by design",8784
+"BD2022DHS","KR","completeness","pct_dk_or_missing_code","h2",NA,0,NA,0
+"BD2022DHS","KR","completeness","pct_na","h3",100,0,"includes rows skipped by design",8784
+"BD2022DHS","KR","completeness","pct_dk_or_missing_code","h3",NA,0,NA,0
+"BD2022DHS","KR","completeness","pct_na","hw70",53.12,0,"includes rows skipped by design",8784
+"BD2022DHS","KR","completeness","pct_dk_or_missing_code","hw70",0,0,NA,4118
+"BD2022DHS","KR","completeness","pct_na","hw71",52.64,0,"includes rows skipped by design",8784
+"BD2022DHS","KR","completeness","pct_dk_or_missing_code","hw71",0,0,NA,4160
+"BD2022DHS","KR","completeness","pct_na","hw72",53.06,0,"includes rows skipped by design",8784
+"BD2022DHS","KR","completeness","pct_dk_or_missing_code","hw72",0,0,NA,4123
+"BD2022DHS","IR","birth_date_completeness","pct_month_and_year","all",97.09,100,NA,64722
+"BD2022DHS","IR","birth_date_completeness","pct_month_and_year","living",97.51,100,NA,60613
+"BD2022DHS","IR","birth_date_completeness","pct_month_and_year","dead",90.97,100,NA,4109
+"BD2022DHS","IR","birth_date_completeness","pct_month_and_year","last_5_years",99.88,100,NA,13119
+"BD2022DHS","IR","birth_date_completeness","pct_month_and_year","last_15_years",98.92,100,NA,37487
+"BD2022DHS","IR","birth_date_completeness","pct_living_age_imputed","living",2.49,0,NA,60613
+"BD2022DHS","IR","births_by_year","calendar_year_ratio","2001",84.46,100,"deficit",1788
+"BD2022DHS","IR","births_by_year","calendar_year_ratio","2002",114.38,100,"excess",2267
+"BD2022DHS","IR","births_by_year","calendar_year_ratio","2003",91.07,100,NA,2176
+"BD2022DHS","IR","births_by_year","calendar_year_ratio","2004",111.97,100,"excess",2512
+"BD2022DHS","IR","births_by_year","calendar_year_ratio","2005",92.96,100,NA,2311
+"BD2022DHS","IR","births_by_year","calendar_year_ratio","2006",100.9,100,NA,2460
+"BD2022DHS","IR","births_by_year","calendar_year_ratio","2007",105.64,100,NA,2565
+"BD2022DHS","IR","births_by_year","calendar_year_ratio","2008",97.52,100,NA,2396
+"BD2022DHS","IR","births_by_year","calendar_year_ratio","2009",96.03,100,NA,2349
+"BD2022DHS","IR","births_by_year","calendar_year_ratio","2010",105.21,100,NA,2496
+"BD2022DHS","IR","births_by_year","calendar_year_ratio","2011",96.95,100,NA,2396
+"BD2022DHS","IR","births_by_year","calendar_year_ratio","2012",102.15,100,NA,2447
+"BD2022DHS","IR","births_by_year","calendar_year_ratio","2013",99.09,100,NA,2395
+"BD2022DHS","IR","births_by_year","calendar_year_ratio","2014",97.83,100,NA,2387
+"BD2022DHS","IR","births_by_year","calendar_year_ratio","2015",101.3,100,NA,2485
+"BD2022DHS","IR","births_by_year","calendar_year_ratio","2016",100.66,100,NA,2519
+"BD2022DHS","IR","births_by_year","calendar_year_ratio","2017",97.96,100,NA,2520
+"BD2022DHS","IR","births_by_year","calendar_year_ratio","2018",103.43,100,NA,2626
+"BD2022DHS","IR","births_by_year","calendar_year_ratio","2019",98.42,100,NA,2558
+"BD2022DHS","IR","births_by_year","calendar_year_ratio","2020",99.32,100,NA,2572
+"BD2022DHS","IR","births_by_year","years_before_ratio","1",95.82,100,NA,2555
+"BD2022DHS","IR","births_by_year","years_before_ratio","2",98.7,100,NA,2541
+"BD2022DHS","IR","births_by_year","years_before_ratio","3",100.19,100,NA,2594
+"BD2022DHS","IR","births_by_year","years_before_ratio","4",103.88,100,NA,2637
+"BD2022DHS","IR","births_by_year","years_before_ratio","5",96.71,100,NA,2483
+"BD2022DHS","IR","births_by_year","years_before_ratio","6",100.95,100,NA,2498
+"BD2022DHS","IR","births_by_year","years_before_ratio","7",100.02,100,NA,2466
+"BD2022DHS","IR","births_by_year","years_before_ratio","8",100.89,100,NA,2433
+"BD2022DHS","IR","births_by_year","years_before_ratio","9",95.91,100,NA,2357
+"BD2022DHS","IR","births_by_year","years_before_ratio","10",104.92,100,NA,2482
+"BD2022DHS","IR","births_by_year","years_before_ratio","11",95.13,100,NA,2374
+"BD2022DHS","IR","births_by_year","years_before_ratio","12",106.16,100,NA,2509
+"BD2022DHS","IR","births_by_year","years_before_ratio","13",95.61,100,NA,2353
+"BD2022DHS","IR","births_by_year","years_before_ratio","14",98.47,100,NA,2413
+"BD2022DHS","IR","births_by_year","years_before_ratio","15",105.33,100,NA,2548
+"BD2022DHS","IR","births_by_year","years_before_ratio","16",99.98,100,NA,2425
+"BD2022DHS","IR","births_by_year","years_before_ratio","17",92.66,100,NA,2303
+"BD2022DHS","IR","births_by_year","years_before_ratio","18",115.91,100,NA,2546
+"BD2022DHS","IR","births_by_year","years_before_ratio","19",87.67,100,NA,2090
+"BD2022DHS","IR","births_by_year","years_before_ratio","20",114.48,100,NA,2222
+"BD2022DHS","IR","births_by_year","births_year4_vs_year3","48-59 vs 36-47 months",101.66,100,NA,5231
+"BD2022DHS","IR","age_at_death","pct_reported_days","deaths",57.41,NA,NA,4109
+"BD2022DHS","IR","age_at_death","pct_reported_months","deaths",25.16,NA,NA,4109
+"BD2022DHS","IR","age_at_death","pct_reported_years","deaths",17.43,NA,NA,4109
+"BD2022DHS","IR","age_at_death","pct_missing","deaths",0,0,NA,4109
+"BD2022DHS","IR","age_at_death","heaping_12_months","reported (12 months or 1 year)",179.31,100,"strong heaping at 12 months",110
+"BD2022DHS","IR","age_at_death","pct_12_months_as_1_year","reported",0,NA,NA,52
+"BD2022DHS","IR","age_at_death","heaping_12_months","imputed months (b7)",179.31,100,"strong heaping at 12 months",110
+"BD2022DHS","IR","completeness","pct_na","v012",0,0,"includes rows skipped by design",30078
+"BD2022DHS","IR","completeness","pct_dk_or_missing_code","v012",0,0,NA,30078
+"BD2022DHS","IR","completeness","pct_na","v024",0,0,"includes rows skipped by design",30078
+"BD2022DHS","IR","completeness","pct_dk_or_missing_code","v024",0,0,NA,30078
+"BD2022DHS","IR","completeness","pct_na","v025",0,0,"includes rows skipped by design",30078
+"BD2022DHS","IR","completeness","pct_dk_or_missing_code","v025",0,0,NA,30078
+"BD2022DHS","IR","completeness","pct_na","v106",0,0,"includes rows skipped by design",30078
+"BD2022DHS","IR","completeness","pct_dk_or_missing_code","v106",0,0,NA,30078
+"BD2022DHS","IR","completeness","pct_na","v190",0,0,"includes rows skipped by design",30078
+"BD2022DHS","IR","completeness","pct_dk_or_missing_code","v190",0,0,NA,30078
+"BD2022DHS","IR","completeness","pct_na","v130",0,0,"includes rows skipped by design",30078
+"BD2022DHS","IR","completeness","pct_dk_or_missing_code","v130",0,0,NA,30078
+"BD2017DHS","BR","birth_date_completeness","pct_month_and_year","all",99.89,100,NA,47828
+"BD2017DHS","BR","birth_date_completeness","pct_month_and_year","living",99.9,100,NA,43840
+"BD2017DHS","BR","birth_date_completeness","pct_month_and_year","dead",99.7,100,NA,3988
+"BD2017DHS","BR","birth_date_completeness","pct_month_and_year","last_5_years",100,100,NA,8684
+"BD2017DHS","BR","birth_date_completeness","pct_month_and_year","last_15_years",99.93,100,NA,27242
+"BD2017DHS","BR","birth_date_completeness","pct_living_age_imputed","living",0.1,0,NA,43840
+"BD2017DHS","BR","births_by_year","calendar_year_ratio","1996",78.59,100,"deficit",1208
+"BD2017DHS","BR","births_by_year","calendar_year_ratio","1997",126.77,100,"excess",1681
+"BD2017DHS","BR","births_by_year","calendar_year_ratio","1998",81.1,100,"deficit",1444
+"BD2017DHS","BR","births_by_year","calendar_year_ratio","1999",117.98,100,"excess",1880
+"BD2017DHS","BR","births_by_year","calendar_year_ratio","2000",93.99,100,NA,1743
+"BD2017DHS","BR","births_by_year","calendar_year_ratio","2001",102.64,100,NA,1829
+"BD2017DHS","BR","births_by_year","calendar_year_ratio","2002",97.56,100,NA,1821
+"BD2017DHS","BR","births_by_year","calendar_year_ratio","2003",102.64,100,NA,1904
+"BD2017DHS","BR","births_by_year","calendar_year_ratio","2004",96.7,100,NA,1889
+"BD2017DHS","BR","births_by_year","calendar_year_ratio","2005",107.57,100,NA,2003
+"BD2017DHS","BR","births_by_year","calendar_year_ratio","2006",91.11,100,NA,1835
+"BD2017DHS","BR","births_by_year","calendar_year_ratio","2007",111.08,100,"excess",2025
+"BD2017DHS","BR","births_by_year","calendar_year_ratio","2008",95.82,100,NA,1811
+"BD2017DHS","BR","births_by_year","calendar_year_ratio","2009",96.09,100,NA,1755
+"BD2017DHS","BR","births_by_year","calendar_year_ratio","2010",104.1,100,NA,1842
+"BD2017DHS","BR","births_by_year","calendar_year_ratio","2011",100.34,100,NA,1784
+"BD2017DHS","BR","births_by_year","calendar_year_ratio","2012",96.32,100,NA,1714
+"BD2017DHS","BR","births_by_year","calendar_year_ratio","2013",104.17,100,NA,1775
+"BD2017DHS","BR","births_by_year","calendar_year_ratio","2014",97.08,100,NA,1694
+"BD2017DHS","BR","births_by_year","calendar_year_ratio","2015",99.88,100,NA,1715
+"BD2017DHS","BR","births_by_year","years_before_ratio","1",98.57,100,NA,1725
+"BD2017DHS","BR","births_by_year","years_before_ratio","2",101.26,100,NA,1726
+"BD2017DHS","BR","births_by_year","years_before_ratio","3",96.2,100,NA,1684
+"BD2017DHS","BR","births_by_year","years_before_ratio","4",104.2,100,NA,1775
+"BD2017DHS","BR","births_by_year","years_before_ratio","5",97.1,100,NA,1723
+"BD2017DHS","BR","births_by_year","years_before_ratio","6",99.89,100,NA,1774
+"BD2017DHS","BR","births_by_year","years_before_ratio","7",103.27,100,NA,1829
+"BD2017DHS","BR","births_by_year","years_before_ratio","8",97.92,100,NA,1768
+"BD2017DHS","BR","births_by_year","years_before_ratio","9",93.27,100,NA,1782
+"BD2017DHS","BR","births_by_year","years_before_ratio","10",115.24,100,NA,2053
+"BD2017DHS","BR","births_by_year","years_before_ratio","11",86.52,100,NA,1781
+"BD2017DHS","BR","births_by_year","years_before_ratio","12",113.41,100,NA,2064
+"BD2017DHS","BR","births_by_year","years_before_ratio","13",93.21,100,NA,1859
+"BD2017DHS","BR","births_by_year","years_before_ratio","14",105.16,100,NA,1925
+"BD2017DHS","BR","births_by_year","years_before_ratio","15",95.24,100,NA,1802
+"BD2017DHS","BR","births_by_year","years_before_ratio","16",107.18,100,NA,1859
+"BD2017DHS","BR","births_by_year","years_before_ratio","17",86.73,100,NA,1667
+"BD2017DHS","BR","births_by_year","years_before_ratio","18",130.85,100,NA,1985
+"BD2017DHS","BR","births_by_year","years_before_ratio","19",73.32,100,NA,1367
+"BD2017DHS","BR","births_by_year","years_before_ratio","20",137.59,100,NA,1744
+"BD2017DHS","BR","births_by_year","births_year4_vs_year3","48-59 vs 36-47 months",105.4,100,NA,3459
+"BD2017DHS","BR","births_by_year","pct_last5_with_m15","births 0-59 months",61.08,NA,"place of delivery reported; m15 covers fewer than 5 years in some rounds",8684
+"BD2017DHS","BR","age_at_death","pct_reported_days","deaths",54.79,NA,NA,3988
+"BD2017DHS","BR","age_at_death","pct_reported_months","deaths",28.11,NA,NA,3988
+"BD2017DHS","BR","age_at_death","pct_reported_years","deaths",17.1,NA,NA,3988
+"BD2017DHS","BR","age_at_death","pct_missing","deaths",0,0,NA,3988
+"BD2017DHS","BR","age_at_death","heaping_12_months","reported (12 months or 1 year)",227.91,100,"strong heaping at 12 months",92
+"BD2017DHS","BR","age_at_death","pct_12_months_as_1_year","reported",0,NA,NA,49
+"BD2017DHS","BR","age_at_death","heaping_12_months","imputed months (b7)",227.91,100,"strong heaping at 12 months",92
+"BD2017DHS","BR","anthropometry","pct_missing_weight","children",3.06,0,NA,8312
+"BD2017DHS","BR","anthropometry","weight_terminal_digit_pct_0","children",8.04,10,NA,8058
+"BD2017DHS","BR","anthropometry","weight_terminal_digit_pct_0_or_5","children",17.29,20,NA,8058
+"BD2017DHS","BR","anthropometry","weight_terminal_digit_dissimilarity","children",3.3,0,NA,8058
+"BD2017DHS","BR","anthropometry","pct_missing_height","children",4.93,0,NA,8312
+"BD2017DHS","BR","anthropometry","height_terminal_digit_pct_0","children",7.68,10,NA,7902
+"BD2017DHS","BR","anthropometry","height_terminal_digit_pct_0_or_5","children",18.08,20,NA,7902
+"BD2017DHS","BR","anthropometry","height_terminal_digit_dissimilarity","children",7.38,0,NA,7902
+"BD2017DHS","BR","anthropometry","haz_pct_missing","children",4.93,0,NA,8312
+"BD2017DHS","BR","anthropometry","haz_pct_flagged","children",0.67,0,NA,7902
+"BD2017DHS","BR","anthropometry","haz_pct_out_of_who_range","children",0,0,NA,7849
+"BD2017DHS","BR","anthropometry","haz_mean","children",-1.38,NA,NA,7849
+"BD2017DHS","BR","anthropometry","haz_sd","children",1.32,1,"SD above the WHO range (1.0-1.2): possible measurement error",7849
+"BD2017DHS","BR","anthropometry","waz_pct_missing","children",3.06,0,NA,8312
+"BD2017DHS","BR","anthropometry","waz_pct_flagged","children",0.1,0,NA,8058
+"BD2017DHS","BR","anthropometry","waz_pct_out_of_who_range","children",0,0,NA,8050
+"BD2017DHS","BR","anthropometry","waz_mean","children",-1.18,NA,NA,8050
+"BD2017DHS","BR","anthropometry","waz_sd","children",1.12,1,"SD within the expected range",8050
+"BD2017DHS","BR","anthropometry","whz_pct_missing","children",4.93,0,NA,8312
+"BD2017DHS","BR","anthropometry","whz_pct_flagged","children",0.9,0,NA,7902
+"BD2017DHS","BR","anthropometry","whz_pct_out_of_who_range","children",0,0,NA,7831
+"BD2017DHS","BR","anthropometry","whz_mean","children",-0.54,NA,NA,7831
+"BD2017DHS","BR","anthropometry","whz_sd","children",1.15,1,"SD within the expected range",7831
+"BD2017DHS","BR","completeness","pct_na","v012",0,0,"includes rows skipped by design",47828
+"BD2017DHS","BR","completeness","pct_dk_or_missing_code","v012",0,0,NA,47828
+"BD2017DHS","BR","completeness","pct_na","v024",0,0,"includes rows skipped by design",47828
+"BD2017DHS","BR","completeness","pct_dk_or_missing_code","v024",0,0,NA,47828
+"BD2017DHS","BR","completeness","pct_na","v025",0,0,"includes rows skipped by design",47828
+"BD2017DHS","BR","completeness","pct_dk_or_missing_code","v025",0,0,NA,47828
+"BD2017DHS","BR","completeness","pct_na","v106",0,0,"includes rows skipped by design",47828
+"BD2017DHS","BR","completeness","pct_dk_or_missing_code","v106",0,0,NA,47828
+"BD2017DHS","BR","completeness","pct_na","v190",0,0,"includes rows skipped by design",47828
+"BD2017DHS","BR","completeness","pct_dk_or_missing_code","v190",0,0,NA,47828
+"BD2017DHS","BR","completeness","pct_na","v130",0,0,"includes rows skipped by design",47828
+"BD2017DHS","BR","completeness","pct_dk_or_missing_code","v130",0,0,NA,47828
+"BD2017DHS","BR","completeness","pct_na","b4",0,0,"includes rows skipped by design",47828
+"BD2017DHS","BR","completeness","pct_dk_or_missing_code","b4",0,0,NA,47828
+"BD2017DHS","BR","completeness","pct_na","b10",0,0,"includes rows skipped by design",47828
+"BD2017DHS","BR","completeness","pct_dk_or_missing_code","b10",0,0,NA,47828
+"BD2017DHS","BR","completeness","pct_na","m14",89.52,0,"includes rows skipped by design",47828
+"BD2017DHS","BR","completeness","pct_dk_or_missing_code","m14",0,0,NA,5012
+"BD2017DHS","BR","completeness","pct_na","m15",88.91,0,"includes rows skipped by design",47828
+"BD2017DHS","BR","completeness","pct_dk_or_missing_code","m15",0,0,NA,5304
+"BD2017DHS","BR","completeness","pct_na","m17",88.92,0,"includes rows skipped by design",47828
+"BD2017DHS","BR","completeness","pct_dk_or_missing_code","m17",0,0,NA,5299
+"BD2017DHS","BR","completeness","pct_na","h2",89.3,0,"includes rows skipped by design",47828
+"BD2017DHS","BR","completeness","pct_dk_or_missing_code","h2",0.02,0,NA,5117
+"BD2017DHS","BR","completeness","pct_na","h3",89.3,0,"includes rows skipped by design",47828
+"BD2017DHS","BR","completeness","pct_dk_or_missing_code","h3",0.04,0,NA,5117
+"BD2017DHS","BR","completeness","pct_na","hw70",83.48,0,"includes rows skipped by design",47828
+"BD2017DHS","BR","completeness","pct_dk_or_missing_code","hw70",0,0,NA,7902
+"BD2017DHS","BR","completeness","pct_na","hw71",83.15,0,"includes rows skipped by design",47828
+"BD2017DHS","BR","completeness","pct_dk_or_missing_code","hw71",0,0,NA,8058
+"BD2017DHS","BR","completeness","pct_na","hw72",83.48,0,"includes rows skipped by design",47828
+"BD2017DHS","BR","completeness","pct_dk_or_missing_code","hw72",0,0,NA,7902
+"BD2017DHS","IR","birth_date_completeness","pct_month_and_year","all",99.89,100,NA,47828
+"BD2017DHS","IR","birth_date_completeness","pct_month_and_year","living",99.9,100,NA,43840
+"BD2017DHS","IR","birth_date_completeness","pct_month_and_year","dead",99.7,100,NA,3988
+"BD2017DHS","IR","birth_date_completeness","pct_month_and_year","last_5_years",100,100,NA,8684
+"BD2017DHS","IR","birth_date_completeness","pct_month_and_year","last_15_years",99.93,100,NA,27242
+"BD2017DHS","IR","birth_date_completeness","pct_living_age_imputed","living",0.1,0,NA,43840
+"BD2017DHS","IR","births_by_year","calendar_year_ratio","1996",78.59,100,"deficit",1208
+"BD2017DHS","IR","births_by_year","calendar_year_ratio","1997",126.77,100,"excess",1681
+"BD2017DHS","IR","births_by_year","calendar_year_ratio","1998",81.1,100,"deficit",1444
+"BD2017DHS","IR","births_by_year","calendar_year_ratio","1999",117.98,100,"excess",1880
+"BD2017DHS","IR","births_by_year","calendar_year_ratio","2000",93.99,100,NA,1743
+"BD2017DHS","IR","births_by_year","calendar_year_ratio","2001",102.64,100,NA,1829
+"BD2017DHS","IR","births_by_year","calendar_year_ratio","2002",97.56,100,NA,1821
+"BD2017DHS","IR","births_by_year","calendar_year_ratio","2003",102.64,100,NA,1904
+"BD2017DHS","IR","births_by_year","calendar_year_ratio","2004",96.7,100,NA,1889
+"BD2017DHS","IR","births_by_year","calendar_year_ratio","2005",107.57,100,NA,2003
+"BD2017DHS","IR","births_by_year","calendar_year_ratio","2006",91.11,100,NA,1835
+"BD2017DHS","IR","births_by_year","calendar_year_ratio","2007",111.08,100,"excess",2025
+"BD2017DHS","IR","births_by_year","calendar_year_ratio","2008",95.82,100,NA,1811
+"BD2017DHS","IR","births_by_year","calendar_year_ratio","2009",96.09,100,NA,1755
+"BD2017DHS","IR","births_by_year","calendar_year_ratio","2010",104.1,100,NA,1842
+"BD2017DHS","IR","births_by_year","calendar_year_ratio","2011",100.34,100,NA,1784
+"BD2017DHS","IR","births_by_year","calendar_year_ratio","2012",96.32,100,NA,1714
+"BD2017DHS","IR","births_by_year","calendar_year_ratio","2013",104.17,100,NA,1775
+"BD2017DHS","IR","births_by_year","calendar_year_ratio","2014",97.08,100,NA,1694
+"BD2017DHS","IR","births_by_year","calendar_year_ratio","2015",99.88,100,NA,1715
+"BD2017DHS","IR","births_by_year","years_before_ratio","1",98.57,100,NA,1725
+"BD2017DHS","IR","births_by_year","years_before_ratio","2",101.26,100,NA,1726
+"BD2017DHS","IR","births_by_year","years_before_ratio","3",96.2,100,NA,1684
+"BD2017DHS","IR","births_by_year","years_before_ratio","4",104.2,100,NA,1775
+"BD2017DHS","IR","births_by_year","years_before_ratio","5",97.1,100,NA,1723
+"BD2017DHS","IR","births_by_year","years_before_ratio","6",99.89,100,NA,1774
+"BD2017DHS","IR","births_by_year","years_before_ratio","7",103.27,100,NA,1829
+"BD2017DHS","IR","births_by_year","years_before_ratio","8",97.92,100,NA,1768
+"BD2017DHS","IR","births_by_year","years_before_ratio","9",93.27,100,NA,1782
+"BD2017DHS","IR","births_by_year","years_before_ratio","10",115.24,100,NA,2053
+"BD2017DHS","IR","births_by_year","years_before_ratio","11",86.52,100,NA,1781
+"BD2017DHS","IR","births_by_year","years_before_ratio","12",113.41,100,NA,2064
+"BD2017DHS","IR","births_by_year","years_before_ratio","13",93.21,100,NA,1859
+"BD2017DHS","IR","births_by_year","years_before_ratio","14",105.16,100,NA,1925
+"BD2017DHS","IR","births_by_year","years_before_ratio","15",95.24,100,NA,1802
+"BD2017DHS","IR","births_by_year","years_before_ratio","16",107.18,100,NA,1859
+"BD2017DHS","IR","births_by_year","years_before_ratio","17",86.73,100,NA,1667
+"BD2017DHS","IR","births_by_year","years_before_ratio","18",130.85,100,NA,1985
+"BD2017DHS","IR","births_by_year","years_before_ratio","19",73.32,100,NA,1367
+"BD2017DHS","IR","births_by_year","years_before_ratio","20",137.59,100,NA,1744
+"BD2017DHS","IR","births_by_year","births_year4_vs_year3","48-59 vs 36-47 months",105.4,100,NA,3459
+"BD2017DHS","IR","age_at_death","pct_reported_days","deaths",54.79,NA,NA,3988
+"BD2017DHS","IR","age_at_death","pct_reported_months","deaths",28.11,NA,NA,3988
+"BD2017DHS","IR","age_at_death","pct_reported_years","deaths",17.1,NA,NA,3988
+"BD2017DHS","IR","age_at_death","pct_missing","deaths",0,0,NA,3988
+"BD2017DHS","IR","age_at_death","heaping_12_months","reported (12 months or 1 year)",227.91,100,"strong heaping at 12 months",92
+"BD2017DHS","IR","age_at_death","pct_12_months_as_1_year","reported",0,NA,NA,49
+"BD2017DHS","IR","age_at_death","heaping_12_months","imputed months (b7)",227.91,100,"strong heaping at 12 months",92
+"BD2017DHS","IR","completeness","pct_na","v012",0,0,"includes rows skipped by design",20127
+"BD2017DHS","IR","completeness","pct_dk_or_missing_code","v012",0,0,NA,20127
+"BD2017DHS","IR","completeness","pct_na","v024",0,0,"includes rows skipped by design",20127
+"BD2017DHS","IR","completeness","pct_dk_or_missing_code","v024",0,0,NA,20127
+"BD2017DHS","IR","completeness","pct_na","v025",0,0,"includes rows skipped by design",20127
+"BD2017DHS","IR","completeness","pct_dk_or_missing_code","v025",0,0,NA,20127
+"BD2017DHS","IR","completeness","pct_na","v106",0,0,"includes rows skipped by design",20127
+"BD2017DHS","IR","completeness","pct_dk_or_missing_code","v106",0,0,NA,20127
+"BD2017DHS","IR","completeness","pct_na","v190",0,0,"includes rows skipped by design",20127
+"BD2017DHS","IR","completeness","pct_dk_or_missing_code","v190",0,0,NA,20127
+"BD2017DHS","IR","completeness","pct_na","v130",0,0,"includes rows skipped by design",20127
+"BD2017DHS","IR","completeness","pct_dk_or_missing_code","v130",0,0,NA,20127
+"BD2017DHS","PR","age_heaping","whipple","total",182.86,100,"very rough",38348
+"BD2017DHS","PR","age_heaping","myers","total",15.86,0,NA,66940
+"BD2017DHS","PR","age_heaping","whipple","male",264.08,100,"very rough",17650
+"BD2017DHS","PR","age_heaping","myers","male",28.27,0,NA,31243
+"BD2017DHS","PR","age_heaping","whipple","female",113.61,100,"approximate",20698
+"BD2017DHS","PR","age_heaping","myers","female",5.48,0,NA,35697
+"BD2017DHS","PR","age_heaping","pct_age_missing","total",0,0,NA,84812
+"BD2017DHS","PR","age_displacement","ratio_14_to_15","female",1.11,1,"no marked excess",1984
+"BD2017DHS","PR","age_displacement","ratio_50_to_49","female",0.31,1,"deficit at 50 relative to 49",572
+"BD2017DHS","PR","age_displacement","ratio_50_to_51","female",0.53,1,"deficit at 50 relative to 51",391
+"BD2017DHS","PR","age_displacement","ratio_14_to_15","male",0.99,1,"no marked excess",1805
+"BD2017DHS","PR","age_displacement","ratio_50_to_49","male",11.17,1,"excess at 50: possible displacement out of the eligible ages",1278
+"BD2017DHS","PR","age_displacement","ratio_50_to_51","male",13.03,1,"excess at 50 (heaping)",1263
+"BD2017DHS","PR","age_displacement","ratio_55_to_54","male",7.76,1,"excess at 55: possible displacement out of the eligible ages",902
+"BD2017DHS","PR","anthropometry","pct_missing_weight","children",3.62,0,NA,8653
+"BD2017DHS","PR","anthropometry","weight_terminal_digit_pct_0","children",8.01,10,NA,8340
+"BD2017DHS","PR","anthropometry","weight_terminal_digit_pct_0_or_5","children",17.23,20,NA,8340
+"BD2017DHS","PR","anthropometry","weight_terminal_digit_dissimilarity","children",3.38,0,NA,8340
+"BD2017DHS","PR","anthropometry","pct_missing_height","children",5.44,0,NA,8653
+"BD2017DHS","PR","anthropometry","height_terminal_digit_pct_0","children",7.64,10,NA,8182
+"BD2017DHS","PR","anthropometry","height_terminal_digit_pct_0_or_5","children",18.03,20,NA,8182
+"BD2017DHS","PR","anthropometry","height_terminal_digit_dissimilarity","children",7.39,0,NA,8182
+"BD2017DHS","PR","anthropometry","haz_pct_missing","children",5.64,0,NA,8653
+"BD2017DHS","PR","anthropometry","haz_pct_flagged","children",0.66,0,NA,8165
+"BD2017DHS","PR","anthropometry","haz_pct_out_of_who_range","children",0,0,NA,8111
+"BD2017DHS","PR","anthropometry","haz_mean","children",-1.38,NA,NA,8111
+"BD2017DHS","PR","anthropometry","haz_sd","children",1.32,1,"SD above the WHO range (1.0-1.2): possible measurement error",8111
+"BD2017DHS","PR","anthropometry","waz_pct_missing","children",3.81,0,NA,8653
+"BD2017DHS","PR","anthropometry","waz_pct_flagged","children",0.11,0,NA,8323
+"BD2017DHS","PR","anthropometry","waz_pct_out_of_who_range","children",0,0,NA,8314
+"BD2017DHS","PR","anthropometry","waz_mean","children",-1.18,NA,NA,8314
+"BD2017DHS","PR","anthropometry","waz_sd","children",1.12,1,"SD within the expected range",8314
+"BD2017DHS","PR","anthropometry","whz_pct_missing","children",5.44,0,NA,8653
+"BD2017DHS","PR","anthropometry","whz_pct_flagged","children",0.88,0,NA,8182
+"BD2017DHS","PR","anthropometry","whz_pct_out_of_who_range","children",0,0,NA,8110
+"BD2017DHS","PR","anthropometry","whz_mean","children",-0.54,NA,NA,8110
+"BD2017DHS","PR","anthropometry","whz_sd","children",1.15,1,"SD within the expected range",8110
+"BD2017DHS","PR","anthropometry","pct_missing_weight","women",2.67,0,NA,20376
+"BD2017DHS","PR","anthropometry","weight_terminal_digit_pct_0","women",6.84,10,NA,19832
+"BD2017DHS","PR","anthropometry","weight_terminal_digit_pct_0_or_5","women",15.58,20,NA,19832
+"BD2017DHS","PR","anthropometry","weight_terminal_digit_dissimilarity","women",5.27,0,NA,19832
+"BD2017DHS","PR","anthropometry","pct_missing_height","women",2.69,0,NA,20376
+"BD2017DHS","PR","anthropometry","height_terminal_digit_pct_0","women",6.15,10,NA,19828
+"BD2017DHS","PR","anthropometry","height_terminal_digit_pct_0_or_5","women",14.85,20,NA,19828
+"BD2017DHS","PR","anthropometry","height_terminal_digit_dissimilarity","women",6.66,0,NA,19828
+"BD2017DHS","PR","completeness","pct_na","hv024",0,0,"includes rows skipped by design",89819
+"BD2017DHS","PR","completeness","pct_dk_or_missing_code","hv024",0,0,NA,89819
+"BD2017DHS","PR","completeness","pct_na","hv025",0,0,"includes rows skipped by design",89819
+"BD2017DHS","PR","completeness","pct_dk_or_missing_code","hv025",0,0,NA,89819
+"BD2017DHS","PR","completeness","pct_na","hv104",0,0,"includes rows skipped by design",89819
+"BD2017DHS","PR","completeness","pct_dk_or_missing_code","hv104",0,0,NA,89819
+"BD2017DHS","PR","completeness","pct_na","hv105",0,0,"includes rows skipped by design",89819
+"BD2017DHS","PR","completeness","pct_dk_or_missing_code","hv105",0,0,NA,89819
+"BD2017DHS","PR","completeness","pct_na","hv106",0,0,"includes rows skipped by design",89819
+"BD2017DHS","PR","completeness","pct_dk_or_missing_code","hv106",0.04,0,NA,89819
+"BD2017DHS","PR","completeness","pct_na","hv270",0,0,"includes rows skipped by design",89819
+"BD2017DHS","PR","completeness","pct_dk_or_missing_code","hv270",0,0,NA,89819
+"BD2017DHS","PR","completeness","pct_na","hc70",90.65,0,"includes rows skipped by design",89819
+"BD2017DHS","PR","completeness","pct_dk_or_missing_code","hc70",0,0,NA,8394
+"BD2017DHS","PR","completeness","pct_na","hc71",90.48,0,"includes rows skipped by design",89819
+"BD2017DHS","PR","completeness","pct_dk_or_missing_code","hc71",0,0,NA,8554
+"BD2017DHS","PR","completeness","pct_na","hc72",90.64,0,"includes rows skipped by design",89819
+"BD2017DHS","PR","completeness","pct_dk_or_missing_code","hc72",0,0,NA,8411
+"BD2017DHS","PR","completeness","pct_na","ha40",77.41,0,"includes rows skipped by design",89819
+"BD2017DHS","PR","completeness","pct_dk_or_missing_code","ha40",0,0,NA,20290
+"BD2022DHS","PR","age_heaping","whipple","total",173.15,100,"rough",60641
+"BD2022DHS","PR","age_heaping","myers","total",14.81,0,NA,100908
+"BD2022DHS","PR","age_heaping","whipple","male",216.08,100,"very rough",27538
+"BD2022DHS","PR","age_heaping","myers","male",21.27,0,NA,46937
+"BD2022DHS","PR","age_heaping","whipple","female",137.43,100,"rough",33103
+"BD2022DHS","PR","age_heaping","myers","female",9.4,0,NA,53971
+"BD2022DHS","PR","age_heaping","pct_age_missing","total",0,0,NA,126597
+"BD2022DHS","PR","age_displacement","ratio_14_to_15","female",0.93,1,"no marked excess",2655
+"BD2022DHS","PR","age_displacement","ratio_50_to_49","female",0.61,1,"deficit at 50 relative to 49",788
+"BD2022DHS","PR","age_displacement","ratio_50_to_51","female",0.56,1,"deficit at 50 relative to 51",834
+"BD2022DHS","PR","age_displacement","ratio_14_to_15","male",0.93,1,"no marked excess",2382
+"BD2022DHS","PR","age_displacement","ratio_50_to_49","male",5.53,1,"excess at 50: possible displacement out of the eligible ages",1633
+"BD2022DHS","PR","age_displacement","ratio_50_to_51","male",3.64,1,"excess at 50 (heaping)",1763
+"BD2022DHS","PR","age_displacement","ratio_55_to_54","male",4.01,1,"excess at 55: possible displacement out of the eligible ages",1317
+"BD2022DHS","PR","anthropometry","pct_missing_weight","children",2.17,0,NA,4420
+"BD2022DHS","PR","anthropometry","weight_terminal_digit_pct_0","children",9.32,10,NA,4324
+"BD2022DHS","PR","anthropometry","weight_terminal_digit_pct_0_or_5","children",20.58,20,NA,4324
+"BD2022DHS","PR","anthropometry","weight_terminal_digit_dissimilarity","children",2.21,0,NA,4324
+"BD2022DHS","PR","anthropometry","pct_missing_height","children",3.19,0,NA,4420
+"BD2022DHS","PR","anthropometry","height_terminal_digit_pct_0","children",6.43,10,NA,4279
+"BD2022DHS","PR","anthropometry","height_terminal_digit_pct_0_or_5","children",17.57,20,NA,4279
+"BD2022DHS","PR","anthropometry","height_terminal_digit_dissimilarity","children",8.24,0,NA,4279
+"BD2022DHS","PR","anthropometry","haz_pct_missing","children",3.33,0,NA,4420
+"BD2022DHS","PR","anthropometry","haz_pct_flagged","children",0.3,0,NA,4273
+"BD2022DHS","PR","anthropometry","haz_pct_out_of_who_range","children",0,0,NA,4260
+"BD2022DHS","PR","anthropometry","haz_mean","children",-1.16,NA,NA,4260
+"BD2022DHS","PR","anthropometry","haz_sd","children",1.28,1,"SD above the WHO range (1.0-1.2): possible measurement error",4260
+"BD2022DHS","PR","anthropometry","waz_pct_missing","children",2.31,0,NA,4420
+"BD2022DHS","PR","anthropometry","waz_pct_flagged","children",0.05,0,NA,4318
+"BD2022DHS","PR","anthropometry","waz_pct_out_of_who_range","children",0,0,NA,4316
+"BD2022DHS","PR","anthropometry","waz_mean","children",-1.18,NA,NA,4316
+"BD2022DHS","PR","anthropometry","waz_sd","children",1.14,1,"SD within the expected range",4316
+"BD2022DHS","PR","anthropometry","whz_pct_missing","children",3.19,0,NA,4420
+"BD2022DHS","PR","anthropometry","whz_pct_flagged","children",0.44,0,NA,4279
+"BD2022DHS","PR","anthropometry","whz_pct_out_of_who_range","children",0,0,NA,4260
+"BD2022DHS","PR","anthropometry","whz_mean","children",-0.75,NA,NA,4260
+"BD2022DHS","PR","anthropometry","whz_sd","children",1.14,1,"SD within the expected range",4260
+"BD2022DHS","PR","anthropometry","pct_missing_weight","women",2.59,0,NA,12755
+"BD2022DHS","PR","anthropometry","weight_terminal_digit_pct_0","women",9.45,10,NA,12425
+"BD2022DHS","PR","anthropometry","weight_terminal_digit_pct_0_or_5","women",20.53,20,NA,12425
+"BD2022DHS","PR","anthropometry","weight_terminal_digit_dissimilarity","women",2.48,0,NA,12425
+"BD2022DHS","PR","anthropometry","pct_missing_height","women",2.84,0,NA,12755
+"BD2022DHS","PR","anthropometry","height_terminal_digit_pct_0","women",6.86,10,NA,12393
+"BD2022DHS","PR","anthropometry","height_terminal_digit_pct_0_or_5","women",16.2,20,NA,12393
+"BD2022DHS","PR","anthropometry","height_terminal_digit_dissimilarity","women",5.93,0,NA,12393
+"BD2022DHS","PR","anthropometry","pct_missing_weight","men",6.83,0,NA,6633
+"BD2022DHS","PR","anthropometry","weight_terminal_digit_pct_0","men",9.79,10,NA,6180
+"BD2022DHS","PR","anthropometry","weight_terminal_digit_pct_0_or_5","men",20.36,20,NA,6180
+"BD2022DHS","PR","anthropometry","weight_terminal_digit_dissimilarity","men",2.9,0,NA,6180
+"BD2022DHS","PR","anthropometry","pct_missing_height","men",6.9,0,NA,6633
+"BD2022DHS","PR","anthropometry","height_terminal_digit_pct_0","men",6.33,10,NA,6175
+"BD2022DHS","PR","anthropometry","height_terminal_digit_pct_0_or_5","men",15.55,20,NA,6175
+"BD2022DHS","PR","anthropometry","height_terminal_digit_dissimilarity","men",5.35,0,NA,6175
+"BD2022DHS","PR","completeness","pct_na","hv024",0,0,"includes rows skipped by design",132463
+"BD2022DHS","PR","completeness","pct_dk_or_missing_code","hv024",0,0,NA,132463
+"BD2022DHS","PR","completeness","pct_na","hv025",0,0,"includes rows skipped by design",132463
+"BD2022DHS","PR","completeness","pct_dk_or_missing_code","hv025",0,0,NA,132463
+"BD2022DHS","PR","completeness","pct_na","hv104",0,0,"includes rows skipped by design",132463
+"BD2022DHS","PR","completeness","pct_dk_or_missing_code","hv104",0,0,NA,132463
+"BD2022DHS","PR","completeness","pct_na","hv105",0,0,"includes rows skipped by design",132463
+"BD2022DHS","PR","completeness","pct_dk_or_missing_code","hv105",0,0,NA,132463
+"BD2022DHS","PR","completeness","pct_na","hv106",8.41,0,"includes rows skipped by design",132463
+"BD2022DHS","PR","completeness","pct_dk_or_missing_code","hv106",0.05,0,NA,121321
+"BD2022DHS","PR","completeness","pct_na","hv270",0,0,"includes rows skipped by design",132463
+"BD2022DHS","PR","completeness","pct_dk_or_missing_code","hv270",0,0,NA,132463
+"BD2022DHS","PR","completeness","pct_na","hc70",96.66,0,"includes rows skipped by design",132463
+"BD2022DHS","PR","completeness","pct_dk_or_missing_code","hc70",0,0,NA,4418
+"BD2022DHS","PR","completeness","pct_na","hc71",96.63,0,"includes rows skipped by design",132463
+"BD2022DHS","PR","completeness","pct_dk_or_missing_code","hc71",0,0,NA,4463
+"BD2022DHS","PR","completeness","pct_na","hc72",96.66,0,"includes rows skipped by design",132463
+"BD2022DHS","PR","completeness","pct_dk_or_missing_code","hc72",0,0,NA,4424
+"BD2022DHS","PR","completeness","pct_na","ha40",90.36,0,"includes rows skipped by design",132463
+"BD2022DHS","PR","completeness","pct_dk_or_missing_code","ha40",0,0,NA,12771

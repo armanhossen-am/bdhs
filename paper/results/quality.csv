@@ -1,0 +1,9 @@
+"survey_id","pct_birth_dates_complete","child_haz_sd","child_haz_pct_flagged","child_height_pct_digit_0_or_5","whipple_men","whipple_women","women_ratio_50_to_49","heaping_12_months"
+"BD1994DHS",99.97,NA,NA,NA,NA,NA,NA,NA
+"BD2000DHS",99.99,NA,NA,31.57,NA,NA,NA,NA
+"BD2004DHS",99.97,NA,NA,23.91,NA,NA,NA,NA
+"BD2007DHS",100,1.36,7.71,22.99,NA,NA,NA,NA
+"BD2011DHS",100,1.41,7.66,21.2,NA,NA,NA,NA
+"BD2014DHS",100,1.34,2.33,22.11,NA,NA,NA,NA
+"BD2017DHS",100,1.32,0.67,18.08,264.08,113.61,0.31,227.91
+"BD2022DHS",99.85,1.27,0.32,17.44,216.08,137.43,0.61,179.31
