@@ -13,6 +13,7 @@ link-citations: true
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+options(knitr.kable.NA = "–")
 res <- function(f) {
   p <- file.path("results", f)
   if (file.exists(p)) utils::read.csv(p, stringsAsFactors = FALSE) else NULL
@@ -26,6 +27,13 @@ syn <- res("synthetic_fidelity.csv")
 cs_trend <- res("case_csection_trend.csv")
 cs_ineq <- res("case_csection_inequality.csv")
 cs_dec <- res("case_csection_decomposition.csv")
+cs_chg <- res("case_csection_changes.csv")
+sdg <- res("sdg.csv")
+cs <- cs_trend[cs_trend$indicator == "rh_del_csection", ]
+fd <- cs_trend[cs_trend$indicator == "rh_del_facility", ]
+iq <- function(s, m, col = "estimate") cs_ineq[cs_ineq$survey_id == s & cs_ineq$measure == m, col]
+dc <- function(from, by, comp, col = "estimate") cs_dec[cs_dec$from == from & cs_dec$by == by & cs_dec$component == comp, col]
+q_all <- res("quality_full.csv")
 n_val <- nrow(val); n_pass <- sum(val$pass)
 fmt <- function(x, d = 1) formatC(x, format = "f", digits = d)
 ```
@@ -151,9 +159,17 @@ variance to the variance of a simple random sample of the same size.
 
 ## Data-quality diagnostics
 
-```{r, results = "asis"}
-if (is.null(qual)) cat("*[To be completed: description of the data-quality checks.]*")
-```
+`bdhs_quality()` implements standard DHS data-quality diagnostics
+[@pullum2006]: age heaping in the household roster (Whipple index for ages
+23-62 and Myers' blended index); age displacement at the boundaries of
+eligibility for the women's interview (ratios of the number of women aged 50
+to 49 and 14 to 15); completeness of birth dates; births by calendar year and
+the ratio of births in the fifth to the fourth year before the survey, which
+detects displacement of births out of the window for the health questions;
+heaping of reported ages at death at 12 months; and anthropometric quality
+(standard deviations of z-scores, flagged values and terminal-digit
+preference in measured height). Statistics are unweighted, as in the DHS
+data-quality tables.
 
 ## Calibrated synthetic data
 
@@ -163,9 +179,21 @@ if (is.null(syn)) cat("*[To be completed: description of the calibration method.
 
 ## Change and inequality analysis
 
-```{r, results = "asis"}
-if (is.null(cs_ineq)) cat("*[To be completed: change tests, inequality indices and decomposition.]*")
-```
+Changes between rounds are tested as differences of independent survey
+estimates, with standard errors combined in quadrature; changes per year use
+the midpoints of fieldwork. Within a round, contrasts between groups use the
+full design-based covariance matrix. Wealth-related inequality is summarised
+by the rich-poor difference and ratio, the slope and relative indices of
+inequality (SII, RII) estimated by design-based regression on the weighted
+ridit of wealth quintiles [@barros2013], the concentration index
+[@wagstaff1991; @kakwani1997] and, for binary outcomes, Erreygers' corrected
+concentration index [@erreygers2009]. Changes between two rounds are split
+into a composition effect (changes in the distribution of a background
+characteristic) and a within-group effect, using Kitagawa's symmetric
+decomposition [@kitagawa1955; @dasgupta1993] with delete-one-cluster
+jackknife standard errors. Progress towards the Sustainable Development
+Goals is assessed from the official estimates as the average annual rate of
+change since 2014 compared with the rate required to reach the 2030 target.
 
 # Results
 
@@ -213,29 +241,210 @@ if (!is.null(deff)) {
 
 ## Data quality
 
-```{r, results = "asis"}
-if (is.null(qual)) cat("*[To be completed.]*") else knitr::kable(qual)
+Reporting of birth dates was essentially complete in every round
+(`r fmt(min(qual$pct_birth_dates_complete, na.rm = TRUE))`-100% of births in
+the children's recode had month and year). Anthropometric quality improved
+markedly: the share of flagged height-for-age z-scores fell from
+`r fmt(qual$child_haz_pct_flagged[qual$survey_id == "BD2007DHS"])`% in 2007 to
+`r fmt(qual$child_haz_pct_flagged[qual$survey_id == "BD2022DHS"])`% in 2022, and
+the share of child heights ending in 0 or 5 fell from
+`r fmt(qual$child_height_pct_digit_0_or_5[qual$survey_id == "BD2000DHS"])`% in
+1999-2000 to `r fmt(qual$child_height_pct_digit_0_or_5[qual$survey_id == "BD2022DHS"])`%
+in 2022 (20% expected without preference). The standard deviation of
+height-for-age z-scores nevertheless exceeded the WHO plausible range
+(1.0-1.2) in every round with data. Age reporting in the household roster
+was much less precise for men than for women (Whipple index
+`r fmt(qual$whipple_men[qual$survey_id == "BD2017DHS"], 0)` vs
+`r fmt(qual$whipple_women[qual$survey_id == "BD2017DHS"], 0)` in 2017-18), and
+there were far fewer women recorded at age 50 than at 49 (ratio
+`r fmt(qual$women_ratio_50_to_49[qual$survey_id == "BD2017DHS"], 2)` in 2017-18 and
+`r fmt(qual$women_ratio_50_to_49[qual$survey_id == "BD2022DHS"], 2)` in 2022), a
+pattern consistent with ages being shifted at the upper boundary of
+eligibility. Reported ages at death were heaped at 12 months (heaping index
+`r fmt(qual$heaping_12_months[qual$survey_id == "BD2017DHS"], 0)` in 2017-18,
+where 100 means no heaping), which moves deaths between the infant and
+child mortality intervals. We found no evidence of births being displaced
+out of the five-year window in 2017-18 or 2022.
+
+```{r}
+qt <- qual
+names(qt) <- c("Survey", "Birth dates complete (%)", "HAZ SD", "HAZ flagged (%)",
+               "Height ending 0/5 (%)", "Whipple, men", "Whipple, women",
+               "Women 50:49", "Heaping at 12 months")
+knitr::kable(qt, digits = 2, caption = "Table 4. Data-quality indicators by round (unweighted).")
 ```
 
 ## Synthetic data fidelity
 
 ```{r, results = "asis"}
-if (is.null(syn)) cat("*[To be completed.]*") else knitr::kable(syn)
+if (is.null(syn)) {
+  cat("*[Synthetic-data results pending.]*")
+} else {
+  knitr::kable(syn, digits = 2, caption = "Table 5. Fidelity of calibrated synthetic data to the official estimates.")
+}
 ```
 
 ## Case study: caesarean delivery, 2004-2022
 
-```{r, results = "asis"}
-if (is.null(cs_trend)) cat("*[To be completed.]*") else knitr::kable(cs_trend)
+Caesarean delivery rose from `r fmt(cs$estimate[cs$survey_id == "BD2000DHS"])`% of
+births in 1999-2000 to `r fmt(cs$estimate[cs$survey_id == "BD2022DHS"])`% in 2022
+(Figure 1), and every change between consecutive rounds was statistically
+significant. Between 2004 and 2022 the increase was
+`r fmt(cs_chg$difference[cs_chg$indicator == "rh_del_csection" & cs_chg$survey_1 == "BD2004DHS" & cs_chg$survey_2 == "BD2022DHS"])`
+percentage points (`r fmt(cs_chg$annual_change[cs_chg$indicator == "rh_del_csection" & cs_chg$survey_1 == "BD2004DHS" & cs_chg$survey_2 == "BD2022DHS"], 2)` points
+per year), faster than the rise in facility delivery relative to its level:
+by 2022, `r fmt(100 * cs$estimate[cs$survey_id == "BD2022DHS"] / fd$estimate[fd$survey_id == "BD2022DHS"], 0)`%
+of facility births were caesarean.
+
+```{r fig1, fig.width = 6.5, fig.height = 3.6, fig.cap = "Figure 1. Caesarean and facility delivery, births in the three years before each survey (95% confidence intervals)."}
+library(ggplot2)
+yr <- c(BD2000DHS = 2000, BD2004DHS = 2004, BD2007DHS = 2007, BD2011DHS = 2011,
+        BD2014DHS = 2014, BD2017DHS = 2018, BD2022DHS = 2022)
+d <- cs_trend
+d$year <- yr[d$survey_id]
+d$what <- ifelse(d$indicator == "rh_del_csection", "Caesarean delivery", "Facility delivery")
+ggplot(d, aes(year, estimate, colour = what)) +
+  geom_line() + geom_point() +
+  geom_errorbar(aes(ymin = ci_low, ymax = ci_high), width = 0.4) +
+  labs(x = NULL, y = "Percent of births", colour = NULL) +
+  theme_minimal(base_size = 10) + theme(legend.position = "bottom")
 ```
+
+Absolute inequality by household wealth widened as coverage expanded: the
+slope index of inequality rose from `r fmt(iq("BD2004DHS", "sii"))` percentage points in
+2004 to `r fmt(iq("BD2017DHS", "sii"))` in 2017-18 and was
+`r fmt(iq("BD2022DHS", "sii"))` (95% CI `r fmt(iq("BD2022DHS", "sii", "ci_low"))`-`r fmt(iq("BD2022DHS", "sii", "ci_high"))`)
+in 2022, while relative inequality fell steeply (RII from
+`r fmt(iq("BD2004DHS", "rii"), 0)` to `r fmt(iq("BD2022DHS", "rii"))`) as the poorest
+quintile began to use caesarean delivery (Table 6). Every measure computed from
+the microdata agreed with the same measure computed from the official
+quintile estimates (for example, Erreygers' index in 2022
+`r fmt(iq("BD2022DHS", "eci"), 3)` vs `r fmt(iq("BD2022DHS", "eci", "official"), 3)`).
+
+```{r}
+tab <- cs_ineq[cs_ineq$measure %in% c("difference", "sii", "rii", "eci"), ]
+tab <- reshape(tab[, c("survey_id", "measure", "estimate")], idvar = "survey_id",
+               timevar = "measure", direction = "wide")
+names(tab) <- c("Survey", "Rich-poor difference", "Erreygers CI", "RII", "SII")
+knitr::kable(tab[, c("Survey", "Rich-poor difference", "SII", "RII", "Erreygers CI")], digits = 3,
+             row.names = FALSE, caption = "Table 6. Wealth-related inequality in caesarean delivery.")
+```
+
+Changes in the composition of mothers explained little of the increase.
+Rising maternal education accounted for `r fmt(dc("BD2004DHS", "mother_edu_level", "composition"))`
+of the `r fmt(dc("BD2004DHS", "mother_edu_level", "total"))` percentage-point increase between 2004 and 2022
+(`r fmt(dc("BD2004DHS", "mother_edu_level", "composition", "percent"), 0)`%), and changes in the
+wealth distribution essentially none
+(`r fmt(dc("BD2004DHS", "wealth_quintile", "composition", "percent"), 0)`%); the remainder occurred
+within education and wealth groups (Table 7).
+
+```{r}
+dt <- cs_dec
+dt$period <- paste(sub("BD(\\d{4}).*", "\\1", dt$from), sub("BD(\\d{4}).*", "\\1", dt$to), sep = "-")
+dt$by <- ifelse(dt$by == "mother_edu_level", "Education", "Wealth quintile")
+knitr::kable(dt[, c("period", "by", "component", "estimate", "se", "percent")], digits = 2, row.names = FALSE,
+             col.names = c("Period", "By", "Component", "Percentage points", "SE", "% of change"),
+             caption = "Table 7. Kitagawa decomposition of the change in caesarean delivery.")
+```
+
+## Progress towards the SDGs
+
+```{r}
+st <- sdg[, c("sdg", "name", "baseline_value", "latest_value", "target", "aarc", "required_aarc", "on_track")]
+knitr::kable(st, digits = 1, row.names = FALSE,
+             col.names = c("SDG", "Indicator", "2014", "2022", "Target", "AARC (%)", "Required AARC (%)", "On track"),
+             caption = "Table 8. Progress towards SDG-related targets from the official estimates.")
+```
+
+Under-five mortality and stunting were on track for their 2030 targets,
+whereas neonatal mortality, wasting and skilled birth attendance were not,
+and child marriage, although declining, remained far from elimination
+(Table 8).
 
 # Discussion
 
-*[To be completed after all results are in.]*
+Reproducing three decades of BDHS estimates from the recode files shows
+that correct analysis is achievable but not automatic. With the survey
+design, denominators, reference periods and round-specific rules encoded
+once, `r n_pass` of `r n_val` national comparisons matched the official values,
+typically to within a few hundredths of a percentage point, and inequality
+measures computed from the microdata matched those derived from the official
+quintile estimates. The same exercise exposed decisions that are invisible in
+the data files but change results substantially.
+
+The largest errors arise from the sampling frame rather than from
+statistical method. Because every BDHS women's sample is restricted to
+ever-married women, indicators of child marriage computed without all-woman
+factors are about ten percentage points too high, which would make
+Bangladesh's child-marriage problem appear considerably worse than it is.
+Conversely, ignoring the short questionnaire introduced in 2022 understates
+unmet need for family planning by a third, which would suggest a much faster
+improvement since 2017-18 than actually occurred. Other pitfalls are smaller
+but still exceed the sampling error: the treatment of births to very young
+mothers in the general fertility rate, the inclusion of country-specific
+feeding questions in exclusive breastfeeding, and the omission of the
+measles-rubella vaccine. Several of these follow conventions that are
+documented only implicitly in the published tables; for example, the
+official child-marriage estimates by background characteristic use the total
+all-woman factor rather than the subgroup factor recommended for other
+all-women indicators.
+
+Design effects between 1.6 and 3.1 for headline indicators mean that analyses
+treating the BDHS as a simple random sample report confidence intervals up to
+1.8 times too narrow, inflating the apparent precision of subgroup
+comparisons. Comparisons across rounds raise a further, practical problem:
+division codes were renumbered when Mymensingh division was created, so a
+code that meant Rajshahi in 2014 means Mymensingh in 2017-18. Harmonized
+division layouts, as provided by `bdhs`, are needed for any regional trend
+analysis.
+
+The data-quality diagnostics point to strengths and to issues worth keeping in
+mind. Birth histories are complete, and there is no evidence of the
+displacement of births out of the five-year window that affects mortality and
+health indicators in some DHS countries. Anthropometric measurement improved
+substantially after 2011. However, the dispersion of height-for-age z-scores
+remains above the WHO plausible range, heaping of age at death at 12 months
+shifts deaths between infant and child mortality, and a deficit of women
+recorded at age 50 relative to 49 suggests age misreporting at the upper
+boundary of eligibility. These patterns are consistent with earlier
+assessments of age and date reporting in DHS surveys [@pullum2006].
+
+The case study illustrates the analyses the package supports. Caesarean
+delivery in Bangladesh rose about ten-fold between 2004 and 2022. Absolute
+inequality by wealth widened as uptake spread from the richest households,
+while relative inequality fell, and changes in maternal education and
+household wealth explained only a small part of the increase. Most of the
+rise occurred within every education and wealth group, consistent with
+changes in health-system practice rather than in the characteristics of
+mothers. Separating these components with appropriate standard errors is
+straightforward once the design and the indicator definitions are correct.
+
+`bdhs` complements rather than replaces existing tools. IPUMS-DHS
+[@ipumsdhs] offers harmonized variables across countries, while `bdhs`
+works directly on the original recode files of every BDHS round and validates
+its results against the official estimates. `rdhs` [@watson2019] and
+`DHS.rates` [@dhsrates] provide data access and demographic rates for all DHS
+countries; `bdhs` reproduces the latter exactly and adds Bangladesh-specific
+harmonization, validation and analysis tools.
+
+This study has limitations. Validation was limited to the recode files
+available to the author: children's recodes for most rounds, and complete
+sets only for 2017-18 and 2022; no files from 1996-97 were available, so its
+harmonization rules are marked as unverified. The validation tolerance of half
+a percentage point does not guarantee agreement for subgroups, although
+subgroup checks for selected indicators agreed closely. Model-based estimates
+below the division level, which policy increasingly requires, are not
+addressed.
 
 # Conclusions
 
-*[To be completed.]*
+Analyses of the BDHS can reproduce the official estimates almost exactly, but
+only when the sampling frame, questionnaire changes and country-specific
+conventions are handled correctly; overlooking them changes key indicators by
+up to ten percentage points. Encoding these rules in validated, open-source
+software makes BDHS analyses more accurate, faster to conduct and easier to
+verify. We recommend that analyses of DHS data report a validation against
+the official national estimates alongside their results.
 
 # Declarations
 
