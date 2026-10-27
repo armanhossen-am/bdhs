@@ -38,6 +38,7 @@ Suggests:
     keyring,
     knitr,
     labelled,
+    pkgdown,
     rdhs,
     rmarkdown,
     sf (>= 1.0.0),
