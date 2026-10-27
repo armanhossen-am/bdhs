@@ -1,7 +1,7 @@
 # Reading DHS recode files -------------------------------------------------------------
 
 # Identifier and complex-design variables kept by bdhs_read(keep_design = TRUE).
-.design_vars <- c(
+.read_keep_vars <- c(
   "caseid", "mcaseid", "hhid", "hvidx", "bidx", "midx", "hwhhid", "hwline", "whhid",
   "v001", "v002", "v003", "v005", "v021", "v022", "v023", "v024", "v025",
   "mv001", "mv002", "mv003", "mv005", "mv021", "mv022", "mv023", "mv024", "mv025",
@@ -234,7 +234,7 @@ read_dhs <- function(path, format, vars, vars_regex, keep_design, labels, n_max,
       cli::cli_abort("None of the requested variables are in {what}.")
     }
     if (keep_design) {
-      want <- union(lower[lower %in% .design_vars | grepl("^awfact", lower)], want)
+      want <- union(lower[lower %in% .read_keep_vars | grepl("^awfact", lower)], want)
     }
     sel <- names[lower %in% want]
   }
