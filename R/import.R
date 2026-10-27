@@ -398,8 +398,10 @@ import_summary <- function(res, dir) {
       ok$survey_id, ok$recode, ok$file_stem, how,
       format(ok$n_rows, big.mark = ","), format(ok$n_cols, big.mark = ",")
     )
-    cli::cli_inform(c("v" = "Imported {nrow(ok)} dataset{?s} into {.path {dir}}:"))
-    cli::cli_bullets(stats::setNames(cli_escape(lines), rep("*", length(lines))))
+    cli::cli_inform(c(
+      "v" = "Imported {nrow(ok)} dataset{?s} into {.path {dir}}:",
+      stats::setNames(cli_escape(lines), rep("*", length(lines)))
+    ))
   }
   other <- res[res$status != "imported", ]
   if (nrow(other)) {
@@ -419,8 +421,10 @@ import_summary <- function(res, dir) {
       other$origin, ": ", what[other$status],
       ifelse(is.na(other$note), "", paste0(" (", other$note, ")"))
     )
-    cli::cli_inform(c("i" = "Skipped {nrow(other)} file{?s}:"))
-    cli::cli_bullets(stats::setNames(cli_escape(lines), unname(type[other$status])))
+    cli::cli_inform(c(
+      "i" = "Skipped {nrow(other)} file{?s}:",
+      stats::setNames(cli_escape(lines), unname(type[other$status]))
+    ))
   }
   if (!nrow(ok) && !nrow(other)) {
     cli::cli_inform("Nothing to import.")
