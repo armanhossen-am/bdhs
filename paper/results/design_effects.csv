@@ -1,0 +1,9 @@
+"survey_id","indicator","estimate","se_design","se_srs","deff","n"
+"BD2022DHS","rh_del_csection",44,1.15,0.68,2.86,5342
+"BD2022DHS","rh_del_facility",63.5,1.16,0.66,3.09,5342
+"BD2022DHS","rh_anc_4plus",39.6,1.09,0.69,2.5,5064
+"BD2022DHS","nt_stunting",23.6,0.83,0.65,1.63,4260
+"BD2022DHS","fp_cpr_modern",54.7,0.54,0.36,2.25,18987
+"BD2017DHS","ch_vac_basic",89.1,0.98,0.76,1.63,1666
+"BD2017DHS","nt_stunting",30.8,0.71,0.51,1.93,8111
+"BD2017DHS","fp_cpr_modern",51.9,0.55,0.36,2.33,18895

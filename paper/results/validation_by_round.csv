@@ -1,0 +1,9 @@
+"survey_id","recodes","n","passed","median_abs_diff","max_abs_diff_passed"
+"BD1994DHS","KR",24,24,0.037,0.51
+"BD2000DHS","KR",27,27,0.036,0.22
+"BD2004DHS","KR",26,26,0.032,0.1
+"BD2007DHS","KR",28,28,0.033,0.12
+"BD2011DHS","KR",27,27,0.026,0.43
+"BD2014DHS","KR",28,28,0.02,0.23
+"BD2017DHS","BR, IR, KR, PR",104,104,0.033,0.36
+"BD2022DHS","IR, KR, PR",91,89,0.03,0.46
