@@ -59,3 +59,13 @@ test_that("data_survey_id() and data_recode() detect simulated data", {
   expect_error(data_survey_id(data.frame(a = 1)), "Can't tell which BDHS round")
   expect_error(data_recode(data.frame(a = 1)), "Can't tell which DHS recode")
 })
+
+test_that("data_recode() tells KR from a BR that also carries midx", {
+  br <- bdhs_simulate(2017, "BR", n_clusters = 4, households = 3)
+  attr(br, "bdhs_recode") <- NULL
+  br$midx <- br$bidx
+  expect_equal(data_recode(br), "BR")
+  kr <- bdhs_simulate(2017, "KR", n_clusters = 4, households = 3)
+  attr(kr, "bdhs_recode") <- NULL
+  expect_equal(data_recode(kr), "KR")
+})

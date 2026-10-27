@@ -200,10 +200,10 @@ data_recode <- function(data, recode = NULL, call = rlang::caller_env()) {
   }
   nm <- tolower(names(data))
   has <- function(...) all(c(...) %in% nm)
-  rec <- if (has("midx")) {
-    "KR"
-  } else if (has("bidx") && has("caseid")) {
-    "BR"
+  rec <- if (has("midx") || (has("bidx") && has("caseid"))) {
+    # The 2017-18 BR also carries midx, so KR vs BR is decided by the children's
+    # ages: KR holds births in the last five years only (three in 1993-94).
+    kr_or_br(data, nm)
   } else if (has("mv001")) {
     "MR"
   } else if (has("caseid", "v001")) {
@@ -225,4 +225,15 @@ data_recode <- function(data, recode = NULL, call = rlang::caller_env()) {
     )
   }
   rec
+}
+
+kr_or_br <- function(data, nm) {
+  col <- function(v) data[[names(data)[match(v, nm)]]]
+  if (all(c("v008", "b3") %in% nm)) {
+    age <- as.numeric(zap_all(col("v008"))) - as.numeric(zap_all(col("b3")))
+    if (any(!is.na(age))) {
+      return(if (max(age, na.rm = TRUE) <= 60) "KR" else "BR")
+    }
+  }
+  if ("midx" %in% nm) "KR" else "BR"
 }
