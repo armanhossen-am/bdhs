@@ -189,7 +189,14 @@ check_by <- function(data, by, call = rlang::caller_env()) {
   }
   bad <- setdiff(by, names(data))
   if (length(bad)) {
-    cli::cli_abort("Grouping variable{?s} {.field {bad}} not found in {.arg data}.", call = call)
+    # The same concept has a different prefix in each recode: v024 (women,
+    # children, births), hv024 (households, members), mv024 (men).
+    stem <- sub("^(hv|mv|v)", "", bad)
+    alt <- unlist(lapply(stem, function(x) intersect(paste0(c("v", "hv", "mv"), x), names(data))))
+    cli::cli_abort(c(
+      "Grouping variable{?s} {.field {bad}} not found in {.arg data}.",
+      "i" = if (length(alt)) "Did you mean {.field {alt}}? Household and member files use {.field hv...} names."
+    ), call = call)
   }
 }
 

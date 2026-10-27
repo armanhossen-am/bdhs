@@ -137,3 +137,8 @@ test_that("design_args are passed to bdhs_design()", {
 test_that("bdhs_estimate() explains non-data input", {
   expect_error(bdhs_estimate(2022), "Read it first")
 })
+
+test_that("a by-variable with the wrong recode prefix gets a suggestion", {
+  pr <- bdhs_simulate(2022, "PR", n_clusters = 6, households = 4)
+  expect_error(bdhs_estimate(pr, "nt_stunting", by = "v024"), "Did you mean .*hv024")
+})
