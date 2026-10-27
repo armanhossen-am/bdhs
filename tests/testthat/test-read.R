@@ -22,8 +22,8 @@ for (fmt in c("dta", "parquet")) {
     expect_equal(attr(ir, "bdhs_file"), "BDIR81FL")
 
     sel <- bdhs_read("2022", "ir", vars = c("V106", "v012"))
-    design <- c("caseid", "v001", "v002", "v003", "v005", "v021", "v022", "v023", "v024", "v025",
-                "awfactt", "awfactu", "awfactr", "awfacte", "awfactw")
+    design <- c("caseid", "v000", "v001", "v002", "v003", "v005", "v007", "v008", "v021", "v022", "v023",
+                "v024", "v025", "awfactt", "awfactu", "awfactr", "awfacte", "awfactw")
     expect_setequal(names(sel), c(design, "v106", "v012"))
     # File order is kept.
     expect_equal(names(sel), names(full)[names(full) %in% names(sel)])

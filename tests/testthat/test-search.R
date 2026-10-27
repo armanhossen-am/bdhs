@@ -4,7 +4,10 @@ test_that("bdhs_search() finds indicators and harmonized variables", {
   expect_s3_class(res, "tbl_df")
   expect_named(res, c("source", "id", "label", "recode", "surveys"))
   expect_true(all(c("CN_NUTS_C_HA2", "stunted_who") %in% res$id))
-  expect_setequal(unique(res$source), c("indicator", "harmonized"))
+  expect_setequal(unique(res$source), c("indicator", "computable", "harmonized"))
+  expect_true("nt_stunting" %in% res$id)
+  # Computable indicators can be found by the DHS id they reproduce.
+  expect_true("rh_del_csection" %in% bdhs_search("RH_DELA_C_CSC", where = "computable")$id)
   # Case-insensitive.
   expect_equal(nrow(bdhs_search("STUNT")), nrow(res))
 })
@@ -52,7 +55,8 @@ test_that("bdhs_search() handles invalid regular expressions and empty results",
 test_that("bdhs_search() prints compactly", {
   res <- bdhs_search("stunt")
   expect_output(print(res), "bdhs search for \"stunt\"")
-  expect_output(print(res), "Indicators \\(2\\)")
+  expect_output(print(res), "Official DHS indicators \\(2\\)")
+  expect_output(print(res), "Computable with bdhs_estimate\\(\\) \\(2\\)")
   expect_output(print(res), "CN_NUTS_C_HA2")
   many <- bdhs_search("vaccin", where = "indicators")
   expect_output(print(many, n = 2), "more")

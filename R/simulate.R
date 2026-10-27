@@ -180,6 +180,10 @@ sim_world <- function(survey_id, n_clusters, households) {
 
   # Birth histories.
   births <- sim_births(wm)
+  births$b16 <- NA_integer_
+  alive <- which(births$b5 == 1L)
+  ord <- alive[order(births$caseid_key[alive], -births$bidx[alive])]
+  births$b16[ord] <- 2L + stats::ave(births$bidx[ord], births$caseid_key[ord], FUN = seq_along)
   wm$ceb <- tabulate(match(births$caseid_key, wm$hhid), nbins = nw)
 
   married <- wm$marital == 1L
@@ -284,24 +288,28 @@ sim_pr <- function(hh, wm, births, info) {
   heads$sex <- ifelse(heads$has_woman, 1L, sample(1:2, nrow(heads), TRUE))
   heads$age <- sample(25:70, nrow(heads), TRUE)
   heads$mother_line <- 0L
+  heads$bmi <- NA_real_
+  heads$preg <- NA_integer_
   women <- wm
+  women$preg <- wm$pregnant
   women$hvidx <- 2L
   women$sex <- 2L
   women$mother_line <- 0L
   kids <- births[births$b5 == 1L, ]
-  kids <- kids[order(kids$caseid_key, -kids$bidx), ]
-  kids$hvidx <- 2L + stats::ave(kids$bidx, kids$caseid_key, FUN = seq_along)
+  kids$hvidx <- kids$b16
   kh <- hh[match(kids$caseid_key, hh$hhid), ]
   kh$hvidx <- kids$hvidx
   kh$sex <- kids$b4
   kh$age <- kids$age_mo %/% 12L
   kh$age_mo <- kids$age_mo
   kh$mother_line <- 2L
+  kh$bmi <- NA_real_
+  kh$preg <- NA_integer_
   cols <- names(hh)
   all <- rbind(
-    cbind(heads[, cols], heads[, c("hvidx", "sex", "age", "mother_line")], age_mo = NA),
-    cbind(women[, cols], women[, c("hvidx", "sex", "age", "mother_line")], age_mo = NA),
-    cbind(kh[, cols], kh[, c("hvidx", "sex", "age", "mother_line", "age_mo")])
+    cbind(heads[, cols], heads[, c("hvidx", "sex", "age", "mother_line", "bmi", "preg")], age_mo = NA),
+    cbind(women[, cols], women[, c("hvidx", "sex", "age", "mother_line", "bmi", "preg")], age_mo = NA),
+    cbind(kh[, cols], kh[, c("hvidx", "sex", "age", "mother_line", "bmi", "preg", "age_mo")])
   )
   all <- all[order(all$v001, all$hv002, all$hvidx), ]
   n <- nrow(all)
@@ -309,6 +317,7 @@ sim_pr <- function(hh, wm, births, info) {
   under5 <- !is.na(all$age_mo) & all$age_mo < 60
   measured <- under5 & stats::runif(n) < 0.92
   haz <- ifelse(measured, round(stats::rnorm(n, -130 + 25 * all$wscore, 120)), NA)
+  wm_measured <- all$sex == 2L & all$age >= 15 & all$age <= 49 & !is.na(all$bmi) & stats::runif(n) < 0.95
   haz[measured & stats::runif(n) < 0.01] <- 9996
   tibble::as_tibble(c(
     list(hhid = num(all$hhid, "case identification"),
@@ -328,7 +337,10 @@ sim_pr <- function(hh, wm, births, info) {
       hc1 = num(ifelse(under5, as.numeric(all$age_mo), NA), "child's age in months"),
       hc70 = num(as.numeric(haz), "height/age standard deviation (new who)"),
       hc71 = num(ifelse(measured, round(stats::rnorm(n, -120 + 20 * all$wscore, 100)), NA), "weight/age standard deviation (new who)"),
-      hc72 = num(ifelse(measured, round(stats::rnorm(n, -60, 100)), NA), "weight/height standard deviation (new who)")
+      hc72 = num(ifelse(measured, round(stats::rnorm(n, -60, 100)), NA), "weight/height standard deviation (new who)"),
+      ha3 = num(ifelse(wm_measured, round(stats::rnorm(n, 1510, 55)), NA), "woman's height in centimeters (1 decimal)"),
+      ha40 = num(ifelse(wm_measured, all$bmi, NA), "body mass index"),
+      ha54 = lbl(ifelse(wm_measured, as.numeric(all$preg), NA), c("no/don't know" = 0, yes = 1), "currently pregnant")
     )
   ))
 }
@@ -429,6 +441,7 @@ sim_br <- function(wm, births, info) {
       b7 = num(as.numeric(b$b7), "age at death (months, imputed)"),
       b8 = num(ifelse(b$b5 == 1L, as.numeric(b$age_mo %/% 12L), NA), "current age of child"),
       b19 = num(as.numeric(b$age_mo), "current age of child in months (months since birth for dead children)"),
+      b16 = num(as.numeric(b$b16), "child's line number in household"),
       awfactt = num(as.numeric(w$awfactt), "all woman factor - total")
     )
   ))
@@ -455,7 +468,6 @@ sim_kr <- function(wm, births, info) {
   symp_lab <- c(no = 0, "yes, last 24 hours" = 1, "yes, last two weeks" = 2, "don't know" = 8)
   alive <- b$b5 == 1L
   symptom <- function(p, yes = 2L) ifelse(alive, ifelse(stats::runif(n) < p, yes, 0L), NA)
-  m3 <- function(x, label) lbl(as.numeric(x), c(no = 0, yes = 1), label)
   tibble::as_tibble(c(
     list(caseid = num(sprintf("%12s%3d", w$hhid, w$line), "case identification"),
          midx = num(as.numeric(b$bidx), "index to birth history"),
@@ -473,18 +485,16 @@ sim_kr <- function(wm, births, info) {
       b4 = lbl(as.numeric(b$b4), c(male = 1, female = 2), "sex of child"),
       b5 = lbl(as.numeric(b$b5), c(no = 0, yes = 1), "child is alive"),
       b19 = num(as.numeric(b$age_mo), "current age of child in months (months since birth for dead children)"),
+      b16 = num(as.numeric(b$b16), "child's line number in household"),
       m14 = num(as.numeric(ifelse(b$bidx == 1L, pmin(20L, stats::rpois(n, 2 + 1.5 * facility)), NA)),
         "number of antenatal visits during pregnancy"),
       m15 = lbl(as.numeric(m15), c("respondent's home" = 11, "other home" = 12, "government hospital" = 21,
         "upazila health complex" = 22, "private hospital/clinic" = 31, "ngo static clinic" = 41),
         "place of delivery"),
-      m17 = lbl(as.numeric(csec), c(no = 0, yes = 1), "delivery by caesarean section"),
-      m3a = m3(doctor, "assistance: doctor"),
-      m3b = m3(as.integer(facility & !doctor), "assistance: nurse/midwife/paramedic"),
-      m3c = m3(rep(0L, n), "assistance: family welfare visitor"),
-      m3g = m3(as.integer(!facility & stats::runif(n) < 0.3), "assistance: trained tba"),
-      m3h = m3(as.integer(!facility & stats::runif(n) < 0.5), "assistance: untrained tba"),
-      m3n = m3(as.integer(!facility & stats::runif(n) < 0.1), "assistance: no one"),
+      m17 = lbl(as.numeric(csec), c(no = 0, yes = 1), "delivery by caesarean section")
+    ),
+    sim_m3(info$survey_id, facility, doctor),
+    list(
       h2 = lbl(as.numeric(vacc(0.97)), vlab, "received bcg"),
       h3 = lbl(as.numeric(vacc(0.95)), vlab, "received pentavalent 1"),
       h5 = lbl(as.numeric(vacc(0.93)), vlab, "received pentavalent 2"),
@@ -502,4 +512,37 @@ sim_kr <- function(wm, births, info) {
       awfactt = num(as.numeric(w$awfactt), "all woman factor - total")
     )
   ))
+}
+
+# Delivery assistance (m3a-m3n). The letters of the providers changed between
+# rounds (e.g. the family welfare visitor is m3d up to 2007 and m3c later), so
+# the variables are laid out with the round's crosswalk rules.
+sim_m3 <- function(survey_id, facility, doctor) {
+  n <- length(facility)
+  roles <- list(
+    assist_doctor = list("assistance: qualified doctor", doctor),
+    assist_nurse_midwife = list("assistance: nurse/midwife/paramedic", as.integer(facility & !doctor)),
+    assist_fwv = list("assistance: family welfare visitor", as.integer(facility & stats::runif(n) < 0.03)),
+    assist_csba = list("assistance: community skilled birth attendant", as.integer(!facility & stats::runif(n) < 0.05)),
+    assist_sacmo = list("assistance: sacmo", as.integer(facility & stats::runif(n) < 0.02)),
+    assist_tba_trained = list("assistance: trained traditional birth attendant", as.integer(!facility & stats::runif(n) < 0.3)),
+    assist_tba_untrained = list("assistance: untrained traditional birth attendant", as.integer(!facility & stats::runif(n) < 0.5)),
+    assist_relative_friend = list("assistance: relative/friend/neighbor", as.integer(!facility & stats::runif(n) < 0.15)),
+    assist_unqualified_doctor = list("assistance: unqualified doctor", as.integer(!facility & stats::runif(n) < 0.05)),
+    assist_none = list("assistance: no one", as.integer(!facility & stats::runif(n) < 0.1))
+  )
+  cw <- crosswalk()$vars
+  out <- list()
+  for (role in names(roles)) {
+    rule <- cw[[role]]$rounds[[survey_id]]
+    if (is.null(rule) || !identical(rule$method, "any_of") || !length(rule$vars)) {
+      next
+    }
+    for (j in seq_along(rule$vars)) {
+      # A role spread over several letters is recorded in the first one.
+      x <- if (j == 1L) roles[[role]][[2]] else rep(0L, n)
+      out[[rule$vars[[j]]]] <- lbl(as.numeric(x), c(no = 0, yes = 1), roles[[role]][[1]])
+    }
+  }
+  out[order(names(out))]
 }

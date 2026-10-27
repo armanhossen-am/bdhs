@@ -52,22 +52,18 @@ test_that("women and members link on line numbers", {
 test_that("children link to the household roster through b16", {
   kr <- sim(2022, "KR")
   pr <- sim(2022, "PR")
-  expect_error(bdhs_merge(kr, pr), "b16")
-  # b16: child's line number (here taken from the simulated roster)
-  kids <- pr[codes_of(pr$hv112) == 2, ]
-  kr$b16 <- NA_real_
+  # Without b16 there is no child-level key.
+  expect_error(bdhs_merge(kr[, setdiff(names(kr), "b16")], pr), "b16")
+  # The simulated b16 is the child's line in the roster (NA for dead children).
   alive <- codes_of(kr$b5) == 1
-  key_kr <- paste(kr$v001, kr$v002)
-  for (k in unique(key_kr[alive])) {
-    rows <- which(key_kr == k & alive)
-    hv <- kids$hvidx[paste(kids$hv001, kids$hv002) == k]
-    kr$b16[rows] <- sort(hv)[seq_along(rows)]
-  }
   m <- quiet(bdhs_merge(kr, pr))
   expect_equal(nrow(m), nrow(kr))
   expect_true(all(is.na(m$hv105[!alive])))
   expect_equal(sum(!is.na(m$hv105)), sum(!is.na(kr$b16)))
   expect_true(all(m$hv112[!is.na(kr$b16)] == 2))
+  # Ages agree: completed years in the roster from months in KR.
+  ok <- !is.na(m$hv105)
+  expect_equal(as.numeric(m$hv105[ok]), as.numeric(m$b19[ok]) %/% 12)
 })
 
 test_that("mismatched surveys are refused and duplicate columns suffixed", {
