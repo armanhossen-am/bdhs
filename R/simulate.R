@@ -128,7 +128,7 @@ num <- function(x, label) {
   x
 }
 
-sim_world <- function(survey_id, n_clusters, households) {
+sim_world <- function(survey_id, n_clusters, households, strata = NULL) {
   info <- sim_round_info(survey_id)
   n_div <- length(info$divisions)
 
@@ -140,6 +140,13 @@ sim_world <- function(survey_id, n_clusters, households) {
   cl$strat <- ((cl$v001 - 1L) %/% 2L) %% n_strata + 1L
   if (n_clusters %% 2L == 1L) {
     cl$strat[[n_clusters]] <- cl$strat[[n_clusters - 1L]]
+  }
+  # Internal hook (bdhs_synthesize()): an explicit stratum per cluster,
+  # coded (division - 1) * 2 + residence. Uses no random numbers, so the
+  # default simulation is unchanged.
+  if (!is.null(strata)) {
+    stopifnot(length(strata) == n_clusters, all(strata %in% seq_len(n_strata)))
+    cl$strat <- as.integer(strata)
   }
   cl$div <- (cl$strat - 1L) %/% 2L + 1L
   cl$res <- (cl$strat - 1L) %% 2L + 1L
