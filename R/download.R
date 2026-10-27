@@ -405,10 +405,24 @@ dhs_project_id <- function(page, project, call = rlang::caller_env()) {
   ids <- ids[keep]
   labels <- labels[keep]
   if (!length(ids)) {
+    # Tell a rejected sign-in apart from an account without a project to pick.
+    if (grepl("name=[\"']?UserPass", page, ignore.case = TRUE)) {
+      cli::cli_abort(c(
+        "Signing in to the DHS Program website failed: the website did not accept the email and password.",
+        "i" = "Check them by signing in at {.url https://dhsprogram.com/data/dataset_admin/login_main.cfm}."
+      ), class = "bdhs_login_failed", call = call)
+    }
+    if (grepl("Request Datasets for your Project", page, ignore.case = TRUE)) {
+      cli::cli_abort(c(
+        "Signed in, but the DHS website opened a dataset request form instead of your list of approved projects.",
+        "i" = "This happens while a project is waiting for approval or has no datasets approved yet.",
+        "i" = "Wait for the DHS approval email, then try again, or download the files manually and use {.fn bdhs_import}."
+      ), class = "bdhs_no_project", call = call)
+    }
     cli::cli_abort(c(
-      "Signing in to the DHS Program website failed.",
-      "i" = "Check your email and password, and that your account has an approved project."
-    ), call = call)
+      "Signed in, but could not find your list of approved DHS projects on the page the website returned.",
+      "i" = "The website may have changed. Download the files manually and use {.fn bdhs_import}, and please report this at {.url https://github.com/armanhossen-am/bdhs/issues}."
+    ), class = "bdhs_no_project", call = call)
   }
   key <- tolower(substr(trimws(project), 1, 30))
   hit <- which(grepl(key, tolower(labels), fixed = TRUE))

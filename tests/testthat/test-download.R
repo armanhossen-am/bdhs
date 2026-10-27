@@ -42,7 +42,7 @@ test_that("login and download-manager pages are parsed", {
   expect_equal(dhs_project_id(projects, "Child health in Bangladesh: trends across all rounds"), "111")
   expect_equal(dhs_project_id(projects, "maternal care"), "222")
   expect_error(dhs_project_id(projects, "Other"), "None of your DHS projects")
-  expect_error(dhs_project_id("<html>Invalid login</html>", "x"), "Signing in")
+  expect_error(dhs_project_id("<html>Invalid login</html>", "x"), class = "bdhs_no_project")
 
   manager <- paste0(
     "<input type=\"checkbox\" name=\"ctrycodelist\" value=\"BD\">",
@@ -361,4 +361,15 @@ test_that("zips downloaded with import = FALSE can be imported afterwards", {
   reg <- bdhs_import(file.path(bdhs_data_dir(), "downloads"), format = "dta", quiet = TRUE)
   expect_equal(reg$recode, "HR")
   expect_equal(reg$survey_id, "BD2022DHS")
+})
+
+test_that("dhs_project_id() explains why no project could be selected", {
+  login_again <- '<form action="login_main.cfm"><input type="password" name="UserPass"></form>'
+  expect_error(dhs_project_id(login_again, "x"), class = "bdhs_login_failed")
+  pending <- "<h2>Request Datasets for your Project</h2><select><option value=''>Choose</option></select>"
+  expect_error(dhs_project_id(pending, "x"), "waiting for approval", class = "bdhs_no_project")
+  other <- "<html><body>Welcome</body></html>"
+  expect_error(dhs_project_id(other, "x"), "list of approved DHS projects", class = "bdhs_no_project")
+  ok <- '<select><option value="123">My BDHS project</option></select>'
+  expect_equal(dhs_project_id(ok, "My BDHS project"), "123")
 })
