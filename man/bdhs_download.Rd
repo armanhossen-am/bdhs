@@ -27,12 +27,16 @@ or \code{"sas"}.}
 \item{project}{Name of your approved DHS project.}
 
 \item{import}{If \code{TRUE} (default), import the downloaded files with
-\code{\link[=bdhs_import]{bdhs_import()}} and delete the downloaded zips. If \code{FALSE}, keep the zips
-in a \code{downloads} folder of \code{\link[=bdhs_data_dir]{bdhs_data_dir()}}.}
+\code{\link[=bdhs_import]{bdhs_import()}}; bdhs's own downloader then deletes the downloaded zips.
+If \code{FALSE}, the zips are kept in a \code{downloads} folder of
+\code{\link[=bdhs_data_dir]{bdhs_data_dir()}} (you can import them later with \code{\link[=bdhs_import]{bdhs_import()}}).}
 
 \item{engine}{\code{"bdhs"} (default) uses bdhs's own downloader (needs the
 httr2 package). \code{"rdhs"} delegates to \code{\link[rdhs:get_datasets]{rdhs::get_datasets()}}; configure
-rdhs first with \code{rdhs::set_rdhs_config()}.}
+rdhs first with \code{rdhs::set_rdhs_config()}. rdhs keeps the zips it
+downloads in its own cache folder (see \code{rdhs::get_rdhs_config()}), and
+bdhs leaves that cache alone, with \code{import = TRUE} as well: delete the
+cached copies yourself if you do not want two copies of the data.}
 }
 \value{
 If \code{import = TRUE}, the registry rows of the imported datasets
@@ -61,8 +65,13 @@ enough).
 is installed (service \code{"bdhs-dhs"}, username = your email; store it once
 with \code{keyring::key_set("bdhs-dhs", username = "you@example.org")}), then
 from the \code{DHS_PASSWORD} environment variable, and is otherwise asked for
-interactively. bdhs never stores, prints or logs it, and does not keep it
-in options.
+at a hidden prompt in interactive sessions (this needs the askpass
+package; bdhs never asks for it with a prompt that shows what you type).
+bdhs never stores, prints or logs it, and does not keep it in options.
+\item The password is only sent to \verb{https://dhsprogram.com}: bdhs does not
+follow redirects of the sign-in form to other sites, and only follows
+download links that point to \verb{https://dhsprogram.com} (or its
+subdomains).
 }
 
 In non-interactive sessions without credentials the function stops with

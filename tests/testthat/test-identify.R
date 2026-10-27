@@ -128,6 +128,111 @@ test_that("non-data and unknown files are reported, not identified", {
   expect_error(bdhs_identify_file(file.path(dir, "nope.dta")), "Can't find")
 })
 
+test_that("a name/content conflict is refused, naming both", {
+  dir <- withr::local_tempdir()
+  # Children's recode content saved under the women's recode name.
+  f_rec <- write_fixture_dta(dir, "BDIR81FL.DTA", 2022, "KR")
+  # A 2014 file under a 2022 name (renamed and standard).
+  f_round <- write_fixture_dta(dir, "BDHS2022IR.dta", 2014, "IR")
+  f_std <- write_fixture_dta(dir, "BDKR81FL.DTA", 2014, "KR")
+  # A household-member file of another country.
+  pr <- sim_recode(2014, "PR")
+  pr$hv000 <- "NP7"
+  f_ctry <- write_fixture_dta(dir, "BDHS2014PR.dta", data = pr)
+
+  expect_warning(id <- bdhs_identify_file(c(f_rec, f_round, f_ctry)), "disagree")
+  expect_true(all(is.na(id$survey_id)))
+  expect_true(all(is.na(id$recode)))
+  expect_true(all(is.na(id$method)))
+  expect_match(id$note[[1]], "the name says BD2022DHS IR but the variables are those of a KR file")
+  expect_match(id$note[[2]], "the name says BD2022DHS IR but the interview dates are from BD2014DHS")
+  expect_match(id$note[[3]], "the country code is NP")
+
+  # A standard name is checked against the interview dates when the content is
+  # read (as bdhs_import() does).
+  r <- identify_one(f_std, content = "always")
+  expect_equal(r$refused, "conflict")
+  expect_true(is.na(r$survey_id))
+  expect_match(r$note, "BD2022DHS KR but the interview dates are from BD2014DHS")
+})
+
+test_that("files whose name and content agree are not refused", {
+  dir <- withr::local_tempdir()
+  br <- sim_recode(2017, "BR")
+  br$midx <- br$bidx # the 2017-18 BR carries midx, like the KR
+  f_br <- write_fixture_dta(dir, "BDBR7RFL.DTA", data = br)
+  f_kr <- write_fixture_dta(dir, "BDHS2018KR.DTA", 2017, "KR")
+  # Without b3 the content cannot tell KR from BR: not a conflict.
+  br$b3 <- NULL
+  f_nob3 <- write_fixture_dta(withr::local_tempdir(), "BDBR7RFL.DTA", data = br)
+  ids <- lapply(c(f_br, f_kr, f_nob3), identify_one, content = "always")
+  expect_equal(vapply(ids, function(x) x$survey_id, ""), rep("BD2017DHS", 3))
+  expect_equal(vapply(ids, function(x) x$recode, ""), c("BR", "KR", "BR"))
+  expect_true(all(is.na(vapply(ids, function(x) x$refused, ""))))
+  expect_no_warning(bdhs_identify_file(c(f_br, f_kr, f_nob3)))
+})
+
+test_that("renamed files need positive confirmation from their content", {
+  dir <- withr::local_tempdir()
+  # Not a DHS file at all, but named like one.
+  f_fake <- file.path(dir, "BDHS2014HR.dta")
+  haven::write_dta(data.frame(id = 1:5, income = c(10, 20, 30, 40, 50), district = 1:5), f_fake)
+  # DHS-like variables but no country code.
+  ir <- sim_recode(2014, "IR")
+  ir$v000 <- NULL
+  f_nocc <- write_fixture_dta(dir, "BDHS2014IR.dta", data = ir)
+  expect_warning(id <- bdhs_identify_file(c(f_fake, f_nocc)), "could not be confirmed")
+  expect_true(all(is.na(id$survey_id)))
+  expect_match(id$note[[1]], "the name suggests BD2014DHS HR but the content does not confirm it")
+  expect_match(id$note[[1]], "no country code")
+  expect_match(id$note[[1]], "hhid")
+  expect_match(id$note[[2]], "no country code")
+
+  # Without a name, unconfirmed content is not identified either.
+  f_kids <- write_fixture_dta(dir, "kids.dta", data = ir)
+  kr <- sim_recode(2014, "KR")
+  kr$v000 <- "IA7"
+  f_ia <- write_fixture_dta(dir, "india.dta", data = kr)
+  id <- bdhs_identify_file(c(f_kids, f_ia))
+  expect_true(all(is.na(id$survey_id)))
+  expect_true(all(is.na(id$method)))
+  expect_match(id$note[[1]], "does not confirm")
+  expect_match(id$note[[2]], "country code IA")
+
+  # Genuine renamed files are still identified.
+  f_ok <- write_fixture_dta(dir, "bdhs_2014_hr.dta", 2014, "HR")
+  id <- bdhs_identify_file(f_ok)
+  expect_equal(c(id$survey_id, id$recode, id$method), c("BD2014DHS", "HR", "filename"))
+})
+
+test_that("SPA and BMMS names map to their own surveys", {
+  p <- function(x) {
+    r <- parse_dhs_name(x)
+    c(r$survey_id, r$recode, r$file_stem, r$kind)
+  }
+  expect_equal(p("SPA2014_FC.dta"), c("BD2014SPA", "FC", "BDFC7AFL", "renamed"))
+  expect_equal(p("BDHS2017FC.dta"), c("BD2017SPA", "FC", "BDFC7IFL", "renamed"))
+  expect_equal(p("spa_1999_pv.sav"), c("BD1999SPA", "PV", "BDPV4RFL", "renamed"))
+  expect_equal(p("BMMS2001_HH.dta"), c("BD2001OTH", "HH", "BDHH4AFL", "renamed"))
+  # Standard SPA names end in SP.
+  expect_equal(p("BDFC7AFLSP.DTA"), c("BD2014SPA", "FC", "BDFC7AFL", "standard"))
+  expect_equal(p("BDKR81FLSP.DTA")[[4]], "none")
+  # An SPA name with a DHS recode is ambiguous.
+  amb <- parse_dhs_name("SPA2014_KR.dta")
+  expect_true(amb$ambiguous)
+  expect_true(is.na(amb$survey_id))
+
+  dir <- withr::local_tempdir()
+  f_spa <- file.path(dir, "SPA2014_FC.dta")
+  haven::write_dta(data.frame(facil = 1:3, q100 = 1:3), f_spa)
+  f_amb <- write_fixture_dta(dir, "SPA2014_KR.dta", 2014, "KR")
+  expect_warning(id <- bdhs_identify_file(c(f_spa, f_amb)), "could not be confirmed")
+  expect_true(all(is.na(id$survey_id)))
+  expect_match(id$note[[1]], "BD2014SPA FC")
+  expect_match(id$note[[1]], "BDFC7AFL.DTA", fixed = TRUE)
+  expect_match(id$note[[2]], "ambiguous")
+})
+
 test_that("normalize_years() handles 2-digit years", {
   expect_equal(normalize_years(c(93, 99, 0, 2017, NA)), c(1993, 1999, 2000, 2017, NA))
 })
@@ -157,7 +262,8 @@ test_that("local files are identified correctly", {
   expect_false(anyNA(vapply(checked, function(x) x$survey_id, character(1))))
   # Content agrees with the names (incl. the 2017-18 BR, which carries midx).
   notes <- vapply(checked, function(x) x$note %|NA|% "", character(1))
-  expect_false(any(grepl("name suggests", notes)))
+  expect_false(any(grepl("name suggests|disagree", notes)))
+  expect_true(all(is.na(vapply(checked, function(x) x$refused, character(1)))))
   br <- checked[[grep("BDBR7RFL", genuine)]]
   expect_equal(br$recode, "BR")
 })

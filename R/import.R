@@ -12,7 +12,20 @@
 #' When the same dataset is found in several formats, the Stata version is
 #' preferred, then SPSS, then SAS. Files that were already imported (same MD5
 #' checksum) are skipped, as are derived or pooled files (several rounds
-#' appended together, or with variables that are not in the DHS recode).
+#' appended together, or with variables that are not in the DHS recode). If
+#' the file registered with the same checksum no longer exists (it was moved
+#' or deleted), the file is registered again from its new location.
+#'
+#' Files whose name and content disagree (for example a children's recode
+#' saved as `BDIR81FL.DTA`), and renamed files that their content does not
+#' confirm as Bangladesh DHS recode files, are not imported; see
+#' [bdhs_identify_file()].
+#'
+#' Files inside the data directory are not imported, except the zips that
+#' `bdhs_download(import = FALSE)` keeps in its `downloads` folder. Only one R
+#' session at a time can import into (or [bdhs_forget()] from) a data
+#' directory; another session waits up to a minute (option
+#' `bdhs.lock_timeout`, in seconds) for it to finish.
 #'
 #' With `copy = TRUE` (default) a copy is kept in [bdhs_data_dir()]: with
 #' `format = "auto"` it is converted to Parquet when the arrow package is
@@ -92,11 +105,15 @@ bdhs_import <- function(path, copy = TRUE, format = c("auto", "parquet", "dta"),
     res$survey_id[[i]] <- id$survey_id %||% NA_character_
     res$recode[[i]] <- id$recode %||% NA_character_
     res$file_stem[[i]] <- id$file_stem %||% NA_character_
+    res$method[[i]] <- id$method %||% NA_character_
     res$n_rows[[i]] <- id$n_rows %||% NA_integer_
     res$n_cols[[i]] <- id$n_cols %||% NA_integer_
     res$note[[i]] <- id$note %||% NA_character_
+    res$refused[[i]] <- id$refused %||% NA_character_
     if (isTRUE(id$derived)) {
       res$status[[i]] <- "derived"
+    } else if (!is.na(res$refused[[i]])) {
+      res$status[[i]] <- res$refused[[i]] # "conflict" or "unconfirmed"
     } else if (is.na(res$survey_id[[i]]) || is.na(res$recode[[i]])) {
       res$status[[i]] <- "unidentified"
     } else {
@@ -123,72 +140,89 @@ bdhs_import <- function(path, copy = TRUE, format = c("auto", "parquet", "dta"),
     }
   }
 
-  # Compare with what is already registered.
-  reg <- registry_read(dir)
-  for (i in which(res$status == "pending")) {
-    same_md5 <- which(reg$md5 %in% res$md5[[i]])
-    same_key <- which(reg$survey_id == res$survey_id[[i]] & reg$recode == res$recode[[i]])
-    if (!overwrite && length(same_md5)) {
-      res$status[[i]] <- "already"
-      res$note[[i]] <- paste("as", reg$survey_id[[same_md5[[1]]]], reg$recode[[same_md5[[1]]]])
-    } else if (!overwrite && length(same_key)) {
-      res$status[[i]] <- "exists"
-    }
-  }
-
-  # Store.
+  # Compare with what is already registered and store, holding the store lock
+  # so that concurrent imports do not lose each other's registry rows.
+  pend <- which(res$status == "pending")
   new_rows <- list()
-  warned <- FALSE
-  for (i in which(res$status == "pending")) {
-    sid <- res$survey_id[[i]]
-    rec <- res$recode[[i]]
-    old <- which(reg$survey_id == sid & reg$recode == rec)
-    linked <- !copy && !res$in_zip[[i]]
-    if (!linked && !warned) {
-      dir.create(dir, recursive = TRUE, showWarnings = FALSE)
-      warn_insecure_store(dir)
-      warned <- TRUE
+  replaced <- registry_template()
+  if (length(pend)) {
+    lock <- store_lock(dir)
+    on.exit(store_unlock(lock), add = TRUE)
+    reg <- registry_read(dir)
+    reg_paths <- registry_abs_path(reg, dir)
+    for (i in pend) {
+      same_md5 <- which(reg$md5 %in% res$md5[[i]])
+      same_key <- which(reg$survey_id == res$survey_id[[i]] & reg$recode == res$recode[[i]])
+      # A registered file that was moved or deleted is registered again.
+      gone <- same_md5[!file.exists(reg_paths[same_md5])]
+      if (overwrite) {
+        next
+      }
+      if (length(same_md5) > length(gone)) {
+        res$status[[i]] <- "already"
+        res$note[[i]] <- paste("as", reg$survey_id[[same_md5[[1]]]], reg$recode[[same_md5[[1]]]])
+      } else if (length(setdiff(same_key, gone))) {
+        res$status[[i]] <- "exists"
+      } else if (length(gone)) {
+        res$note[[i]] <- join_notes(res$note[[i]], paste0(
+          "registered again: the file registered before (", reg_paths[gone[[1]]], ") no longer exists"
+        ))
+      }
     }
-    stored <- tryCatch(
-      store_one(res[i, ], dir, linked = linked, store_format = store_format),
-      error = function(e) e
-    )
-    if (inherits(stored, "error")) {
-      res$status[[i]] <- "error"
-      res$note[[i]] <- conditionMessage(stored)
-      next
+
+    warned <- FALSE
+    for (i in which(res$status == "pending")) {
+      sid <- res$survey_id[[i]]
+      rec <- res$recode[[i]]
+      gone <- which(reg$md5 %in% res$md5[[i]] & !file.exists(reg_paths))
+      old <- union(which(reg$survey_id == sid & reg$recode == rec), gone)
+      linked <- !copy && !res$in_zip[[i]]
+      if (!linked && !warned) {
+        warn_insecure_store(dir)
+        warned <- TRUE
+      }
+      stored <- tryCatch(
+        store_one(res[i, ], dir, linked = linked, store_format = store_format),
+        error = function(e) e
+      )
+      store_lock_touch(lock)
+      if (inherits(stored, "error")) {
+        res$status[[i]] <- "error"
+        res$note[[i]] <- conditionMessage(stored)
+        next
+      }
+      if (length(old)) {
+        drop <- !reg$linked[old] & normalize_path(reg_paths[old]) != normalize_path(file.path(dir, stored$path))
+        unlink(store_files(reg_paths[old][drop], reg$format[old][drop]))
+        replaced <- dplyr::bind_rows(replaced, reg[old, ])
+        reg <- reg[-old, ]
+        reg_paths <- reg_paths[-old]
+      }
+      if (!copy && res$in_zip[[i]]) {
+        stored$note <- join_notes(stored$note, "extracted from a zip archive, so a copy was stored")
+      }
+      row <- tibble::tibble(
+        survey_id = sid,
+        recode = rec,
+        file_stem = res$file_stem[[i]],
+        format = stored$format,
+        path = stored$path,
+        linked = linked,
+        source_path = res$origin[[i]],
+        md5 = res$md5[[i]],
+        n_rows = as.integer(res$n_rows[[i]]),
+        n_cols = as.integer(res$n_cols[[i]]),
+        imported_at = .POSIXct(as.numeric(Sys.time()), tz = "UTC"),
+        bdhs_version = bdhs_version()
+      )
+      new_rows <- c(new_rows, list(row))
+      res$status[[i]] <- "imported"
+      res$stored_as[[i]] <- stored$format
+      res$note[[i]] <- join_notes(res$note[[i]], stored$note)
     }
-    if (length(old)) {
-      old_paths <- registry_abs_path(reg[old, ], dir)
-      drop <- !reg$linked[old] & normalize_path(old_paths) != normalize_path(file.path(dir, stored$path))
-      unlink(store_files(old_paths[drop], reg$format[old][drop]))
-      reg <- reg[-old, ]
+    if (length(new_rows)) {
+      registry_merge_write(dplyr::bind_rows(new_rows), replaced, dir)
     }
-    if (!copy && res$in_zip[[i]]) {
-      stored$note <- "extracted from a zip archive, so a copy was stored"
-    }
-    row <- tibble::tibble(
-      survey_id = sid,
-      recode = rec,
-      file_stem = res$file_stem[[i]],
-      format = stored$format,
-      path = stored$path,
-      linked = linked,
-      source_path = res$origin[[i]],
-      md5 = res$md5[[i]],
-      n_rows = as.integer(res$n_rows[[i]]),
-      n_cols = as.integer(res$n_cols[[i]]),
-      imported_at = .POSIXct(as.numeric(Sys.time()), tz = "UTC"),
-      bdhs_version = bdhs_version()
-    )
-    reg <- dplyr::bind_rows(reg, row)
-    new_rows <- c(new_rows, list(row))
-    res$status[[i]] <- "imported"
-    res$stored_as[[i]] <- stored$format
-    if (!is.null(stored$note)) res$note[[i]] <- stored$note
-  }
-  if (length(new_rows)) {
-    registry_write(reg, dir)
   }
 
   import_warnings(res)
@@ -210,6 +244,8 @@ collect_candidates <- function(path, tmp, dir) {
   }), use.names = FALSE)
   files <- unique(files)
   dir_prefix <- paste0(normalize_path(dir), "/")
+  # bdhs_download(import = FALSE) keeps its zips here: they may be imported.
+  downloads_prefix <- paste0(normalize_path(file.path(dir, "downloads")), "/")
   rows <- list()
   add <- function(path, origin, format, in_zip, status = "pending", note = NA_character_) {
     rows[[length(rows) + 1L]] <<- tibble::tibble(
@@ -219,7 +255,7 @@ collect_candidates <- function(path, tmp, dir) {
   }
   for (f in files) {
     fmt <- file_format(f)
-    if (startsWith(f, dir_prefix)) {
+    if (startsWith(f, dir_prefix) && !startsWith(f, downloads_prefix)) {
       add(f, f, fmt, FALSE, "refused", "it is inside the bdhs data directory")
     } else if (identical(fmt, "zip")) {
       members <- extract_zip_data(f, tempfile("zip-", tmpdir = tmp))
@@ -244,6 +280,8 @@ collect_candidates <- function(path, tmp, dir) {
   res$md5 <- NA_character_
   res$n_rows <- NA_integer_
   res$n_cols <- NA_integer_
+  res$method <- NA_character_
+  res$refused <- NA_character_
   res$stored_as <- rep(NA_character_, n)
   res
 }
@@ -365,6 +403,7 @@ parquet_round_trips <- function(df, path, attrs_path = parquet_attrs_path(path))
 }
 
 import_warnings <- function(res) {
+  warn_refused(res[res$status %in% c("conflict", "unconfirmed"), ], label = "origin", done = "imported")
   derived <- res[res$status == "derived", ]
   if (nrow(derived)) {
     msg <- paste0(derived$origin, ": ", derived$note %|NA|% "derived file")
@@ -393,10 +432,14 @@ import_summary <- function(res, dir) {
     how <- ifelse(reg$linked[i], "registered in place",
       ifelse(reg$format[i] == "parquet", "stored as Parquet", paste0("copied (.", reg$format[i], ")"))
     )
+    notes <- vapply(seq_len(nrow(ok)), function(j) {
+      join_notes(if (identical(ok$method[[j]], "content")) "identified by content", ok$note[[j]])
+    }, character(1))
     lines <- sprintf(
-      "%s %s (%s): %s, %s rows x %s variables",
+      "%s %s (%s): %s, %s rows x %s variables%s",
       ok$survey_id, ok$recode, ok$file_stem, how,
-      format(ok$n_rows, big.mark = ","), format(ok$n_cols, big.mark = ",")
+      format(ok$n_rows, big.mark = ","), format(ok$n_cols, big.mark = ","),
+      ifelse(is.na(notes), "", paste0(" (", notes, ")"))
     )
     cli::cli_inform(c(
       "v" = "Imported {nrow(ok)} dataset{?s} into {.path {dir}}:",
@@ -410,13 +453,15 @@ import_summary <- function(res, dir) {
       duplicate = "duplicate",
       exists = "not replaced (use overwrite = TRUE)",
       derived = "derived or pooled file, skipped",
+      conflict = "file name and content disagree, not imported",
+      unconfirmed = "not confirmed as a BDHS recode file, not imported",
       unidentified = "not recognised as a BDHS recode file",
       refused = "not imported",
       nodata = "skipped",
       error = "failed"
     )
-    type <- c(already = "i", duplicate = "i", exists = "!", derived = "!",
-              unidentified = "x", refused = "x", nodata = "i", error = "x")
+    type <- c(already = "i", duplicate = "i", exists = "!", derived = "!", conflict = "x",
+              unconfirmed = "x", unidentified = "x", refused = "x", nodata = "i", error = "x")
     lines <- paste0(
       other$origin, ": ", what[other$status],
       ifelse(is.na(other$note), "", paste0(" (", other$note, ")"))

@@ -47,7 +47,20 @@ as the bulk "STATA_BD_..." downloads) are unpacked to a temporary folder.
 When the same dataset is found in several formats, the Stata version is
 preferred, then SPSS, then SAS. Files that were already imported (same MD5
 checksum) are skipped, as are derived or pooled files (several rounds
-appended together, or with variables that are not in the DHS recode).
+appended together, or with variables that are not in the DHS recode). If
+the file registered with the same checksum no longer exists (it was moved
+or deleted), the file is registered again from its new location.
+
+Files whose name and content disagree (for example a children's recode
+saved as \code{BDIR81FL.DTA}), and renamed files that their content does not
+confirm as Bangladesh DHS recode files, are not imported; see
+\code{\link[=bdhs_identify_file]{bdhs_identify_file()}}.
+
+Files inside the data directory are not imported, except the zips that
+\code{bdhs_download(import = FALSE)} keeps in its \code{downloads} folder. Only one R
+session at a time can import into (or \code{\link[=bdhs_forget]{bdhs_forget()}} from) a data
+directory; another session waits up to a minute (option
+\code{bdhs.lock_timeout}, in seconds) for it to finish.
 
 With \code{copy = TRUE} (default) a copy is kept in \code{\link[=bdhs_data_dir]{bdhs_data_dir()}}: with
 \code{format = "auto"} it is converted to Parquet when the arrow package is

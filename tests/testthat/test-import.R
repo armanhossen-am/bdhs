@@ -228,3 +228,159 @@ test_that("bdhs_forget() unregisters, deletes stored copies only on request", {
   expect_equal(nrow(registry_read()), 0)
   expect_message(bdhs_forget(2022, "IR"), "Nothing registered")
 })
+
+test_that("files whose name and content disagree are not imported", {
+  store <- local_bdhs_store()
+  dir <- withr::local_tempdir()
+  write_fixture_dta(dir, "BDIR81FL.DTA", 2022, "KR")
+  haven::write_dta(data.frame(id = 1:5, income = c(10, 20, 30, 40, 50), district = 1:5),
+                   file.path(dir, "BDHS2014HR.dta"))
+  warnings <- character()
+  out <- withCallingHandlers(
+    capture_msgs(bdhs_import(dir, format = "dta")),
+    warning = function(w) {
+      warnings <<- c(warnings, conditionMessage(w))
+      invokeRestart("muffleWarning")
+    }
+  )
+  expect_equal(nrow(out$value), 0)
+  expect_equal(nrow(registry_read(store)), 0)
+  expect_match(paste(warnings, collapse = "\n"), "name and the content of 1 file disagree")
+  expect_match(paste(warnings, collapse = "\n"), "BD2022DHS IR but the variables are those of a KR file")
+  expect_match(paste(warnings, collapse = "\n"), "could not be confirmed")
+  expect_match(out$text, "file name and content disagree, not imported")
+  expect_match(out$text, "not confirmed as a BDHS recode file")
+})
+
+test_that("the import summary shows the notes of imported files", {
+  local_bdhs_store()
+  dir <- withr::local_tempdir()
+  write_fixture_dta(dir, "children.dta", 2022, "KR")
+  out <- capture_msgs(bdhs_import(dir, format = "dta"))
+  expect_match(out$text, "BD2022DHS KR (BDKR81FL): copied (.dta)", fixed = TRUE)
+  expect_match(out$text, "identified by content")
+})
+
+test_that("a registered file that was moved or deleted is registered again", {
+  store <- local_bdhs_store()
+  dir1 <- withr::local_tempdir()
+  dir2 <- withr::local_tempdir()
+  f <- write_fixture_dta(dir1, "BDHR81FL.DTA", 2022, "HR")
+  bdhs_import(f, copy = FALSE, quiet = TRUE)
+  moved <- file.path(dir2, "BDHR81FL.DTA")
+  file.rename(f, moved)
+  out <- capture_msgs(bdhs_import(moved, copy = FALSE))
+  expect_match(out$text, "registered again")
+  expect_equal(nrow(out$value), 1)
+  reg <- registry_read(store)
+  expect_equal(nrow(reg), 1)
+  expect_equal(reg$path, normalize_path(moved))
+  expect_equal(nrow(bdhs_read(2022, "HR", vars = "hv001")), nrow(sim_recode(2022, "HR")))
+
+  # A deleted stored copy is stored again.
+  f_kr <- write_fixture_dta(dir1, "BDKR81FL.DTA", 2022, "KR")
+  bdhs_import(f_kr, format = "dta", quiet = TRUE)
+  unlink(file.path(store, "BD2022DHS", "BDKR81FL.dta"))
+  out <- capture_msgs(bdhs_import(f_kr, format = "dta"))
+  expect_match(out$text, "registered again")
+  expect_true(file.exists(file.path(store, "BD2022DHS", "BDKR81FL.dta")))
+  expect_equal(nrow(registry_read(store)), 2)
+  # Files that still exist are skipped as before.
+  expect_match(capture_msgs(bdhs_import(f_kr, format = "dta"))$text, "already imported")
+})
+
+test_that("zips kept by bdhs_download(import = FALSE) can be imported", {
+  skip_if_no_zip()
+  store <- local_bdhs_store()
+  stage <- withr::local_tempdir()
+  write_fixture_dta(stage, "BDPR81FL.DTA", 2022, "PR")
+  downloads <- file.path(store, "downloads")
+  dir.create(downloads, recursive = TRUE)
+  write_fixture_zip(file.path(downloads, "BDPR81DT.ZIP"), stage, "BDPR81FL.DTA")
+  reg <- bdhs_import(downloads, format = "dta", quiet = TRUE)
+  expect_equal(reg$recode, "PR")
+  expect_equal(reg$path, "BD2022DHS/BDPR81FL.dta")
+  # Stored copies are still refused.
+  out <- capture_msgs(bdhs_import(file.path(store, "BD2022DHS")))
+  expect_match(out$text, "inside the bdhs data directory")
+})
+
+test_that("the store lock is exclusive, re-entrant and released", {
+  store <- local_bdhs_store()
+  key <- store_lock(store)
+  expect_true(dir.exists(file.path(store, ".lock")))
+  expect_equal(store_lock(store), key)
+  store_unlock(key)
+  expect_true(dir.exists(file.path(store, ".lock")))
+  store_unlock(key)
+  expect_false(dir.exists(file.path(store, ".lock")))
+
+  # A lock held by another session: imports wait, then stop clearly.
+  lock <- file.path(store, ".lock")
+  dir.create(lock)
+  writeLines(c("pid: 1", "host: another-computer", "user: someone", "time: now"), file.path(lock, "owner"))
+  withr::local_options(bdhs.lock_timeout = 0.3)
+  src <- withr::local_tempdir()
+  f <- write_fixture_dta(src, "BDKR81FL.DTA", 2022, "KR")
+  expect_error(bdhs_import(f, format = "dta", quiet = TRUE), class = "bdhs_store_locked")
+  expect_error(bdhs_import(f, format = "dta", quiet = TRUE), "in use by another R session")
+  expect_equal(nrow(registry_read(store)), 0)
+
+  # ... unless the lock is stale.
+  Sys.setFileTime(file.path(lock, "owner"), Sys.time() - 7200)
+  reg <- bdhs_import(f, format = "dta", quiet = TRUE)
+  expect_equal(reg$recode, "KR")
+  expect_false(dir.exists(lock))
+})
+
+test_that("a lock left by a process that has ended is taken over", {
+  skip_on_os("windows")
+  store <- local_bdhs_store()
+  # The id of a process that has ended.
+  pid <- as.integer(system2("sh", c("-c", shQuote("echo $$")), stdout = TRUE))
+  lock <- file.path(store, ".lock")
+  dir.create(lock)
+  writeLines(c(paste("pid:", pid), paste("host:", Sys.info()[["nodename"]]),
+               paste("user:", Sys.info()[["user"]]), "time: earlier"), file.path(lock, "owner"))
+  withr::local_options(bdhs.lock_timeout = 5)
+  key <- store_lock(store)
+  expect_equal(store_lock_owner(lock)[["pid"]], as.character(Sys.getpid()))
+  store_unlock(key)
+})
+
+test_that("rows registered by another session during an import are kept", {
+  store <- local_bdhs_store()
+  src <- withr::local_tempdir()
+  f_hr <- write_fixture_dta(src, "BDHR81FL.DTA", 2022, "HR")
+  f_kr <- write_fixture_dta(src, "BDKR81FL.DTA", 2022, "KR")
+  real_store_one <- store_one
+  # Another session (not using the lock, e.g. an older bdhs) registers the HR
+  # file while this import is storing the KR file.
+  local_mocked_bindings(store_one = function(cand, dir, linked, store_format) {
+    other <- registry_template()
+    other[1, "survey_id"] <- "BD2022DHS"
+    other$recode <- "HR"
+    other$path <- normalize_path(f_hr)
+    other$linked <- TRUE
+    other$md5 <- unname(tools::md5sum(f_hr))
+    registry_write(other, dir)
+    real_store_one(cand, dir, linked, store_format)
+  })
+  bdhs_import(f_kr, format = "dta", quiet = TRUE)
+  reg <- registry_read(store)
+  expect_equal(sort(reg$recode), c("HR", "KR"))
+})
+
+test_that("a data directory that is not writable gives a clear error", {
+  skip_on_os("windows")
+  skip_if(identical(unname(Sys.info()[["effective_user"]]), "root"), "root can write anywhere")
+  ro <- withr::local_tempdir()
+  Sys.chmod(ro, "0555")
+  withr::defer(Sys.chmod(ro, "0755"))
+  withr::local_options(bdhs.data_dir = file.path(ro, "store"))
+  src <- withr::local_tempdir()
+  f <- write_fixture_dta(src, "BDKR81FL.DTA", 2022, "KR")
+  expect_error(bdhs_import(f, format = "dta", quiet = TRUE), class = "bdhs_store_not_writable")
+  expect_error(bdhs_import(f, copy = FALSE, quiet = TRUE), "Can't write to the bdhs data directory")
+  expect_error(registry_write(registry_template(), file.path(ro, "store")), class = "bdhs_store_not_writable")
+})

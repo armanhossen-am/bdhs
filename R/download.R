@@ -26,8 +26,13 @@
 #'   is installed (service `"bdhs-dhs"`, username = your email; store it once
 #'   with `keyring::key_set("bdhs-dhs", username = "you@example.org")`), then
 #'   from the `DHS_PASSWORD` environment variable, and is otherwise asked for
-#'   interactively. bdhs never stores, prints or logs it, and does not keep it
-#'   in options.
+#'   at a hidden prompt in interactive sessions (this needs the askpass
+#'   package; bdhs never asks for it with a prompt that shows what you type).
+#'   bdhs never stores, prints or logs it, and does not keep it in options.
+#' * The password is only sent to `https://dhsprogram.com`: bdhs does not
+#'   follow redirects of the sign-in form to other sites, and only follows
+#'   download links that point to `https://dhsprogram.com` (or its
+#'   subdomains).
 #'
 #' In non-interactive sessions without credentials the function stops with
 #' instructions for downloading the files manually.
@@ -39,11 +44,15 @@
 #' @param email Email address of your DHS Program account.
 #' @param project Name of your approved DHS project.
 #' @param import If `TRUE` (default), import the downloaded files with
-#'   [bdhs_import()] and delete the downloaded zips. If `FALSE`, keep the zips
-#'   in a `downloads` folder of [bdhs_data_dir()].
+#'   [bdhs_import()]; bdhs's own downloader then deletes the downloaded zips.
+#'   If `FALSE`, the zips are kept in a `downloads` folder of
+#'   [bdhs_data_dir()] (you can import them later with [bdhs_import()]).
 #' @param engine `"bdhs"` (default) uses bdhs's own downloader (needs the
 #'   httr2 package). `"rdhs"` delegates to [rdhs::get_datasets()]; configure
-#'   rdhs first with `rdhs::set_rdhs_config()`.
+#'   rdhs first with `rdhs::set_rdhs_config()`. rdhs keeps the zips it
+#'   downloads in its own cache folder (see `rdhs::get_rdhs_config()`), and
+#'   bdhs leaves that cache alone, with `import = TRUE` as well: delete the
+#'   cached copies yourself if you do not want two copies of the data.
 #' @return If `import = TRUE`, the registry rows of the imported datasets
 #'   (see [bdhs_import()]); otherwise a tibble with the downloaded `file_name`
 #'   and `path`. Invisibly.
@@ -68,7 +77,7 @@ bdhs_download <- function(survey, recode, format = "stata",
   on.exit(unlink(session$cookies), add = TRUE)
 
   cli::cli_inform(c("i" = "Signing in to the DHS Program website as {.email {creds$email}} (experimental)..."))
-  proj_id <- dhs_login(session, creds)
+  proj_id <- dhs_login(session, creds, call = rlang::current_env())
   urls <- dhs_url_list(session, proj_id)
   urls <- dhs_select_urls(urls, files$file_name)
 
@@ -143,26 +152,28 @@ dhs_credentials <- function(email, project, files = NULL, call = rlang::caller_e
   }
   password <- dhs_password(email)
   if (is.null(password) || !nzchar(password)) {
-    abort_manual_download(files, "No DHS password found.", call = call)
+    hint <- if (rlang::is_interactive() && !has_askpass()) {
+      "To type the password at a hidden prompt instead, install the askpass package: {.code install.packages(\"askpass\")}."
+    }
+    abort_manual_download(files, "No DHS password found.", hint = hint, call = call)
   }
   list(email = email, project = project, password = password)
 }
 
-# Password from the keyring, then DHS_PASSWORD, then an interactive prompt.
+# Password from the keyring, then DHS_PASSWORD, then a hidden interactive
+# prompt (askpass). Never readline(): it would show the password as typed and
+# keep it in the console history.
 dhs_password <- function(email) {
-  if (rlang::is_installed("keyring")) {
-    pw <- tryCatch(keyring::key_get(.dhs_keyring_service, username = email), error = function(e) "")
-    if (rlang::is_string(pw) && nzchar(pw)) {
-      return(pw)
-    }
+  pw <- dhs_keyring_password(email)
+  if (rlang::is_string(pw) && nzchar(pw)) {
+    return(pw)
   }
   pw <- Sys.getenv("DHS_PASSWORD")
   if (nzchar(pw)) {
     return(pw)
   }
-  if (rlang::is_interactive()) {
-    prompt <- paste0("DHS Program password for ", email, ": ")
-    pw <- if (rlang::is_installed("askpass")) askpass::askpass(prompt) else readline(prompt)
+  if (rlang::is_interactive() && has_askpass()) {
+    pw <- dhs_ask_password(paste0("DHS Program password for ", email, ": "))
     if (rlang::is_string(pw) && nzchar(pw)) {
       return(pw)
     }
@@ -170,10 +181,27 @@ dhs_password <- function(email) {
   NULL
 }
 
-abort_manual_download <- function(files, problem, call = rlang::caller_env()) {
+dhs_keyring_password <- function(email) {
+  if (!rlang::is_installed("keyring")) {
+    return(NULL)
+  }
+  tryCatch(keyring::key_get(.dhs_keyring_service, username = email), error = function(e) NULL)
+}
+
+has_askpass <- function() {
+  rlang::is_installed("askpass")
+}
+
+# Hidden prompt (nothing is echoed or kept in the console history).
+dhs_ask_password <- function(prompt) {
+  askpass::askpass(prompt)
+}
+
+abort_manual_download <- function(files, problem, hint = NULL, call = rlang::caller_env()) {
   example <- if (!is.null(files) && nrow(files)) toupper(files$file_name[[1]]) else "BDIR81DT.ZIP"
   cli::cli_abort(c(
     problem,
+    "i" = hint,
     "i" = "Download the files yourself: sign in at {.url https://dhsprogram.com/data/dataset_admin/login_main.cfm}, open your Bangladesh project and download the Stata files{if (!is.null(files)) paste0(' (', paste(toupper(files$file_name), collapse = ', '), ')') else ''}.",
     "i" = "Then run {.code bdhs_import(\"path/to/{example}\")}.",
     "i" = "To download from R instead, set {.envvar DHS_EMAIL} and {.envvar DHS_PROJECT} and store your password with {.code keyring::key_set(\"bdhs-dhs\", username = \"<your email>\")} (or set {.envvar DHS_PASSWORD})."
@@ -189,28 +217,88 @@ dhs_session <- function() {
   )
 }
 
-# The only function that talks to the network: GET (body = NULL) or POST a
-# form; returns the response body, or `path` when the body is written to disk.
-dhs_http <- function(session, url, body = NULL, path = NULL) {
+# GET (body = NULL) or POST a form; returns the response body, or `path`
+# when the body is written to disk. Form posts (the sign-in form carries the
+# password) never follow redirects automatically: a redirect is followed only
+# to https://dhsprogram.com, with a GET, except that 307/308 re-send the form
+# (to dhsprogram.com only).
+dhs_http <- function(session, url, body = NULL, path = NULL, call = rlang::caller_env()) {
+  for (hop in 0:5) {
+    resp <- dhs_perform(session, url, body = body, path = path)
+    status <- httr2::resp_status(resp)
+    if (is.null(body) || status < 300L || status >= 400L) {
+      return(if (is.null(path)) httr2::resp_body_string(resp) else path)
+    }
+    location <- httr2::resp_header(resp, "location")
+    target <- if (is.null(location)) NA_character_ else dhs_safe_url(dhs_resolve_url(location, url))
+    if (is.na(target)) {
+      cli::cli_abort(c(
+        "The DHS Program website redirected a form to {.url {location %||% '(no address)'}}, which is not on {.url https://dhsprogram.com}.",
+        "i" = "bdhs did not follow the redirect, so nothing was sent there.",
+        "i" = "Download the files manually and use {.fn bdhs_import}."
+      ), class = "bdhs_unsafe_url", call = call)
+    }
+    if (!status %in% c(307L, 308L)) {
+      body <- NULL
+    }
+    url <- target
+  }
+  cli::cli_abort("The DHS Program website redirected too many times.", class = "bdhs_unsafe_url", call = call)
+}
+
+# The only function that talks to the network: one request, returns the
+# httr2 response. Form posts do not follow redirects (see dhs_http()).
+dhs_perform <- function(session, url, body = NULL, path = NULL) {
   req <- httr2::request(url)
   req <- httr2::req_user_agent(req, session$user_agent)
   req <- httr2::req_cookie_preserve(req, session$cookies)
   req <- httr2::req_retry(req, max_tries = 3)
   if (!is.null(body)) {
     req <- httr2::req_body_form(req, !!!body, .multi = "explode")
+    req <- httr2::req_options(req, followlocation = 0L)
   }
-  resp <- httr2::req_perform(req, path = path)
-  if (is.null(path)) httr2::resp_body_string(resp) else path
+  httr2::req_perform(req, path = path)
 }
 
 # Sign in and return the id of the user's project.
-dhs_login <- function(session, creds) {
+dhs_login <- function(session, creds, call = rlang::caller_env()) {
   url <- paste0(.dhs_admin, "login_main.cfm")
   page <- dhs_http(session, url)
   body <- html_form_hidden(page, "UserPass")
   body[c("UserName", "UserPass", "Submitted", "UserType")] <- list(creds$email, creds$password, "1", "2")
-  page <- dhs_http(session, url, body = body)
-  dhs_project_id(page, creds$project)
+  # httr2 keeps the last request (with the form, so the password) for
+  # httr2::last_request(), and its errors carry it too: forget it, and never
+  # pass such an error on.
+  on.exit(httr2_forget_last(), add = TRUE)
+  page <- tryCatch(dhs_http(session, url, body = body), error = function(e) e)
+  rm(body)
+  if (inherits(page, "error")) {
+    httr2_forget_last()
+    if (inherits(page, "bdhs_unsafe_url")) {
+      cli::cli_abort(c("Signing in to the DHS Program website failed.", cli_escape(conditionMessage(page))),
+                     class = "bdhs_login_failed", call = call)
+    }
+    status <- if (inherits(page, "httr2_http")) page$status else NULL
+    rm(page)
+    cli::cli_abort(c(
+      "Signing in to the DHS Program website failed{if (!is.null(status)) paste0(' (HTTP status ', status, ')') else ''}.",
+      "i" = "Check your email, password and internet connection, or download the files manually and use {.fn bdhs_import}."
+    ), class = "bdhs_login_failed", call = call)
+  }
+  dhs_project_id(page, creds$project, call = call)
+}
+
+# httr2 keeps the last request and response (which includes the request) for
+# httr2::last_request() and httr2::last_response(). There is no exported way
+# to clear them, so reset them in httr2's state environment if it exists.
+httr2_forget_last <- function() {
+  the <- tryCatch(utils::getFromNamespace("the", "httr2"), error = function(e) NULL)
+  if (is.environment(the)) {
+    for (nm in intersect(c("last_request", "last_response"), ls(the, all.names = TRUE))) {
+      assign(nm, NULL, envir = the)
+    }
+  }
+  invisible(NULL)
 }
 
 dhs_open_download_manager <- function(session, proj_id) {
@@ -266,10 +354,13 @@ dhs_fetch <- function(session, url, dest, expected_size, relogin, attempts = 3L)
   ))
 }
 
+# rdhs keeps the zips in its own cache; bdhs never deletes them.
 download_with_rdhs <- function(files, import) {
   check_installed("rdhs", "to download datasets with the rdhs engine")
   paths <- rdhs::get_datasets(files$file_name, download_option = "zip")
   paths <- unlist(paths, use.names = FALSE)
+  cache <- unique(dirname(paths))
+  cli::cli_inform(c("i" = "rdhs keeps the downloaded {cli::qty(length(paths))}zip{?s} in its cache: {.path {cache}}."))
   if (import) {
     return(bdhs_import(paths, copy = TRUE))
   }
@@ -354,8 +445,46 @@ dhs_urlslist_link <- function(page, call = rlang::caller_env()) {
       "i" = "The website may have changed; download the files manually and use {.fn bdhs_import}."
     ), call = call)
   }
-  link <- link[[1]]
-  if (startsWith(link, "/")) paste0(.dhs_base, link) else link
+  safe <- dhs_safe_url(dhs_resolve_url(link[[1]], paste0(.dhs_admin, "index.cfm")))
+  if (is.na(safe)) {
+    cli::cli_abort(c(
+      "The DHS website returned a download-list link that is not on {.url https://dhsprogram.com}: {.url {link[[1]]}}.",
+      "i" = "bdhs did not follow it. Download the files manually and use {.fn bdhs_import}."
+    ), class = "bdhs_unsafe_url", call = call)
+  }
+  safe
+}
+
+# Absolute URL of a link found on the page at `base`.
+dhs_resolve_url <- function(link, base = .dhs_base) {
+  vapply(trimws(link), function(u) {
+    if (grepl("^[A-Za-z][A-Za-z0-9+.-]*:", u)) {
+      u
+    } else if (startsWith(u, "//")) {
+      paste0("https:", u)
+    } else if (startsWith(u, "/")) {
+      paste0(sub("^([A-Za-z]+://[^/?#]*).*$", "\\1", base), u)
+    } else {
+      paste0(sub("[^/]*$", "", sub("[?#].*$", "", base)), u)
+    }
+  }, character(1), USE.NAMES = FALSE)
+}
+
+# `url` when it is an https URL on dhsprogram.com or one of its subdomains,
+# otherwise NA. Hosts with user names, ports or unusual characters are refused.
+dhs_safe_url <- function(url) {
+  vapply(url, function(u) {
+    if (is.na(u)) {
+      return(NA_character_)
+    }
+    m <- regmatches(u, regexec("^https://([^/?#]*)([/?#].*)?$", u, ignore.case = TRUE))[[1]]
+    if (!length(m)) {
+      return(NA_character_)
+    }
+    host <- sub(":443$", "", tolower(m[[2]]))
+    ok <- grepl("^[a-z0-9.-]+$", host) && (host == "dhsprogram.com" || endsWith(host, ".dhsprogram.com"))
+    if (ok) u else NA_character_
+  }, character(1), USE.NAMES = FALSE)
 }
 
 # Pick the download URL of each file (matched on the Filename= parameter).
@@ -364,10 +493,24 @@ dhs_select_urls <- function(urls, file_names, call = rlang::caller_env()) {
     m <- regmatches(u, regexec(paste0("[?&]", p, "=([^&]+)"), u, ignore.case = TRUE))
     vapply(m, function(x) if (length(x) > 1L) utils::URLdecode(x[[2]]) else NA_character_, character(1))
   }
+  urls <- dhs_resolve_url(urls)
   fname <- toupper(param(urls, "Filename"))
   ctry <- toupper(param(urls, "Ctry_Code"))
   fname[!is.na(ctry) & ctry != "BD"] <- NA_character_
-  idx <- match(toupper(file_names), fname)
+  # Only links to https://dhsprogram.com are followed.
+  unsafe <- is.na(dhs_safe_url(urls))
+  wanted <- toupper(file_names)
+  off_site <- wanted %in% fname[unsafe] & !wanted %in% fname[!unsafe]
+  if (any(off_site)) {
+    bad <- urls[unsafe & fname %in% wanted[off_site]]
+    cli::cli_abort(c(
+      "The DHS website returned download links that are not on {.url https://dhsprogram.com} for {.file {wanted[off_site]}}.",
+      "i" = "bdhs did not follow {cli::qty(length(bad))}{?it/them}: {.url {bad}}.",
+      "i" = "Download the files manually and use {.fn bdhs_import}."
+    ), class = "bdhs_unsafe_url", call = call)
+  }
+  fname[unsafe] <- NA_character_
+  idx <- match(wanted, fname)
   if (anyNA(idx)) {
     cli::cli_abort(c(
       "Your DHS project cannot download {.file {toupper(file_names[is.na(idx)])}}.",

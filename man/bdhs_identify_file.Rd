@@ -20,13 +20,20 @@ A tibble with one row per data file and columns \code{path},
 Works out which survey round and recode each file holds, so that files can
 be imported whatever they are called. Standard DHS names (\code{BDIR81FL.DTA},
 \code{BDKR7RDT.ZIP}, lower-case or prefixed, e.g. \verb{2022BDPR81FL.DTA}) are
-recognised from the name alone. Renamed files such as \code{BDHS2018KR.DTA} are
-recognised from the year and recode code in the name and confirmed from
-their content; anything else is identified from its content, reading only
-the header and a few columns (\code{v000}/\code{hv000}, \code{v007}/\code{hv007} and the
-identifier variables).
+recognised from the name alone (their variable names are checked against
+the recode). Renamed files such as \code{BDHS2018KR.DTA} or \code{SPA2014_FC.dta}
+are recognised from the year and recode code in the name and must be
+confirmed by their content: a Bangladesh country code (\code{v000}, \code{hv000} or
+\code{mv000}) and the identifier variables of the recode. Anything else is
+identified from its content, reading only the header and a few columns
+(\code{v000}/\code{hv000}, \code{v007}/\code{hv007} and the identifier variables).
 }
 \details{
+Files whose name and content disagree (another round, recode or country),
+and renamed files that their content does not confirm, are left
+unidentified (\code{survey_id} and \code{recode} are \code{NA}) with a warning; the
+\code{note} column says why. \code{\link[=bdhs_import]{bdhs_import()}} does not import them.
+
 Derived files -- several rounds appended together, or files with variables
 that are not in the DHS recode -- are flagged with \code{derived = TRUE}.
 \code{\link[=bdhs_import]{bdhs_import()}} skips them, because bdhs only stores original DHS files.

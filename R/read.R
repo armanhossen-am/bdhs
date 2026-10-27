@@ -174,6 +174,7 @@ bdhs_read_file <- function(path, vars = NULL, vars_regex = NULL, indicators = NU
   } else if (is.na(id$survey_id) || is.na(id$recode)) {
     cli::cli_warn(c(
       "Could not identify the survey round and recode of {.file {basename(display)}}.",
+      "i" = if (!is.na(id$note %||% NA)) cli_escape(id$note),
       "i" = "Survey attributes are not set; supply {.arg survey} and {.arg recode} to functions that need them."
     ))
   }

@@ -169,3 +169,196 @@ test_that("dhs_fetch() signs in again when the file size is wrong", {
   expect_error(dhs_fetch(list(), "u", dest, 10, function() NULL), "did not send the data file")
   expect_false(file.exists(dest))
 })
+
+test_that("form posts never follow redirects off dhsprogram.com", {
+  skip_if_not_installed("httr2")
+  session <- dhs_session()
+  form <- list(UserName = "someone@example.org", UserPass = "not-a-real-password")
+  seen <- list()
+  record <- function(req) {
+    seen[[length(seen) + 1L]] <<- list(
+      url = req$url, has_body = !is.null(req$body), follow = req$options$followlocation
+    )
+  }
+  # 307 to another host: the form (with the password) is not sent there.
+  httr2::local_mocked_responses(function(req) {
+    record(req)
+    httr2::response(307, headers = list(Location = "https://collector.example/steal"))
+  })
+  expect_error(dhs_http(session, "https://dhsprogram.com/data/dataset_admin/login_main.cfm", body = form),
+               class = "bdhs_unsafe_url")
+  expect_length(seen, 1)
+  expect_equal(seen[[1]]$follow, 0L)
+  # Look-alike hosts, plain http and user-info tricks are refused too.
+  for (loc in c("https://dhsprogram.com.example.net/x", "http://dhsprogram.com/x",
+                "https://dhsprogram.com@collector.example/x", "https://collector.example/dhsprogram.com")) {
+    seen <- list()
+    httr2::local_mocked_responses(function(req) {
+      record(req)
+      httr2::response(302, headers = list(Location = loc))
+    })
+    expect_error(dhs_http(session, "https://dhsprogram.com/a", body = form), class = "bdhs_unsafe_url")
+    expect_length(seen, 1)
+  }
+
+  # Same-site redirects: 302 continues with a GET, 307 re-sends the form.
+  for (status in c(302L, 307L)) {
+    seen <- list()
+    httr2::local_mocked_responses(function(req) {
+      record(req)
+      if (length(seen) == 1L) {
+        httr2::response(status, headers = list(Location = "/data/dataset_admin/index.cfm"))
+      } else {
+        httr2::response(200, body = charToRaw("<html>ok</html>"))
+      }
+    })
+    expect_equal(dhs_http(session, "https://dhsprogram.com/data/dataset_admin/login_main.cfm", body = form), "<html>ok</html>")
+    expect_length(seen, 2)
+    expect_equal(seen[[2]]$url, "https://dhsprogram.com/data/dataset_admin/index.cfm")
+    expect_equal(seen[[2]]$has_body, status == 307L)
+  }
+})
+
+test_that("only https links to dhsprogram.com are followed", {
+  expect_equal(
+    dhs_urlslist_link("<a href=\"https://www.dhsprogram.com/data/download/urlslist_1.cfm\">list</a>"),
+    "https://www.dhsprogram.com/data/download/urlslist_1.cfm"
+  )
+  for (href in c("https://collector.example/data/download/urlslist_1.cfm",
+                 "http://dhsprogram.com/data/download/urlslist_1.cfm",
+                 "https://dhsprogram.com.collector.example/data/download/urlslist_1.cfm",
+                 "https://user@collector.example/data/download/urlslist_1.cfm",
+                 "//collector.example/data/download/urlslist_1.cfm")) {
+    expect_error(dhs_urlslist_link(paste0("<a href='", href, "'>x</a>")), class = "bdhs_unsafe_url")
+  }
+  good <- "https://dhsprogram.com/data/download.cfm?Filename=BDKR81DT.ZIP&Ctry_Code=BD"
+  bad <- "https://collector.example/download.cfm?Filename=BDKR81DT.ZIP&Ctry_Code=BD"
+  expect_error(dhs_select_urls(bad, "BDKR81DT.ZIP"), class = "bdhs_unsafe_url")
+  expect_error(dhs_select_urls(sub("https", "http", good), "BDKR81DT.ZIP"), "not on")
+  expect_equal(dhs_select_urls(c(bad, good), "BDKR81DT.ZIP"), good)
+  expect_equal(dhs_safe_url(c(good, bad, NA)), c(good, NA, NA))
+})
+
+test_that("a failed sign-in leaves the password nowhere", {
+  skip_if_not_installed("httr2")
+  # A random fake password, so that it does not occur in this file's source
+  # (which error backtraces reference).
+  password <- paste0("fake-", paste(sample(c(letters, 0:9), 24, replace = TRUE), collapse = ""))
+  creds <- list(email = "someone@example.org", password = password, project = "Test project")
+  contains_password <- function(x) {
+    any(grepl(password, rawToChar(serialize(x, NULL, ascii = TRUE)), fixed = TRUE))
+  }
+  login_page <- "<form action='login_main.cfm'><input type='hidden' name='Submitted' value='1'><input name='UserPass' type='password'></form>"
+
+  # HTTP error: httr2's error carries the request, form included.
+  local_mocked_bindings(dhs_http = function(session, url, body = NULL, path = NULL, call = NULL) {
+    if (is.null(body)) {
+      return(login_page)
+    }
+    req <- httr2::req_body_form(httr2::request(url), !!!body)
+    httr2::with_mocked_responses(function(req) httr2::response(500), httr2::req_perform(req))
+  })
+  err <- tryCatch(dhs_login(dhs_session(), creds), error = function(e) e)
+  expect_s3_class(err, "bdhs_login_failed")
+  expect_match(conditionMessage(err), "HTTP status 500")
+  expect_null(err$parent)
+  expect_false(contains_password(err))
+
+  # Connection failure on a real request (to a closed local port): httr2 also
+  # records the request for httr2::last_request().
+  skip_on_cran()
+  local_mocked_bindings(dhs_http = function(session, url, body = NULL, path = NULL, call = NULL) {
+    if (is.null(body)) {
+      return(login_page)
+    }
+    req <- httr2::req_body_form(httr2::request("http://127.0.0.1:9/login"), !!!body)
+    httr2::req_perform(httr2::req_options(req, connecttimeout = 2))
+  })
+  err <- tryCatch(dhs_login(dhs_session(), creds), error = function(e) e)
+  expect_s3_class(err, "bdhs_login_failed")
+  expect_null(err$parent)
+  expect_false(contains_password(err))
+  expect_false(contains_password(httr2::last_request()))
+  expect_false(contains_password(httr2::last_response()))
+})
+
+test_that("the password is never read with a visible prompt", {
+  rlang::local_interactive(TRUE)
+  withr::local_envvar(DHS_PASSWORD = NA)
+  asked <- character()
+  local_mocked_bindings(
+    dhs_keyring_password = function(email) NULL,
+    has_askpass = function() FALSE,
+    dhs_ask_password = function(prompt) {
+      asked <<- c(asked, prompt)
+      "typed"
+    }
+  )
+  expect_null(dhs_password("someone@example.org"))
+  expect_length(asked, 0)
+  expect_error(dhs_credentials("someone@example.org", "Test project"), "askpass")
+  expect_error(dhs_credentials("someone@example.org", "Test project"), "DHS_PASSWORD")
+  expect_false(any(grepl("readline", deparse(dhs_password), fixed = TRUE)))
+
+  local_mocked_bindings(has_askpass = function() TRUE)
+  expect_equal(dhs_password("someone@example.org"), "typed")
+  expect_length(asked, 1)
+  withr::local_envvar(DHS_PASSWORD = "from-env")
+  expect_equal(dhs_password("someone@example.org"), "from-env")
+})
+
+test_that("the rdhs engine leaves rdhs's cache alone", {
+  skip_if_not_installed("rdhs")
+  skip_if_no_zip()
+  local_bdhs_store()
+  stage <- withr::local_tempdir()
+  cache <- withr::local_tempdir("rdhs-cache-")
+  write_fixture_dta(stage, "BDKR81FL.DTA", 2022, "KR")
+  zip <- write_fixture_zip(file.path(cache, "BDKR81DT.ZIP"), stage, "BDKR81FL.DTA")
+  local_mocked_bindings(get_datasets = function(dataset_filenames, ...) list(BDKR81DT = zip), .package = "rdhs")
+  out <- capture_msgs(bdhs_download(2022, "KR", engine = "rdhs"))
+  expect_match(out$text, "rdhs keeps the downloaded zip in its cache")
+  expect_equal(out$value$recode, "KR")
+  expect_true(file.exists(zip))
+})
+
+test_that("zips downloaded with import = FALSE can be imported afterwards", {
+  skip_if_not_installed("httr2")
+  skip_if_no_zip()
+  store <- local_bdhs_store()
+  stage <- withr::local_tempdir()
+  zips <- withr::local_tempdir()
+  write_fixture_dta(stage, "BDHR81FL.DTA", 2022, "HR")
+  fixture <- write_fixture_zip(file.path(zips, "BDHR81DT.ZIP"), stage, "BDHR81FL.DTA")
+  local_mocked_bindings(
+    dhs_http = function(session, url, body = NULL, path = NULL) {
+      if (!is.null(path)) {
+        file.copy(fixture, path, overwrite = TRUE)
+        return(path)
+      }
+      if (grepl("login_main", url) && is.null(body)) {
+        return("<form><input type='hidden' name='Submitted' value='1'><input name='UserPass' type='password'></form>")
+      }
+      if (grepl("login_main", url)) {
+        return("<select><option value='4242'>Test project</option></select>")
+      }
+      if (identical(body$subaction, "Build URL File List")) {
+        return("<a href='/data/download/urlslist_4242.cfm?Proj_ID=4242'>urls</a>")
+      }
+      if (grepl("urlslist", url)) {
+        return("https://dhsprogram.com/data/download.cfm?Filename=BDHR81DT.ZIP&Tp=1&Ctry_Code=BD\n")
+      }
+      ""
+    },
+    dhs_password = function(email) "not-a-real-password",
+    dhs_files_for = function(survey, recode, format = "stata", call = NULL) {
+      tibble::tibble(survey_id = "BD2022DHS", recode = "HR", file_name = "BDHR81DT.ZIP",
+                     file_size = file.size(fixture))
+    }
+  )
+  dl <- capture_msgs(bdhs_download(2022, "HR", email = "someone@example.org", project = "Test project", import = FALSE))$value
+  expect_equal(dirname(dl$path), normalize_path(file.path(store, "downloads")))
+  reg <- bdhs_import(file.path(bdhs_data_dir(), "downloads"), format = "dta", quiet = TRUE)
+  expect_equal(reg$recode, "HR")
+  expect_equal(reg$survey_id, "BD2022DHS")
+})

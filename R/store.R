@@ -139,21 +139,195 @@ registry_read <- function(dir = store_dir()) {
   reg[names(tmpl)]
 }
 
-registry_write <- function(reg, dir = store_dir()) {
-  dir.create(dir, recursive = TRUE, showWarnings = FALSE)
+# Write the registry atomically (temporary file + rename). Callers that read,
+# change and write it hold the store lock (store_lock()) meanwhile.
+registry_write <- function(reg, dir = store_dir(), call = rlang::caller_env()) {
+  check_store_writable(dir, call = call)
   reg <- reg[order(reg$survey_id, reg$recode), names(registry_template())]
   tmp <- tempfile("registry-", tmpdir = dir, fileext = ".rds")
-  saveRDS(reg, tmp)
-  if (!file.rename(tmp, registry_file(dir))) {
-    file.copy(tmp, registry_file(dir), overwrite = TRUE)
+  ok <- tryCatch({
+    saveRDS(reg, tmp)
+    TRUE
+  }, error = function(e) FALSE, warning = function(w) FALSE)
+  if (!ok) {
     unlink(tmp)
+    abort_store_not_writable(dir, call = call)
+  }
+  if (!file.rename(tmp, registry_file(dir))) {
+    copied <- file.copy(tmp, registry_file(dir), overwrite = TRUE)
+    unlink(tmp)
+    if (!copied) {
+      abort_store_not_writable(dir, call = call)
+    }
   }
   invisible(reg)
 }
 
+# Write the registry after an import. It is read again first (a writer that
+# does not use the lock may have changed it); the rows this import replaced
+# and older rows of the same datasets are dropped, the new rows added.
+registry_merge_write <- function(new_rows, replaced, dir = store_dir(), call = rlang::caller_env()) {
+  reg <- registry_read(dir)
+  id <- function(x) paste(x$survey_id, x$recode, x$md5, x$path, sep = "\r")
+  drop <- paste(reg$survey_id, reg$recode) %in% paste(new_rows$survey_id, new_rows$recode) |
+    id(reg) %in% id(replaced)
+  registry_write(dplyr::bind_rows(reg[!drop, ], new_rows), dir, call = call)
+}
+
+# Create the data directory if needed and check that it is writable.
+check_store_writable <- function(dir, call = rlang::caller_env()) {
+  if (!dir.exists(dir)) {
+    dir.create(dir, recursive = TRUE, showWarnings = FALSE)
+  }
+  if (!dir.exists(dir) || file.access(dir, 2L) != 0L) {
+    abort_store_not_writable(dir, call = call)
+  }
+  invisible(dir)
+}
+
+abort_store_not_writable <- function(dir, call = rlang::caller_env()) {
+  cli::cli_abort(c(
+    "Can't write to the bdhs data directory {.path {dir}}.",
+    "i" = "Check that the folder can be created and that you have permission to write to it.",
+    "i" = "Or choose another location with {.code bdhs_data_dir(\"path\")} or the {.envvar BDHS_DATA_DIR} environment variable."
+  ), class = "bdhs_store_not_writable", call = call)
+}
+
+# Store lock -----------------------------------------------------------------------
+#
+# Imports and bdhs_forget() change the registry and the stored copies; two R
+# sessions doing so at once would lose registry rows and orphan stored files.
+# The lock is a directory (<data_dir>/.lock) because creating a directory is
+# atomic. It holds an "owner" file (process id, host, user, time) that is
+# touched while the lock is in use. A lock is stale, and taken over, when its
+# owner file has not been touched for `stale` seconds or when its process on
+# this computer has ended. Locks are re-entrant within an R session.
+
+.store_locks <- new.env(parent = emptyenv())
+
+store_lock_path <- function(dir) {
+  file.path(dir, ".lock")
+}
+
+# Acquire the lock of the store in `dir`; returns a key for store_unlock().
+store_lock <- function(dir = store_dir(), timeout = bdhs_opt("lock_timeout", 60),
+                       stale = bdhs_opt("lock_stale", 1800), call = rlang::caller_env()) {
+  key <- normalize_path(dir)
+  held <- .store_locks[[key]] %||% 0L
+  if (held > 0L) {
+    .store_locks[[key]] <- held + 1L
+    return(invisible(key))
+  }
+  check_store_writable(key, call = call)
+  lock <- store_lock_path(key)
+  start <- Sys.time()
+  wait <- 0.05
+  repeat {
+    if (dir.create(lock, showWarnings = FALSE)) {
+      written <- tryCatch({
+        writeLines(c(
+          paste0("pid: ", Sys.getpid()),
+          paste0("host: ", Sys.info()[["nodename"]]),
+          paste0("user: ", Sys.info()[["user"]]),
+          paste0("time: ", format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z"))
+        ), file.path(lock, "owner"))
+        TRUE
+      }, error = function(e) FALSE, warning = function(w) FALSE)
+      if (!written) {
+        unlink(lock, recursive = TRUE)
+        abort_store_not_writable(key, call = call)
+      }
+      .store_locks[[key]] <- 1L
+      return(invisible(key))
+    }
+    if (!dir.exists(lock)) {
+      abort_store_not_writable(key, call = call)
+    }
+    if (store_lock_is_stale(lock, stale)) {
+      # Move it aside first so that only one session removes it.
+      aside <- paste0(lock, "-", basename(tempfile("stale-")))
+      if (file.rename(lock, aside)) {
+        unlink(aside, recursive = TRUE)
+      }
+      next
+    }
+    if (as.numeric(difftime(Sys.time(), start, units = "secs")) > timeout) {
+      owner <- store_lock_owner(lock)
+      cli::cli_abort(c(
+        "The bdhs data directory {.path {key}} is in use by another R session.",
+        "i" = if (all(c("pid", "host", "time") %in% names(owner))) "Lock held by process {owner[['pid']]} on {owner[['host']]} since {owner[['time']]}." else NULL,
+        "i" = "Try again when the other import has finished.",
+        "i" = "If no other R session is using the store, delete {.path {lock}}."
+      ), class = "bdhs_store_locked", call = call)
+    }
+    Sys.sleep(wait)
+    wait <- min(wait * 2, 1)
+  }
+}
+
+store_unlock <- function(key) {
+  held <- .store_locks[[key]] %||% 0L
+  if (held > 1L) {
+    .store_locks[[key]] <- held - 1L
+    return(invisible(NULL))
+  }
+  if (exists(key, envir = .store_locks, inherits = FALSE)) {
+    rm(list = key, envir = .store_locks)
+  }
+  lock <- store_lock_path(key)
+  # Leave a lock that another session took over (after ours went stale).
+  pid <- store_lock_owner(lock)["pid"]
+  if (is.na(pid) || identical(unname(pid), as.character(Sys.getpid()))) {
+    unlink(lock, recursive = TRUE)
+  }
+  invisible(NULL)
+}
+
+# Mark the lock as in use (for long imports).
+store_lock_touch <- function(key) {
+  owner <- file.path(store_lock_path(key), "owner")
+  if (file.exists(owner)) {
+    Sys.setFileTime(owner, Sys.time())
+  }
+  invisible(NULL)
+}
+
+# Owner fields of a lock (named character vector, empty if unreadable).
+store_lock_owner <- function(lock) {
+  lines <- tryCatch(readLines(file.path(lock, "owner"), warn = FALSE), error = function(e) character(), warning = function(w) character())
+  lines <- lines[grepl(": ", lines, fixed = TRUE)]
+  stats::setNames(sub("^[^:]*: ", "", lines), sub(": .*$", "", lines))
+}
+
+store_lock_is_stale <- function(lock, stale) {
+  owner_file <- file.path(lock, "owner")
+  # Without an owner file the lock was just created: judge by its own age.
+  stamp <- if (file.exists(owner_file)) file.mtime(owner_file) else file.mtime(lock)
+  if (is.na(stamp)) {
+    return(FALSE)
+  }
+  if (as.numeric(difftime(Sys.time(), stamp, units = "secs")) > stale) {
+    return(TRUE)
+  }
+  owner <- store_lock_owner(lock)
+  pid <- suppressWarnings(as.integer(unname(owner["pid"])))
+  same_owner <- identical(unname(owner["host"]), Sys.info()[["nodename"]]) &&
+    identical(unname(owner["user"]), Sys.info()[["user"]])
+  if (!same_owner || is.na(pid)) {
+    return(FALSE)
+  }
+  if (pid == Sys.getpid()) {
+    # This session holds no lock on the store (store_lock() is re-entrant), so
+    # the lock is a leftover of this process.
+    return(TRUE)
+  }
+  # Signal 0 only checks whether the process exists (Unix only).
+  .Platform$OS.type == "unix" && !isTRUE(tools::pskill(pid, 0L))
+}
+
 # Absolute paths of registry rows.
 registry_abs_path <- function(reg, dir = store_dir()) {
-  ifelse(reg$linked, reg$path, file.path(dir, reg$path))
+  as.character(ifelse(reg$linked, reg$path, file.path(dir, reg$path)))
 }
 
 # Secure-storage checks -----------------------------------------------------------
@@ -345,6 +519,19 @@ bdhs_forget <- function(survey, recode = NULL, delete = FALSE) {
       cli::cli_inform("Nothing was unregistered or deleted.")
       return(invisible(reg[0, ]))
     }
+  }
+  # Change the registry as it is now, under the store lock: another session
+  # may have imported meanwhile.
+  lock <- store_lock(dir)
+  on.exit(store_unlock(lock), add = TRUE)
+  reg <- registry_read(dir)
+  hit <- reg$survey_id == survey_id & (is.null(recode) | reg$recode %in% recode)
+  rows <- reg[hit, ]
+  labels <- paste(rows$survey_id, rows$recode)
+  stored <- !rows$linked
+  if (!nrow(rows)) {
+    cli::cli_inform("Nothing registered for {survey_id}{if (!is.null(recode)) paste0(' ', paste(recode, collapse = ', ')) else ''}.")
+    return(invisible(rows))
   }
   if (delete && any(stored)) {
     paths <- registry_abs_path(rows[stored, ], dir)

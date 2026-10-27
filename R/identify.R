@@ -14,11 +14,18 @@
 #' Works out which survey round and recode each file holds, so that files can
 #' be imported whatever they are called. Standard DHS names (`BDIR81FL.DTA`,
 #' `BDKR7RDT.ZIP`, lower-case or prefixed, e.g. `2022BDPR81FL.DTA`) are
-#' recognised from the name alone. Renamed files such as `BDHS2018KR.DTA` are
-#' recognised from the year and recode code in the name and confirmed from
-#' their content; anything else is identified from its content, reading only
-#' the header and a few columns (`v000`/`hv000`, `v007`/`hv007` and the
-#' identifier variables).
+#' recognised from the name alone (their variable names are checked against
+#' the recode). Renamed files such as `BDHS2018KR.DTA` or `SPA2014_FC.dta`
+#' are recognised from the year and recode code in the name and must be
+#' confirmed by their content: a Bangladesh country code (`v000`, `hv000` or
+#' `mv000`) and the identifier variables of the recode. Anything else is
+#' identified from its content, reading only the header and a few columns
+#' (`v000`/`hv000`, `v007`/`hv007` and the identifier variables).
+#'
+#' Files whose name and content disagree (another round, recode or country),
+#' and renamed files that their content does not confirm, are left
+#' unidentified (`survey_id` and `recode` are `NA`) with a warning; the
+#' `note` column says why. [bdhs_import()] does not import them.
 #'
 #' Derived files -- several rounds appended together, or files with variables
 #' that are not in the DHS recode -- are flagged with `derived = TRUE`.
@@ -55,7 +62,42 @@ bdhs_identify_file <- function(path) {
       }
     }
   }
+  warn_refused(rows)
   identification_tibble(rows)
+}
+
+# Warn about files left unidentified because their name and content disagree
+# or their content does not confirm their name. `rows`: identify_one() results
+# (lists or a data frame with columns path/origin, refused and note).
+warn_refused <- function(rows, label = "path", done = "identified") {
+  if (!is.data.frame(rows)) {
+    rows <- list(
+      path = vapply(rows, function(r) r$path %||% NA_character_, character(1)),
+      refused = vapply(rows, function(r) r$refused %||% NA_character_, character(1)),
+      note = vapply(rows, function(r) r$note %||% NA_character_, character(1))
+    )
+  }
+  bullets <- function(i) {
+    msg <- paste0(rows[[label]][i], ": ", rows$note[i] %|NA|% "")
+    stats::setNames(cli_escape(msg), rep("*", length(msg)))
+  }
+  conflict <- which(rows$refused %in% "conflict")
+  if (length(conflict)) {
+    cli::cli_warn(c(
+      "The name and the content of {length(conflict)} file{?s} disagree, so {?it was/they were} not {done}:",
+      bullets(conflict),
+      "i" = "Check that each file is what its name says; download the original DHS file again if in doubt."
+    ))
+  }
+  unconfirmed <- which(rows$refused %in% "unconfirmed")
+  if (length(unconfirmed)) {
+    cli::cli_warn(c(
+      "{length(unconfirmed)} renamed file{?s} could not be confirmed as {?a /}BDHS recode file{?s} and {?was/were} not {done}:",
+      bullets(unconfirmed),
+      "i" = "A renamed file is identified only when its content confirms its name."
+    ))
+  }
+  invisible(rows)
 }
 
 identification_tibble <- function(rows) {
@@ -95,24 +137,28 @@ file_format <- function(path) {
 # Identification by file name -----------------------------------------------------------
 
 # Parse a file name. Returns a list with survey_id, recode, file_stem, kind
-# ("standard", "renamed", "none"), derived and note.
+# ("standard", "renamed", "none"), derived, ambiguous and note.
 parse_dhs_name <- function(path) {
   stem <- toupper(tools::file_path_sans_ext(basename(path)))
   out <- list(survey_id = NA_character_, recode = NA_character_, file_stem = NA_character_,
-              kind = "none", derived = FALSE, note = NA_character_)
+              kind = "none", derived = FALSE, ambiguous = FALSE, note = NA_character_)
   # Standard DHS stems, optionally prefixed with a year: BDIR81FL, BDKR7RDT,
-  # BDIR81, 2022BDPR81FL, 2017_BDPR7RFL.
+  # BDIR81, 2022BDPR81FL, 2017_BDPR7RFL; SPA files end in SP (BDFC7AFLSP).
   m <- regmatches(stem, regexec(
-    "^(?:((?:19|20)[0-9]{2})[ _.-]?)?BD([A-Z]{2})([0-9][0-9A-Z])(FL|DT|SV|SD)?$", stem, perl = TRUE
+    "^(?:((?:19|20)[0-9]{2})[ _.-]?)?BD([A-Z]{2})([0-9][0-9A-Z])(FL|DT|SV|SD)?(SP)?$", stem, perl = TRUE
   ))[[1]]
   if (length(m)) {
     core <- paste0("BD", m[[3]], m[[4]])
     cat <- catalogue()
     hit <- which(substr(cat$file_stem, 1, 6) == core)
+    if (nzchar(m[[6]])) {
+      # The SP suffix is only used by Service Provision Assessment files.
+      hit <- hit[cat$survey_type[hit] == "SPA"]
+    }
     if (length(hit)) {
       out$survey_id <- cat$survey_id[[hit[[1]]]]
       out$recode <- cat$file_type_code[[hit[[1]]]]
-    } else if (m[[3]] %in% .recodes$recode) {
+    } else if (!nzchar(m[[6]]) && m[[3]] %in% .recodes$recode) {
       out$survey_id <- bdhs_survey_id(m[[4]], error = FALSE)
       out$recode <- m[[3]]
       out$note <- "file version not in the DHS catalogue"
@@ -129,13 +175,26 @@ parse_dhs_name <- function(path) {
       return(out)
     }
   }
-  # Renamed files: a survey year and a recode code, e.g. BDHS2018KR, bdhs_2014_ir.
+  # Renamed files: a survey year and a recode code, e.g. BDHS2018KR,
+  # bdhs_2014_ir, SPA2014_FC.
   years <- regmatches(stem, gregexpr("(?<![0-9])(19|20)[0-9]{2}(?![0-9])", stem, perl = TRUE))[[1]]
   rest <- gsub("(19|20)[0-9]{2}", " ", stem)
   tokens <- strsplit(rest, "[^A-Z]+")[[1]]
-  tokens <- sub("^(BDHS|BDDHS|DHS|BD)(?=[A-Z]{2}$)", "", tokens, perl = TRUE)
+  says_spa <- any(grepl("^(BD)?SPA$", tokens))
+  says_bmms <- any(grepl("^(BD)?BMMS$", tokens))
+  tokens <- sub("^(BDHS|BDDHS|DHS|BD|SPA|BMMS)(?=[A-Z]{2}$)", "", tokens, perl = TRUE)
   recodes <- unique(tokens[tokens %in% .recodes$recode])
-  rounds <- unique(stats::na.omit(bdhs_survey_id(years, type = "DHS", error = FALSE)))
+  type <- if (length(recodes) == 1L) name_survey_type(recodes, says_spa, says_bmms) else "DHS"
+  if (length(recodes) == 1L && length(years) && is.na(type)) {
+    # e.g. "SPA2014_KR": an SPA name with a recode that SPA surveys do not have.
+    out$recode <- recodes
+    out$kind <- "renamed"
+    out$ambiguous <- TRUE
+    out$note <- paste0("the name mixes ", if (says_spa) "SPA" else "BMMS", " with the ", recodes,
+                       " recode, so the survey is ambiguous")
+    return(out)
+  }
+  rounds <- if (length(years)) rounds_from_years(years, type) else character()
   if (length(recodes) == 1L && length(rounds)) {
     out$recode <- recodes
     out$kind <- "renamed"
@@ -152,6 +211,28 @@ parse_dhs_name <- function(path) {
     out$note <- paste(stats::na.omit(c(out$note, "name suggests a derived (appended/pooled/merged) file")), collapse = "; ")
   }
   out
+}
+
+# Survey type ("DHS", "SPA" or "OTH") that a renamed file refers to, from its
+# recode and an explicit "SPA"/"BMMS" in the name; NA when they contradict
+# each other. Recodes that only one survey type has (FC: SPA) decide alone.
+name_survey_type <- function(recode, says_spa = FALSE, says_bmms = FALSE) {
+  cr <- catalogue_recodes()
+  avail <- unique(cr$survey_type[cr$recode == recode])
+  named <- c(if (says_spa) "SPA", if (says_bmms) "OTH")
+  if (length(named) > 1L) {
+    return(NA_character_)
+  }
+  if (length(named) == 1L) {
+    return(if (named %in% avail) named else NA_character_)
+  }
+  if (!length(avail) || "DHS" %in% avail) "DHS" else if (length(avail) == 1L) avail else NA_character_
+}
+
+# Survey ids of the rounds of one survey type held in the given years.
+rounds_from_years <- function(years, type = "DHS") {
+  key <- switch(type, DHS = years, SPA = paste0("spa", years), OTH = paste0("bmms", years))
+  unique(stats::na.omit(bdhs_survey_id(key, type = type, error = FALSE)))
 }
 
 # Identification by content -----------------------------------------------------------
@@ -178,21 +259,26 @@ inspect_content <- function(path, format = file_format(path)) {
     cols <- names[[1]]
   }
   x <- read_columns(path, format, cols)
+  # Without the children's ages a midx file may be a KR or a 2017-18 BR.
+  recode_certain <- !identical(recode, "KR")
   if (length(ages) == 2L) {
     age <- as_codes(x[[ages[[1]]]]) - as_codes(x[[ages[[2]]]])
     if (any(!is.na(age))) {
       recode <- if (max(age, na.rm = TRUE) <= 60) "KR" else "BR"
+      recode_certain <- TRUE
     }
   }
   out <- list(
     names = names, n_cols = length(names), n_rows = nrow(x),
-    survey_id = NA_character_, recode = recode,
+    survey_id = NA_character_, recode = recode, recode_certain = recode_certain,
+    round_from_years = FALSE, country = character(),
     derived = FALSE, notes = character()
   )
   v000 <- if (!is.null(c000)) unique(trimws(as.character(zap_all(x[[c000]])))) else character()
-  v000 <- v000[!is.na(v000) & nzchar(v000)]
-  if (length(v000) && !all(substr(v000, 1, 2) == "BD")) {
-    out$notes <- c(out$notes, paste0("not a Bangladesh file (country code ", paste(unique(substr(v000, 1, 2)), collapse = ", "), ")"))
+  v000 <- toupper(v000[!is.na(v000) & nzchar(v000)])
+  out$country <- unique(substr(v000, 1, 2))
+  if (length(v000) && !all(out$country == "BD")) {
+    out$notes <- c(out$notes, paste0("not a Bangladesh file (country code ", paste(out$country, collapse = ", "), ")"))
   }
   years <- if (!is.null(c007)) {
     normalize_years(as_codes(x[[c007]]))
@@ -212,6 +298,7 @@ inspect_content <- function(path, format = file_format(path)) {
     out$notes <- c(out$notes, paste0("pooled file: several survey rounds (", paste(what, collapse = "; "), ")"))
   } else if (length(rounds) == 1L) {
     out$survey_id <- rounds
+    out$round_from_years <- TRUE
   } else if (length(v000) == 1L && substr(v000, 1, 2) == "BD") {
     out$survey_id <- survey_from_v000(v000)
   }
@@ -267,29 +354,73 @@ dhs_like_name <- function(nm) {
 
 # Combined identification ---------------------------------------------------------------
 
+# Recodes whose variables recode_from_names() recognises: only for these can
+# the content confirm or contradict the recode given by a file name.
+.content_recodes <- c("IR", "MR", "KR", "BR", "HR", "PR", "CR", "HW", "WI")
+
+# Identifier variables (lower case) that every genuine file of a recode has.
+# Files whose name is not a standard DHS name are imported only when their
+# content has these and a Bangladesh country code (v000, hv000 or mv000);
+# other recodes must keep their DHS name.
+.recode_id_vars <- list(
+  IR = c("caseid", "v001", "v002", "v003"),
+  KR = c("caseid", "midx", "v001", "v002"),
+  BR = c("caseid", "bidx", "v001", "v002"),
+  MR = c("mcaseid", "mv001", "mv002"),
+  HR = c("hhid", "hv001", "hv002"),
+  PR = c("hhid", "hvidx", "hv001", "hv002"),
+  CR = c("v001", "v002", "mv001")
+)
+
+# Formats whose content can be inspected.
+content_formats <- function() {
+  c("dta", "sav", "sas7bdat", if (rlang::is_installed("arrow")) "parquet")
+}
+
 # content: "auto" reads the content unless a standard DHS name identifies the
-# file; "always" always reads it (needed by bdhs_import() for row counts).
+# file (and its variable names do not contradict it); "always" always reads it
+# (needed by bdhs_import() for row counts); "never" uses the name only.
+#
+# Files are refused (survey_id and recode NA, `refused` set) when
+# * the name and the content disagree on the round, the recode or the country
+#   (refused = "conflict"), or
+# * the name is not a standard DHS name and the content cannot confirm it
+#   (refused = "unconfirmed").
 identify_one <- function(path, content = c("auto", "always", "never"), display = path) {
   content <- rlang::arg_match(content)
   format <- file_format(path)
   by_name <- parse_dhs_name(path)
+  standard <- by_name$kind == "standard"
   out <- list(
     path = display, file_stem = by_name$file_stem, survey_id = by_name$survey_id,
     recode = by_name$recode, format = format, method = "filename",
-    derived = by_name$derived, note = by_name$note, n_rows = NA_integer_, n_cols = NA_integer_
+    derived = by_name$derived, note = by_name$note, n_rows = NA_integer_, n_cols = NA_integer_,
+    refused = NA_character_
   )
-  if (!format %in% c("dta", "sav", "sas7bdat")) {
+  if (isTRUE(by_name$ambiguous)) {
+    return(refuse_identification(out, "unconfirmed", NULL))
+  }
+  if (!format %in% content_formats() || content == "never") {
     if (is.na(out$survey_id)) out$method <- NA_character_
-    if (is.na(format)) out$note <- "not a Stata, SPSS or SAS data file"
+    if (is.na(format)) {
+      out$note <- "not a Stata, SPSS or SAS data file"
+    } else if (!standard && !is.na(out$survey_id) && !out$derived) {
+      out$note <- join_notes(out$note, "identified from the name only; the content is checked when the file is imported")
+    }
     return(out)
   }
-  read_content <- content == "always" || (content == "auto" && by_name$kind != "standard")
+  read_content <- content == "always" || !standard || header_contradicts(path, format, out$recode)
   if (!read_content) {
     return(out)
   }
   info <- tryCatch(inspect_content(path, format), error = function(e) e)
   if (inherits(info, "error")) {
-    out$note <- paste0("could not read the file: ", conditionMessage(info))
+    note <- paste0("could not read the file: ", conditionMessage(info))
+    if (!standard && !is.na(out$survey_id) && !out$derived) {
+      # The name alone is not enough for a renamed file.
+      return(refuse_identification(out, "unconfirmed", note))
+    }
+    out$note <- join_notes(out$note, note)
     if (is.na(out$survey_id)) out$method <- NA_character_
     return(out)
   }
@@ -303,30 +434,128 @@ identify_one <- function(path, content = c("auto", "always", "never"), display =
     out$method <- "content"
     if (!is.na(info$recode) && is.na(out$recode)) out$recode <- info$recode
     if (!is.na(info$survey_id) && is.na(out$survey_id)) out$survey_id <- info$survey_id
-  } else if (is.na(out$survey_id) || is.na(out$recode)) {
-    # Name was not enough: use the content.
-    out$method <- "content"
-    if (is.na(out$survey_id)) out$survey_id <- info$survey_id
-    if (is.na(out$recode)) out$recode <- info$recode
   } else {
-    if (!is.na(info$survey_id) && !identical(info$survey_id, out$survey_id)) {
-      notes <- c(notes, paste0("name suggests ", out$survey_id, " but the interview years are from ", info$survey_id))
-      out$survey_id <- info$survey_id
-      out$method <- "content"
+    clash <- name_content_clash(out$survey_id, out$recode, info)
+    if (length(clash)) {
+      shown <- paste(stats::na.omit(c(out$survey_id, out$recode)), collapse = " ")
+      notes <- c(notes, paste0("name and content disagree: the name says ", shown, " but ", paste(clash, collapse = " and ")))
+      return(refuse_identification(out, "conflict", notes))
     }
-    if (!is.na(info$recode) && !identical(info$recode, out$recode)) {
-      notes <- c(notes, paste0("name suggests ", out$recode, " but the variables look like ", info$recode))
+    if (is.na(out$survey_id) || is.na(out$recode)) {
+      # Name was not enough: use the content.
+      out$method <- "content"
+      if (is.na(out$survey_id)) out$survey_id <- info$survey_id
+      if (is.na(out$recode)) out$recode <- info$recode
+    }
+    if (is.na(out$survey_id)) {
+      notes <- c(notes, "could not identify the survey round")
+    } else if (!standard) {
+      # A name that is not a standard DHS name needs positive confirmation.
+      why <- if (is.na(out$recode)) "could not identify the recode (file type)" else content_unconfirmed(info, out$recode)
+      if (length(why) && by_name$kind == "renamed") {
+        stem <- catalogue_stem(out$survey_id, out$recode)
+        hint <- if (is.null(.recode_id_vars[[out$recode]]) && !is.na(stem)) {
+          paste0("; if it is a genuine DHS file, give it its DHS name (", stem, ".", toupper(tools::file_ext(path)), ")")
+        }
+        note <- paste0("the name suggests ", out$survey_id, " ", out$recode, " but the content does not confirm it (",
+                       paste(why, collapse = "; "), ")", hint)
+        return(refuse_identification(out, "unconfirmed", c(notes, note)))
+      }
+      if (length(why)) {
+        if (!is.na(out$recode)) {
+          why <- paste0("the variables look like ", out$survey_id, " ", out$recode,
+                        " but the content does not confirm it (", paste(why, collapse = "; "), ")")
+        }
+        notes <- c(notes, why)
+        out$survey_id <- NA_character_
+        out$recode <- NA_character_
+      }
     }
   }
-  if (!is.na(out$survey_id) && !is.na(out$recode)) {
-    out$file_stem <- catalogue_stem(out$survey_id, out$recode) %|NA|% out$file_stem
+  out$file_stem <- if (!is.na(out$survey_id) && !is.na(out$recode)) {
+    catalogue_stem(out$survey_id, out$recode) %|NA|% out$file_stem
+  } else if (!out$derived) {
+    NA_character_
+  } else {
+    out$file_stem
   }
   if (is.na(out$survey_id) && !out$derived) {
     out$method <- NA_character_
-    notes <- c(notes, "could not identify the survey round")
   }
-  out$note <- if (length(notes)) paste(unique(notes), collapse = "; ") else NA_character_
+  out$note <- join_notes(notes)
   out
+}
+
+join_notes <- function(...) {
+  x <- c(...)
+  x <- unique(x[!is.na(x) & nzchar(x)])
+  if (length(x)) paste(x, collapse = "; ") else NA_character_
+}
+
+# Leave a file unidentified, keeping the reason in its note.
+refuse_identification <- function(out, why, notes) {
+  out$refused <- why
+  out$note <- join_notes(out$note, notes)
+  out$survey_id <- NA_character_
+  out$recode <- NA_character_
+  out$file_stem <- NA_character_
+  out$method <- NA_character_
+  out
+}
+
+# Where the content positively contradicts the name: descriptions of the
+# disagreements (character(0) when there are none or the content cannot tell).
+name_content_clash <- function(survey_id, recode, info) {
+  clash <- character()
+  if (!is.na(survey_id) && length(info$country) && !all(info$country == "BD")) {
+    clash <- c(clash, paste0("the country code is ", paste(info$country, collapse = ", ")))
+  }
+  # Interview dates identify DHS rounds only; SPA and BMMS names are not checked.
+  name_type <- .rounds$survey_type[match(survey_id, .rounds$survey_id)]
+  if (identical(name_type, "DHS") && isTRUE(info$round_from_years) && !is.na(info$survey_id) &&
+      info$survey_id != survey_id) {
+    clash <- c(clash, paste0("the interview dates are from ", info$survey_id))
+  }
+  if (!is.na(recode) && recode %in% .content_recodes && !is.na(info$recode) && info$recode != recode &&
+      (isTRUE(info$recode_certain) || !all(c(info$recode, recode) %in% c("KR", "BR")))) {
+    clash <- c(clash, paste0("the variables are those of a ", info$recode, " file"))
+  }
+  clash
+}
+
+# Why the content does not confirm that a file is a Bangladesh DHS `recode`
+# file (character(0) when it does).
+content_unconfirmed <- function(info, recode) {
+  why <- character()
+  if (!length(info$country)) {
+    why <- c(why, "no country code in v000, hv000 or mv000")
+  } else if (!all(info$country == "BD")) {
+    why <- c(why, paste0("country code ", paste(info$country, collapse = ", "), ", not BD"))
+  }
+  ids <- .recode_id_vars[[recode]]
+  if (is.null(ids)) {
+    why <- c(why, paste0("bdhs cannot check the variables of ", recode, " files"))
+  } else {
+    miss <- setdiff(ids, tolower(info$names))
+    if (length(miss)) {
+      why <- c(why, paste0("no ", paste(miss, collapse = ", ")))
+    }
+  }
+  why
+}
+
+# Do the variable names of a file contradict the recode of its (standard)
+# name? Reads the header only; KR and BR need the data to be told apart.
+header_contradicts <- function(path, format, recode) {
+  if (is.na(recode) || !recode %in% .content_recodes) {
+    return(FALSE)
+  }
+  nm <- tryCatch(tolower(read_header_names(path, format)), error = function(e) NULL)
+  if (!length(nm)) {
+    return(FALSE)
+  }
+  guess <- recode_from_names(nm)
+  !is.na(guess) && guess != recode && !all(c(guess, recode) %in% c("KR", "BR"))
 }
 
 # Members of a zip, identified from their names only.
