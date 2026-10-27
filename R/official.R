@@ -135,7 +135,7 @@ explore_official_ids <- function(indicator = NULL, search = NULL, call = rlang::
     if (!is.character(indicator) || anyNA(indicator)) {
       cli::cli_abort("{.arg indicator} must be a character vector of DHS indicator ids.", call = call)
     }
-    ids <- unique(toupper_trim(indicator))
+    ids <- unique(official_ids_from_registry(indicator))
     unknown <- setdiff(ids, catalog$indicator_id)
     if (length(unknown)) {
       close <- unique(unlist(lapply(unknown, function(u) {
@@ -255,4 +255,22 @@ explore_grepl <- function(pattern, x) {
     out <- grepl(tolower(pattern), tolower(x), fixed = TRUE)
   }
   out & !is.na(x)
+}
+
+# bdhs indicator ids (e.g. "rh_del_csection") given where DHS indicator ids are
+# expected are replaced by the DHS ids they reproduce, with a message.
+official_ids_from_registry <- function(indicator) {
+  reg <- indicator_registry()
+  out <- character()
+  for (x in indicator) {
+    key <- tolower(trimws(x))
+    api <- if (key %in% names(reg)) stats::na.omit(reg[[key]]$api_id) else character()
+    if (length(api)) {
+      cli::cli_inform("Using DHS indicator id{cli::qty(length(api))}{?s} {.val {api}} for bdhs indicator {.val {key}}.")
+      out <- c(out, api)
+    } else {
+      out <- c(out, toupper_trim(x))
+    }
+  }
+  out
 }

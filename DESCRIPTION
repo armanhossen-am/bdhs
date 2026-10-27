@@ -14,7 +14,7 @@ Description: A complete toolkit for every round of the Bangladesh Demographic
     and computes indicators that are validated against official DHS
     estimates. See <https://dhsprogram.com>.
 License: MIT + file LICENSE
-URL: https://github.com/armanhossen-am/bdhs
+URL: https://github.com/armanhossen-am/bdhs, https://armanhossen-am.github.io/bdhs/
 BugReports: https://github.com/armanhossen-am/bdhs/issues
 Depends:
     R (>= 4.1.0)

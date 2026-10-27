@@ -4,14 +4,16 @@
 #'
 #' One search box for everything bundled with the package: variable names and
 #' labels of the DHS recode files ([bdhs_codebook]), official indicator ids,
-#' labels and definitions ([bdhs_indicator_catalog]) and the cross-round
-#' harmonized variables used by [bdhs_harmonize()]. Works offline and needs no
-#' microdata.
+#' labels and definitions ([bdhs_indicator_catalog]), the indicators bdhs can
+#' compute from microdata ([bdhs_indicator_list()], used by [bdhs_estimate()])
+#' and the cross-round harmonized variables used by [bdhs_harmonize()]. Works
+#' offline and needs no microdata.
 #'
 #' @param pattern A regular expression, matched case-insensitively. Invalid
 #'   regular expressions are matched as plain text.
 #' @param where Where to search: `"all"` (default), or any of `"variables"`,
-#'   `"indicators"` and `"harmonized"`.
+#'   `"indicators"` (official DHS indicators), `"computable"` (indicators
+#'   [bdhs_estimate()] computes) and `"harmonized"`.
 #' @param survey Optional survey references (see [bdhs_survey_id()]); keeps
 #'   results available in at least one of these rounds.
 #' @param recode Optional recode codes (e.g. `"IR"`, `"KR"`); restricts
@@ -21,9 +23,11 @@
 #'   (e.g. `"pentavalent"` finds variables with such a category).
 #'
 #' @return A tibble of class `bdhs_search` with columns `source`
-#'   (`"variable"`, `"indicator"` or `"harmonized"`), `id` (variable name,
-#'   indicator id or harmonized name), `label`, `recode` and `surveys` (comma
-#'   separated survey ids). It prints compactly; use `print(x, n = Inf)` to
+#'   (`"variable"`, `"indicator"`, `"computable"` or `"harmonized"`), `id`
+#'   (variable name, DHS indicator id, bdhs indicator id or harmonized name),
+#'   `label`, `recode` and `surveys` (comma separated survey ids). For
+#'   computable indicators the DHS indicator id they reproduce is appended to
+#'   the label. It prints compactly; use `print(x, n = Inf)` to
 #'   see every match or [tibble::as_tibble()] for a plain tibble.
 #' @seealso [bdhs_variable()] for one variable across rounds,
 #'   [bdhs_official()] for the official estimates of an indicator.
@@ -32,14 +36,14 @@
 #' bdhs_search("stunt")
 #' bdhs_search("region|division", where = "variables", recode = "IR")
 #' bdhs_search("anemia", where = "indicators", survey = 2011)
-bdhs_search <- function(pattern, where = c("all", "variables", "indicators", "harmonized"),
+bdhs_search <- function(pattern, where = c("all", "variables", "indicators", "computable", "harmonized"),
                         survey = NULL, recode = NULL, value_labels = FALSE) {
   if (!rlang::is_string(pattern) || !nzchar(pattern)) {
     cli::cli_abort("{.arg pattern} must be a single non-empty string.")
   }
   where <- rlang::arg_match(where, multiple = TRUE)
   if ("all" %in% where) {
-    where <- c("variables", "indicators", "harmonized")
+    where <- c("variables", "indicators", "computable", "harmonized")
   }
   sid <- if (!is.null(survey)) bdhs_survey_id(survey) else NULL
   recode <- if (!is.null(recode)) toupper_trim(recode) else NULL
@@ -47,6 +51,7 @@ bdhs_search <- function(pattern, where = c("all", "variables", "indicators", "ha
   parts <- list(
     variables = if ("variables" %in% where) search_variables(pattern, sid, recode, value_labels),
     indicators = if ("indicators" %in% where) search_indicators(pattern, sid),
+    computable = if ("computable" %in% where) search_computable(pattern, sid, recode),
     harmonized = if ("harmonized" %in% where) search_harmonized(pattern, sid, recode)
   )
   out <- do.call(dplyr::bind_rows, c(list(search_empty()), unname(parts)))
@@ -68,7 +73,10 @@ print.bdhs_search <- function(x, ..., n = 10) {
     cli::cat_line("No matches. Try a shorter or broader pattern, or `value_labels = TRUE`.")
     return(invisible(x))
   }
-  titles <- c(variable = "Variables", indicator = "Indicators", harmonized = "Harmonized variables")
+  titles <- c(
+    variable = "Variables", indicator = "Official DHS indicators",
+    computable = "Computable with bdhs_estimate()", harmonized = "Harmonized variables"
+  )
   width <- cli::console_width()
   truncated <- FALSE
   for (src in intersect(names(titles), unique(x$source))) {
@@ -273,6 +281,30 @@ search_indicators <- function(pattern, survey_id = NULL) {
   tibble::tibble(
     source = "indicator", id = rows$indicator_id, label = rows$label,
     recode = NA_character_, surveys = rows$surveys
+  )
+}
+
+search_computable <- function(pattern, survey_id = NULL, recode = NULL) {
+  ind <- bdhs_indicator_list()
+  api <- vapply(ind$api_id, function(x) paste(stats::na.omit(x), collapse = "+"), character(1))
+  hit <- explore_grepl(pattern, ind$id) | explore_grepl(pattern, ind$label) |
+    explore_grepl(pattern, ind$definition %|NA|% "") | explore_grepl(pattern, api)
+  rounds <- vapply(ind$rounds, function(r) paste(r, collapse = ","), character(1))
+  if (!is.null(survey_id)) {
+    hit <- hit & vapply(ind$rounds, function(r) any(r %in% survey_id), logical(1))
+  }
+  if (!is.null(recode)) {
+    hit <- hit & vapply(ind$recode, function(r) any(r %in% recode), logical(1))
+  }
+  if (!any(hit)) {
+    return(NULL)
+  }
+  tibble::tibble(
+    source = "computable",
+    id = ind$id[hit],
+    label = ifelse(nzchar(api[hit]), paste0(ind$label[hit], " [", api[hit], "]"), ind$label[hit]),
+    recode = vapply(ind$recode[hit], paste, character(1), collapse = ","),
+    surveys = rounds[hit]
   )
 }
 

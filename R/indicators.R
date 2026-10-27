@@ -111,17 +111,47 @@ resolve_indicators <- function(indicators, call = rlang::caller_env()) {
   if (!is.character(indicators) || !length(indicators)) {
     cli::cli_abort("{.arg indicators} must be a character vector of indicator ids.", call = call)
   }
+  indicators <- translate_indicator_ids(indicators, reg)
   bad <- setdiff(indicators, names(reg))
   if (length(bad)) {
+    close <- unique(unlist(lapply(tolower(bad), function(b) {
+      names(reg)[utils::adist(b, names(reg)) <= 3]
+    })))
     cli::cli_abort(
       c(
         "Unknown indicator id{?s}: {.val {bad}}.",
-        "i" = "See {.fn bdhs_indicator_list} for the available indicators."
+        "i" = if (length(close)) "Did you mean {.val {utils::head(close, 5)}}?",
+        "i" = "See {.fn bdhs_indicator_list} or {.code bdhs_search(\"<keyword>\", where = \"computable\")}."
       ),
       call = call
     )
   }
   reg[unique(indicators)]
+}
+
+# Map ids given in another case ("RH_DEL_CSECTION") or as DHS API ids
+# ("RH_DELA_C_CSC") to registry ids, telling the user about API translations.
+translate_indicator_ids <- function(ids, reg = indicator_registry()) {
+  lower <- tolower(ids)
+  ids[lower %in% names(reg)] <- lower[lower %in% names(reg)]
+  unknown <- which(!ids %in% names(reg))
+  if (!length(unknown)) {
+    return(ids)
+  }
+  from_api <- character()
+  for (i in unknown) {
+    hit <- names(reg)[vapply(reg, function(x) toupper(ids[[i]]) %in% x$api_id, logical(1))]
+    if (length(hit) == 1L) {
+      from_api[[ids[[i]]]] <- hit
+      ids[[i]] <- hit
+    }
+  }
+  if (length(from_api)) {
+    cli::cli_inform(
+      "Using bdhs indicator{cli::qty(length(from_api))}{?s} {.val {unname(from_api)}} for DHS indicator id{cli::qty(length(from_api))}{?s} {.val {names(from_api)}}."
+    )
+  }
+  ids
 }
 
 # Indicators applicable to a recode (and optionally a survey round).

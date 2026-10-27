@@ -5,7 +5,13 @@
   "caseid", "mcaseid", "hhid", "hvidx", "bidx", "midx", "hwhhid", "hwline", "whhid",
   "v001", "v002", "v003", "v005", "v021", "v022", "v023", "v024", "v025",
   "mv001", "mv002", "mv003", "mv005", "mv021", "mv022", "mv023", "mv024", "mv025",
-  "hv001", "hv002", "hv003", "hv005", "hv021", "hv022", "hv023", "hv024", "hv025"
+  "hv001", "hv002", "hv003", "hv005", "hv021", "hv022", "hv023", "hv024", "hv025",
+  # Survey identification and interview dates, needed to detect the round and
+  # for every time-windowed indicator.
+  "v000", "v007", "v008", "hv000", "hv007", "hv008", "mv000", "mv007", "mv008",
+  # Child's date of birth and age, which define the births and children
+  # files' reference periods.
+  "b3", "b19"
 )
 
 # Prefix of the companion columns that keep Stata extended missing values
@@ -30,11 +36,16 @@
 #'   the file are skipped with a warning.
 #' @param vars_regex Regular expressions; variables whose (lower-case) names
 #'   match any of them are read too.
+#' @param indicators Indicator ids from [bdhs_indicator_list()]. Every
+#'   variable these indicators need is read, so the result can go straight
+#'   into [bdhs_estimate()]. Combines with `vars` and `vars_regex`.
 #' @param keep_design If `TRUE` (default) and variables are selected, also
-#'   read the identifiers and survey design variables needed to link files and
-#'   to build a survey design with [bdhs_design()]: `caseid`, `hhid`, `hvidx`,
-#'   `bidx`, `midx`, `v001`-`v003`, `v005`, `v021`-`v025` (and their `hv`/`mv`
-#'   equivalents) and the all-woman factors `awfact*`.
+#'   read the identifiers, survey design variables and interview dates needed
+#'   to link files, detect the round and build a survey design with
+#'   [bdhs_design()]: `caseid`, `hhid`, `hvidx`, `bidx`, `midx`,
+#'   `v000`-`v003`, `v005`, `v007`, `v008`, `v021`-`v025` (and their `hv`/`mv`
+#'   equivalents), the child's birth date and age (`b3`, `b19`) and the
+#'   all-woman factors `awfact*`.
 #' @param labels How to return labelled variables: `"haven"` (default) keeps
 #'   [haven::labelled()] columns; `"factor"` converts every variable whose
 #'   values are all labelled to a factor with [haven::as_factor()] (`levels =
@@ -58,11 +69,15 @@
 #'
 #' ir <- bdhs_read(2022, "IR", vars = c("v012", "v106"))
 #' names(ir)
+#'
+#' # Exactly the columns two indicators need
+#' ir <- bdhs_read(2022, "IR", indicators = c("fp_cpr_modern", "fp_unmet_total"))
+#' bdhs_estimate(ir, c("fp_cpr_modern", "fp_unmet_total"))
 #' attr(ir, "bdhs_file")
 #' bdhs_read(2022, "IR", vars_regex = "^v1[0-9]{2}$", keep_design = FALSE, labels = "factor")
 #' \dontshow{bdhs_forget(2022, "IR", delete = TRUE); options(old)}
-bdhs_read <- function(survey, recode, vars = NULL, vars_regex = NULL, keep_design = TRUE,
-                      labels = c("haven", "factor", "codes"), n_max = Inf) {
+bdhs_read <- function(survey, recode, vars = NULL, vars_regex = NULL, indicators = NULL,
+                      keep_design = TRUE, labels = c("haven", "factor", "codes"), n_max = Inf) {
   labels <- rlang::arg_match(labels)
   check_n_max(n_max)
   survey_id <- bdhs_survey_id(survey, type = c("DHS", "SPA", "OTH"))
@@ -92,7 +107,7 @@ bdhs_read <- function(survey, recode, vars = NULL, vars_regex = NULL, keep_desig
     ))
   }
   out <- read_dhs(path, row$format, vars, vars_regex, keep_design, labels, n_max,
-                  what = paste(survey_id, recode))
+                  what = paste(survey_id, recode), indicators = indicators)
   set_dhs_attrs(out, survey_id, recode, row$file_stem)
 }
 
@@ -115,8 +130,8 @@ bdhs_read <- function(survey, recode, vars = NULL, vars_regex = NULL, keep_desig
 #' haven::write_dta(bdhs_simulate(2022, "KR", n_clusters = 4, households = 3), f)
 #' kr <- bdhs_read_file(f, vars = c("hw70", "b4"))
 #' attr(kr, "bdhs_survey_id")
-bdhs_read_file <- function(path, vars = NULL, vars_regex = NULL, keep_design = TRUE,
-                           labels = c("haven", "factor", "codes"), n_max = Inf) {
+bdhs_read_file <- function(path, vars = NULL, vars_regex = NULL, indicators = NULL,
+                           keep_design = TRUE, labels = c("haven", "factor", "codes"), n_max = Inf) {
   labels <- rlang::arg_match(labels)
   check_n_max(n_max)
   if (!rlang::is_string(path) || !file.exists(path) || dir.exists(path)) {
@@ -163,7 +178,7 @@ bdhs_read_file <- function(path, vars = NULL, vars_regex = NULL, keep_design = T
     ))
   }
   out <- read_dhs(path, format, vars, vars_regex, keep_design, labels, n_max,
-                  what = basename(display))
+                  what = basename(display), indicators = indicators)
   if (!isTRUE(id$derived) && !is.na(id$survey_id) && !is.na(id$recode)) {
     out <- set_dhs_attrs(out, id$survey_id, id$recode, id$file_stem)
   }
@@ -208,9 +223,13 @@ abort_not_available <- function(survey_id, recode, call = rlang::caller_env()) {
 }
 
 # Read selected columns of a DHS file, with bdhs conventions.
-read_dhs <- function(path, format, vars, vars_regex, keep_design, labels, n_max, what) {
+read_dhs <- function(path, format, vars, vars_regex, keep_design, labels, n_max, what,
+                     indicators = NULL) {
   names <- read_header_names(path, format)
   lower <- tolower(names)
+  if (!is.null(indicators)) {
+    vars <- union(vars, indicator_columns(indicators, lower))
+  }
   if (is.null(vars) && is.null(vars_regex)) {
     sel <- names
   } else {

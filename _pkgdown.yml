@@ -77,6 +77,7 @@ reference:
   - bdhs_fertility
   - bdhs_mortality
   - bdhs_validate
+  - bdhs_validation_record
   - plot.bdhs_estimate
 - title: Maps
   contents:
