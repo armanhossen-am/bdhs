@@ -5,7 +5,7 @@
 # don't-know pattern only matches labels that *start* with it.
 .na_label_patterns <- c(
   missing = "\\bmissing\\b",
-  dont_know = "^(don['’]?t|dont|do not) know\\b|^dk\\b",
+  dont_know = "^(don['\u2019]?t|dont|do not) know\\b|^dk\\b",
   not_dejure = "\\bnot (a )?de[- ]?jure\\b|\\bnon[- ]?de[- ]?jure\\b",
   flagged = "\\bflagged\\b",
   implausible = "implausible|plausible limits?",
