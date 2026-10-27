@@ -1,0 +1,174 @@
+---
+title: "Harmonizing 30 years of BDHS"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Harmonizing 30 years of BDHS}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+```{r setup}
+library(bdhs)
+```
+
+The same DHS variable name does not always mean the same thing across BDHS
+rounds:
+
+* **Divisions** went from 5 (1993-94) to 6 (Sylhet), 7 (Rangpur, 2011) and 8
+  (Mymensingh, 2017-18). When Mymensingh became code 5, Rajshahi, Rangpur and
+  Sylhet each moved up one code. Spellings changed too: "barisal" and
+  "chittagong" became "barishal" and "chattogram" in 2022.
+* **Answer categories** change. Places of delivery, types of provider and
+  water and toilet types get new codes as the questionnaires evolve, and the
+  letters of the delivery-assistance variables `m3a`-`m3n` shift between
+  rounds.
+* **Some content lives elsewhere.** The wealth index of 1993-94, 1996-97 and
+  1999-2000 is in separate WI files, and the WHO growth-standard z-scores of
+  1996-97 to 2004 are in separate HW files.
+* **Some value labels in the files are simply wrong**, for example religion
+  in 1993-94, and roof material in 1999-2000.
+
+`bdhs_variable()` shows the problem for any variable, using the bundled
+codebooks:
+
+```{r}
+bdhs_variable("v024", recode = "KR")[, c("survey_id", "label", "value_labels", "label_drift")]
+```
+
+## The harmonized variables
+
+bdhs ships a crosswalk with rules for `r nrow(bdhs_harmonized_vars())`
+harmonized variables. Each rule names the source variables and code mapping
+for every round, and was checked against the real files and against official
+DHS estimates.
+
+```{r}
+hv <- bdhs_harmonized_vars()
+hv[, c("name", "label", "comparability")]
+table(hv$comparability)
+```
+
+`comparability` tells you how far a variable can be compared:
+
+* `"full"`: same meaning in every round.
+* `"partial"`: comparable, but with documented caveats, such as new
+  categories or one round missing.
+* `"break"`: definitions differ. The division as surveyed is one example,
+  because the boundaries themselves changed.
+
+`bdhs_harmonized_vars(survey)` shows the rules for one round, with the
+source variables:
+
+```{r}
+r <- bdhs_harmonized_vars(2004)
+r[r$name %in% c("wealth_quintile", "facility_delivery", "haz_who"), c("name", "method", "source", "available", "note")]
+```
+
+## Harmonizing a dataset
+
+`bdhs_harmonize()` adds the harmonized columns to your data. The original
+DHS columns stay as they were.
+
+```{r}
+kr <- bdhs_simulate(2017, "KR")
+h <- bdhs_harmonize(kr, vars = c("division_surveyed", "division_trend6", "residence",
+                                 "wealth_quintile", "facility_delivery", "csection"))
+h[1:6, c("v024", "division_surveyed", "division_trend6", "residence", "facility_delivery", "csection")]
+```
+
+Without `vars`, every harmonized variable that applies to the recode is
+created. Rules written for children (KR) also apply to women (IR) and births
+(BR) where they concern the mother. Variables with a household equivalent
+also work in the household (HR) and member (PR) files.
+
+### Division layouts
+
+| Variable | Layout |
+|---|---|
+| `division_surveyed` | Divisions as they existed at the survey (5 to 8) |
+| `division_trend6` | Six divisions: Rangpur in Rajshahi, Mymensingh in Dhaka |
+| `division_trend5` | Five 1993-94 divisions: Sylhet also in Chattogram |
+| `division_backcast8` | 2022's eight divisions, rebuilt from districts where possible |
+
+The bundled `bdhs_regions` table holds the same crosswalk for every survey,
+with the codes as they appear in the files:
+
+```{r}
+bdhs_regions[bdhs_regions$survey_id == "BD2017DHS", c("region_code", "region_label", "division", "trend6", "trend5")]
+```
+
+## Trends with pooled, harmonized data
+
+Pool rounds with `harmonize = TRUE`, then analyse with the pooled design:
+
+```{r}
+years <- c(2004, 2011, 2017, 2022)
+rounds <- lapply(seq_along(years), function(i) bdhs_simulate(years[i], "KR", seed = i))
+pooled <- bdhs_pool(rounds, harmonize = TRUE, vars = c("division_trend6", "csection"))
+des <- bdhs_design(pooled)
+survey::svyby(~csection, ~survey_id, des, survey::svymean, na.rm = TRUE)
+```
+
+(The values are random because the data are simulated. With real data this
+is the C-section trend.)
+
+## Early rounds: wealth and z-scores from separate files
+
+For 1993-94 to 1999-2000 the wealth index comes from a WI file, and the WHO
+z-scores for 1996-97 to 2004 come from an HW file. Merge them first, and
+`bdhs_harmonize()` picks them up:
+
+```{r, eval = FALSE}
+kr <- bdhs_read(2004, "KR")
+hw <- bdhs_read(2004, "HW")
+kr <- bdhs_merge(kr, hw)
+kr <- bdhs_harmonize(kr, vars = c("haz_who", "stunted_who"))
+```
+
+## Merging recodes
+
+`bdhs_merge()` knows the DHS linking keys, so you don't have to remember them:
+
+| x | y | Keys |
+|---|---|---|
+| IR, KR, BR | HR | `v001`, `v002` = `hv001`, `hv002` |
+| IR | PR | `v001`, `v002`, `v003` = `hv001`, `hv002`, `hvidx` |
+| KR, BR | IR | `caseid` |
+| KR | PR | `v001`, `v002`, `b16` = `hv001`, `hv002`, `hvidx` |
+| PR | HR | `hhid` |
+| MR | HR, PR | `mv001`, `mv002` (and `mv003` = `hvidx`) |
+
+```{r}
+ir <- bdhs_simulate(2022, "IR")
+hr <- bdhs_simulate(2022, "HR")
+m <- bdhs_merge(ir, hr)
+m[1:3, c("caseid", "v001", "v002", "hv201", "hv205", "hv270")]
+```
+
+## Special codes
+
+DHS files use codes like 98 (don't know), 99 (missing) and 9996-9999
+(flagged anthropometry), and recent files also use Stata's tagged missing
+values. `bdhs_na()` turns them into `NA` using the value labels:
+
+```{r}
+x <- haven::labelled(c(1, 2, 8, 9), c(yes = 1, no = 2, "don't know" = 8, missing = 9))
+bdhs_na(x)
+bdhs_na(x, dont_know = "keep")
+```
+
+`bdhs_harmonize()` already does this for every harmonized variable.
+
+## Caveats
+
+* No 1996-97 file was available while the crosswalk was built. Its rules were
+  derived from the published codebook and are flagged as unverified in
+  `bdhs_harmonized_vars(1997)`.
+* District-based variables (`district_bbs`, `division_backcast8`) need a
+  district variable, which most rounds do not include.
+* Men's files (MR, last collected in 2011) are not yet covered by the
+  crosswalk.

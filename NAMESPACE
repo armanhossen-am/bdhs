@@ -37,6 +37,7 @@ export(bdhs_simulate)
 export(bdhs_sitrep)
 export(bdhs_survey_id)
 export(bdhs_validate)
+export(bdhs_validation_record)
 export(bdhs_variable)
 importFrom(rlang,
   "%||%",

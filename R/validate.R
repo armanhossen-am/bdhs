@@ -137,3 +137,27 @@ official_value <- function(ind, survey_id) {
 indicator_validation_status <- function() {
   .indicator_validation
 }
+
+#' The validation record shipped with bdhs
+#'
+#' Every indicator in [bdhs_indicator_list()] that has an official DHS value
+#' was checked by computing it with [bdhs_validate()] from the maintainer's
+#' own copies of the BDHS recode files and comparing it with the DHS Program
+#' API value. This function returns that record: national aggregates only, no
+#' microdata.
+#'
+#' An indicator-round passes when the computed value is within 0.5 points
+#' (plus half a unit of the official value's rounding) of the official value.
+#' Rounds and recodes not in the record have not been checked, usually
+#' because the maintainer had no copy of that file.
+#'
+#' @return A tibble with columns `survey_id`, `recode`, `indicator`,
+#'   `computed`, `official` and `pass`.
+#' @seealso [bdhs_validate()] to check your own copy of the data.
+#' @export
+#' @examples
+#' rec <- bdhs_validation_record()
+#' table(rec$survey_id, rec$pass)
+bdhs_validation_record <- function() {
+  indicator_validation_status()
+}

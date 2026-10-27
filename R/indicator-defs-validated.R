@@ -3,8 +3,8 @@
 # National aggregates computed by bdhs_validate() from the maintainer's own
 # copies of the BDHS recode files, compared with the DHS Program API values
 # bundled in bdhs_indicators. Only aggregate numbers are stored (no microdata).
-# Regenerate with tests/testthat/test-local-validation.R (BDHS_LOCAL_TESTS=true)
-# and the maintainer's validation script. Last run: 2026-10-26.
+# Regenerate with data-raw/07-build-validation.R (needs the local microdata).
+# Last run: 2026-10-26.
 
 .indicator_validation <- tibble::tribble(
   ~survey_id, ~recode, ~indicator, ~computed, ~official, ~pass,
