@@ -40,6 +40,7 @@ recommended) and run \code{bdhs_import("path/to/downloads")}.
 Useful links:
 \itemize{
   \item \url{https://github.com/armanhossen-am/bdhs}
+  \item \url{https://armanhossen-am.github.io/bdhs/}
   \item Report bugs at \url{https://github.com/armanhossen-am/bdhs/issues}
 }
 

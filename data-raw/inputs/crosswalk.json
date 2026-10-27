@@ -20,7 +20,7 @@
         "kr": "BDKR3AFL",
         "kr_window_months": null,
         "verified": false,
-        "note": "No local file. Rules (crosswalk 0.2.0) were copied from 1993-94 or 1999-2000 only where the DHS-III recode codebook for 1996-97 (World Bank microdata catalog DDI, study 1335) has the same variables, codes and value labels; they are NOT verified against the data. 6 divisions; separate WI and HW files."
+        "note": "Rules (crosswalk 0.2.0) were copied from 1993-94 or 1999-2000 only where the DHS-III recode codebook for 1996-97 (World Bank microdata catalog DDI, study 1335) has the same variables, codes and value labels; they are NOT verified against the data. 6 divisions; separate WI and HW files."
       },
       {
         "survey_id": "BD2000DHS",
@@ -88,7 +88,7 @@
       "derive": "Computed from another harmonized variable using the variable-level `derive` block.",
       "constant": "Fixed value.",
       "unavailable": "Not available in this round; `check_var` documents the empty/absent source.",
-      "external_file": "Lives in another recode file (WI/HW) of the same survey; join key given; not verified locally."
+      "external_file": "Lives in another recode file (WI/HW) of the same survey; join key given; not verified against the data."
     },
     "file_codes": {
       "KR": "Children's recode (births in last 5 years; 3 years in 1993-94)",
@@ -562,7 +562,7 @@
       {
         "division": "sylhet",
         "created": "1995 (from Chittagong)",
-        "first_in_bdhs": "1996-97 (verified 1999-2000 locally)"
+        "first_in_bdhs": "1996-97 (verified against the 1999-2000 data)"
       },
       {
         "division": "rangpur",
@@ -1655,7 +1655,7 @@
         },
         "BD2000DHS": {
           "method": "unavailable",
-          "reason": "No district variable in KR; needs cluster->district join (GPS/BDGE files), not available locally."
+          "reason": "No district variable in KR; needs cluster->district join (GPS/BDGE files), which need separate DHS approval."
         },
         "BD2004DHS": {
           "method": "unavailable",
@@ -3518,7 +3518,7 @@
           },
           "join": "WI.whhid == substr(KR.caseid, 1, 12)",
           "status": "unverified_no_local_file",
-          "note": "BDWI31FL; not in KR/IR. Join key per DHS convention (unverified locally)."
+          "note": "BDWI31FL; not in KR/IR. Join key per DHS convention (not verified against the data)."
         },
         "BD1997DHS": {
           "method": "external_file",
@@ -3536,7 +3536,7 @@
           },
           "join": "WI.whhid == substr(KR.caseid, 1, 12)",
           "status": "unverified_no_local_file",
-          "note": "BDWI3AFL; not in KR/IR. Join key per DHS convention (unverified locally). (1996-97: BDWI3AFL)"
+          "note": "BDWI3AFL; not in KR/IR. Join key per DHS convention (not verified against the data). (1996-97: BDWI3AFL)"
         },
         "BD2000DHS": {
           "method": "external_file",
@@ -3554,7 +3554,7 @@
           },
           "join": "WI.whhid == substr(KR.caseid, 1, 12)",
           "status": "unverified_no_local_file",
-          "note": "BDWI41FL; not in KR/IR. Join key per DHS convention (unverified locally)."
+          "note": "BDWI41FL; not in KR/IR. Join key per DHS convention (not verified against the data)."
         },
         "BD2004DHS": {
           "method": "map",
@@ -6007,7 +6007,7 @@
         },
         "BD2022DHS": {
           "method": "unavailable",
-          "reason": "v161 holds only 97 (non-de jure); hv222/hv223/hv226 are 'na' in BDPR81FL. Cooking fuel not released in local 2022 files.",
+          "reason": "v161 holds only 97 (non-de jure); hv222/hv223/hv226 are 'na' in BDPR81FL. Cooking fuel is not released in the 2022 recode files.",
           "check_var": "v161"
         }
       },
@@ -11211,7 +11211,7 @@
           },
           "join": "HW.hwhhid/hwline -> PR hhid/hvidx (no b16 in 1999-2000 KR)",
           "status": "unverified_no_local_file",
-          "note": "WHO z-scores only in BDHW3AFL (not local). (1996-97: BDHW3AFL)"
+          "note": "WHO z-scores only in BDHW3AFL; merge the HW file with bdhs_merge(). (1996-97: BDHW3AFL)"
         },
         "BD2000DHS": {
           "method": "external_file",
@@ -11224,7 +11224,7 @@
           },
           "join": "HW.hwhhid/hwline -> PR hhid/hvidx (no b16 in 1999-2000 KR)",
           "status": "unverified_no_local_file",
-          "note": "WHO z-scores only in BDHW41FL (not local)."
+          "note": "WHO z-scores only in BDHW41FL; merge the HW file with bdhs_merge()."
         },
         "BD2004DHS": {
           "method": "external_file",
@@ -11237,7 +11237,7 @@
           },
           "join": "HW.hwhhid/hwline -> PR hhid/hvidx or KR via b16",
           "status": "unverified_no_local_file",
-          "note": "WHO z-scores only in BDHW4JFL (not local)."
+          "note": "WHO z-scores only in BDHW4JFL; merge the HW file with bdhs_merge()."
         },
         "BD2007DHS": {
           "method": "numeric",
@@ -11301,7 +11301,7 @@
           },
           "join": "HW.hwhhid/hwline -> PR hhid/hvidx (no b16 in 1999-2000 KR)",
           "status": "unverified_no_local_file",
-          "note": "WHO z-scores only in BDHW3AFL (not local). (1996-97: BDHW3AFL)"
+          "note": "WHO z-scores only in BDHW3AFL; merge the HW file with bdhs_merge(). (1996-97: BDHW3AFL)"
         },
         "BD2000DHS": {
           "method": "external_file",
@@ -11314,7 +11314,7 @@
           },
           "join": "HW.hwhhid/hwline -> PR hhid/hvidx (no b16 in 1999-2000 KR)",
           "status": "unverified_no_local_file",
-          "note": "WHO z-scores only in BDHW41FL (not local)."
+          "note": "WHO z-scores only in BDHW41FL; merge the HW file with bdhs_merge()."
         },
         "BD2004DHS": {
           "method": "external_file",
@@ -11327,7 +11327,7 @@
           },
           "join": "HW.hwhhid/hwline -> PR hhid/hvidx or KR via b16",
           "status": "unverified_no_local_file",
-          "note": "WHO z-scores only in BDHW4JFL (not local)."
+          "note": "WHO z-scores only in BDHW4JFL; merge the HW file with bdhs_merge()."
         },
         "BD2007DHS": {
           "method": "numeric",
@@ -11389,7 +11389,7 @@
           },
           "join": "HW.hwhhid/hwline -> PR hhid/hvidx (no b16 in 1999-2000 KR)",
           "status": "unverified_no_local_file",
-          "note": "WHO z-scores only in BDHW3AFL (not local). (1996-97: BDHW3AFL)"
+          "note": "WHO z-scores only in BDHW3AFL; merge the HW file with bdhs_merge(). (1996-97: BDHW3AFL)"
         },
         "BD2000DHS": {
           "method": "external_file",
@@ -11402,7 +11402,7 @@
           },
           "join": "HW.hwhhid/hwline -> PR hhid/hvidx (no b16 in 1999-2000 KR)",
           "status": "unverified_no_local_file",
-          "note": "WHO z-scores only in BDHW41FL (not local)."
+          "note": "WHO z-scores only in BDHW41FL; merge the HW file with bdhs_merge()."
         },
         "BD2004DHS": {
           "method": "external_file",
@@ -11415,7 +11415,7 @@
           },
           "join": "HW.hwhhid/hwline -> PR hhid/hvidx or KR via b16",
           "status": "unverified_no_local_file",
-          "note": "WHO z-scores only in BDHW4JFL (not local)."
+          "note": "WHO z-scores only in BDHW4JFL; merge the HW file with bdhs_merge()."
         },
         "BD2007DHS": {
           "method": "numeric",
@@ -11477,7 +11477,7 @@
           },
           "join": "HW.hwhhid/hwline -> PR hhid/hvidx (no b16 in 1999-2000 KR)",
           "status": "unverified_no_local_file",
-          "note": "WHO z-scores only in BDHW3AFL (not local). (1996-97: BDHW3AFL)"
+          "note": "WHO z-scores only in BDHW3AFL; merge the HW file with bdhs_merge(). (1996-97: BDHW3AFL)"
         },
         "BD2000DHS": {
           "method": "external_file",
@@ -11490,7 +11490,7 @@
           },
           "join": "HW.hwhhid/hwline -> PR hhid/hvidx (no b16 in 1999-2000 KR)",
           "status": "unverified_no_local_file",
-          "note": "WHO z-scores only in BDHW41FL (not local)."
+          "note": "WHO z-scores only in BDHW41FL; merge the HW file with bdhs_merge()."
         },
         "BD2004DHS": {
           "method": "external_file",
@@ -11503,7 +11503,7 @@
           },
           "join": "HW.hwhhid/hwline -> PR hhid/hvidx or KR via b16",
           "status": "unverified_no_local_file",
-          "note": "WHO z-scores only in BDHW4JFL (not local)."
+          "note": "WHO z-scores only in BDHW4JFL; merge the HW file with bdhs_merge()."
         },
         "BD2007DHS": {
           "method": "numeric",

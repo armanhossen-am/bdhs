@@ -8,6 +8,7 @@ bdhs_read_file(
   path,
   vars = NULL,
   vars_regex = NULL,
+  indicators = NULL,
   keep_design = TRUE,
   labels = c("haven", "factor", "codes"),
   n_max = Inf
@@ -23,11 +24,17 @@ the file are skipped with a warning.}
 \item{vars_regex}{Regular expressions; variables whose (lower-case) names
 match any of them are read too.}
 
+\item{indicators}{Indicator ids from \code{\link[=bdhs_indicator_list]{bdhs_indicator_list()}}. Every
+variable these indicators need is read, so the result can go straight
+into \code{\link[=bdhs_estimate]{bdhs_estimate()}}. Combines with \code{vars} and \code{vars_regex}.}
+
 \item{keep_design}{If \code{TRUE} (default) and variables are selected, also
-read the identifiers and survey design variables needed to link files and
-to build a survey design with \code{\link[=bdhs_design]{bdhs_design()}}: \code{caseid}, \code{hhid}, \code{hvidx},
-\code{bidx}, \code{midx}, \code{v001}-\code{v003}, \code{v005}, \code{v021}-\code{v025} (and their \code{hv}/\code{mv}
-equivalents) and the all-woman factors \verb{awfact*}.}
+read the identifiers, survey design variables and interview dates needed
+to link files, detect the round and build a survey design with
+\code{\link[=bdhs_design]{bdhs_design()}}: \code{caseid}, \code{hhid}, \code{hvidx}, \code{bidx}, \code{midx},
+\code{v000}-\code{v003}, \code{v005}, \code{v007}, \code{v008}, \code{v021}-\code{v025} (and their \code{hv}/\code{mv}
+equivalents), the child's birth date and age (\code{b3}, \code{b19}) and the
+all-woman factors \verb{awfact*}.}
 
 \item{labels}{How to return labelled variables: \code{"haven"} (default) keeps
 \code{\link[haven:labelled]{haven::labelled()}} columns; \code{"factor"} converts every variable whose

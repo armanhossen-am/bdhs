@@ -27,7 +27,12 @@ is given and \code{breakdown} is not, all breakdowns are searched.}
 
 \item{characteristic}{Characteristic categories to keep, e.g. \code{"Residence"},
 \code{"Wealth quintile"}, \code{"Education"} or \code{"Region"} (\code{"Division"} is
-accepted as a synonym). Case-insensitive.}
+accepted as a synonym). Case-insensitive. The DHS "Region" category
+holds both the divisions as surveyed and the older groupings kept for
+trends ("Chattogram/Sylhet", "Dhaka before 2015", "Rajshahi/Rangpur");
+tell them apart by \code{characteristic_label}, or use \code{\link[=bdhs_plot_trend]{bdhs_plot_trend()}}
+with \code{by = "Region"} (comparable groupings) or \code{by = "Division"}
+(divisions as surveyed).}
 
 \item{preferred}{If \code{TRUE} (default), keep only the headline value of each
 estimate (the DHS \code{IsPreferred} flag). With \code{FALSE}, alternative

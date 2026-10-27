@@ -158,6 +158,8 @@ bdhs_design <- function(data, weight = "default", strata = c("auto", "design", "
     data = design_data,
     nest = TRUE
   )
+  # Print as the user's call, not the internal svydesign() call.
+  des$call <- sys.call()
   attr(des, "bdhs_survey_id") <- survey_id
   attr(des, "bdhs_recode") <- recode
   attr(des, "bdhs_weight") <- ws$var

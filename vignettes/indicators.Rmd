@@ -83,7 +83,7 @@ A few details are handled for you:
 * **Round differences.** Some definitions change between rounds, for
   example who counts as a skilled provider, the 2022 short questionnaire, or
   solar electricity in 2022. These are built into each indicator. An
-  indicator that a round did not collect is skipped with a message.
+  indicator that a round did not collect is skipped with a warning.
 
 ```{r}
 ir <- bdhs_simulate(2022, "IR")
@@ -185,9 +185,11 @@ rec[!rec$pass, ]
 * **Solar electricity.** The 2022 electricity indicator includes solar
   home systems (`sh132g`), as in the final report (99.4%).
 
-Indicators without an official value are marked `validated = FALSE` in
-`bdhs_indicator_list()`. These are solid cooking fuel and the 2011/2017-18
-biomarker indicators (hypertension and diabetes). Use them with care.
+The `validated` column of `bdhs_indicator_list()` lists, for each
+indicator, the rounds in which it reproduced the official value. Indicators
+without an official value have an empty list there: solid cooking fuel and
+the 2011/2017-18 biomarker indicators (hypertension and diabetes). Use them
+with care.
 
 ## Comparing with the official numbers
 

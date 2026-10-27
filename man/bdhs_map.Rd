@@ -30,7 +30,8 @@ your own estimates by region, such as the output of
 }
 \details{
 A data frame needs a region column (\code{region_code}, \code{v024}, \code{hv024},
-\code{mv024}, \code{region}, \code{division} or \code{region_name}) holding region codes as in
+\code{mv024}, \code{region}, \code{division}, \code{region_name}, or the harmonized
+\code{division_surveyed}, \code{division_trend6} or \code{division_trend5}) holding region codes as in
 the recode files or division names (old and new spellings such as
 "Barisal"/"Barishal" are both understood), and a value column (\code{value}
 argument; by default \code{estimate} or \code{value}). The survey round comes from

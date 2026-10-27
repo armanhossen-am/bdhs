@@ -6,7 +6,7 @@
 \usage{
 bdhs_search(
   pattern,
-  where = c("all", "variables", "indicators", "harmonized"),
+  where = c("all", "variables", "indicators", "computable", "harmonized"),
   survey = NULL,
   recode = NULL,
   value_labels = FALSE
@@ -17,7 +17,8 @@ bdhs_search(
 regular expressions are matched as plain text.}
 
 \item{where}{Where to search: \code{"all"} (default), or any of \code{"variables"},
-\code{"indicators"} and \code{"harmonized"}.}
+\code{"indicators"} (official DHS indicators), \code{"computable"} (indicators
+\code{\link[=bdhs_estimate]{bdhs_estimate()}} computes) and \code{"harmonized"}.}
 
 \item{survey}{Optional survey references (see \code{\link[=bdhs_survey_id]{bdhs_survey_id()}}); keeps
 results available in at least one of these rounds.}
@@ -31,17 +32,20 @@ affected.}
 }
 \value{
 A tibble of class \code{bdhs_search} with columns \code{source}
-(\code{"variable"}, \code{"indicator"} or \code{"harmonized"}), \code{id} (variable name,
-indicator id or harmonized name), \code{label}, \code{recode} and \code{surveys} (comma
-separated survey ids). It prints compactly; use \code{print(x, n = Inf)} to
+(\code{"variable"}, \code{"indicator"}, \code{"computable"} or \code{"harmonized"}), \code{id}
+(variable name, DHS indicator id, bdhs indicator id or harmonized name),
+\code{label}, \code{recode} and \code{surveys} (comma separated survey ids). For
+computable indicators the DHS indicator id they reproduce is appended to
+the label. It prints compactly; use \code{print(x, n = Inf)} to
 see every match or \code{\link[tibble:as_tibble]{tibble::as_tibble()}} for a plain tibble.
 }
 \description{
 One search box for everything bundled with the package: variable names and
 labels of the DHS recode files (\link{bdhs_codebook}), official indicator ids,
-labels and definitions (\link{bdhs_indicator_catalog}) and the cross-round
-harmonized variables used by \code{\link[=bdhs_harmonize]{bdhs_harmonize()}}. Works offline and needs no
-microdata.
+labels and definitions (\link{bdhs_indicator_catalog}), the indicators bdhs can
+compute from microdata (\code{\link[=bdhs_indicator_list]{bdhs_indicator_list()}}, used by \code{\link[=bdhs_estimate]{bdhs_estimate()}})
+and the cross-round harmonized variables used by \code{\link[=bdhs_harmonize]{bdhs_harmonize()}}. Works
+offline and needs no microdata.
 }
 \examples{
 bdhs_search("stunt")

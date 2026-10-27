@@ -358,7 +358,9 @@ estimate_axis_titles <- function(object, by_cols) {
   labs <- attr(object, "by_labels", exact = TRUE)
   out <- by_cols
   if (length(labs)) {
-    hit <- by_cols %in% names(labs) & !is.na(labs[by_cols])
+    # Long labels (harmonized variables document their rules in the label)
+    # would crowd the axis; keep the column name for those.
+    hit <- by_cols %in% names(labs) & !is.na(labs[by_cols]) & nchar(labs[by_cols]) <= 40
     out[hit] <- labs[by_cols[hit]]
   }
   out

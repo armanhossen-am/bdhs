@@ -21,7 +21,8 @@ A ggplot object.
 Point-and-interval plot of the estimates returned by \code{\link[=bdhs_estimate]{bdhs_estimate()}}:
 one panel per indicator, one row per group (when \code{by} was used), and one
 colour per survey round when several rounds are present. Intervals are
-the 95\% confidence intervals of the estimates.
+the confidence intervals of the estimates (at the level used by
+\code{\link[=bdhs_estimate]{bdhs_estimate()}}).
 }
 \examples{
 \dontshow{if (rlang::is_installed("ggplot2")) withAutoprint(\{ # examplesIf}

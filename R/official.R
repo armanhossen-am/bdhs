@@ -27,7 +27,12 @@
 #'   is given and `breakdown` is not, all breakdowns are searched.
 #' @param characteristic Characteristic categories to keep, e.g. `"Residence"`,
 #'   `"Wealth quintile"`, `"Education"` or `"Region"` (`"Division"` is
-#'   accepted as a synonym). Case-insensitive.
+#'   accepted as a synonym). Case-insensitive. The DHS "Region" category
+#'   holds both the divisions as surveyed and the older groupings kept for
+#'   trends ("Chattogram/Sylhet", "Dhaka before 2015", "Rajshahi/Rangpur");
+#'   tell them apart by `characteristic_label`, or use [bdhs_plot_trend()]
+#'   with `by = "Region"` (comparable groupings) or `by = "Division"`
+#'   (divisions as surveyed).
 #' @param preferred If `TRUE` (default), keep only the headline value of each
 #'   estimate (the DHS `IsPreferred` flag). With `FALSE`, alternative
 #'   reference periods are returned too and a `by_variable_label` column says

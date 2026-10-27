@@ -514,7 +514,14 @@ harmonize_report <- function(cw, vars, out_vars, results, rounds, log, explicit,
       if (!is.null(b)) bullets <- c(bullets, b)
     }
   }
-  if (length(bullets)) {
+  if (length(bullets) > 6L && !explicit) {
+    # Harmonizing everything: one compact line instead of a long list.
+    na_vars <- unique(sub("^\\{\\.field ([^}]+)\\}.*$", "\\1", bullets))
+    cli::cli_inform(c(
+      "i" = "{length(na_vars)} harmonized variable{?s} {?is/are} {.val NA} by design in some rounds (not collected, or in a separate WI/HW file): {.field {na_vars}}.",
+      "i" = "See {.code bdhs_harmonized_vars(<survey>)} for the reason in each round."
+    ))
+  } else if (length(bullets)) {
     names(bullets) <- rep("*", length(bullets))
     cli::cli_inform(c("i" = "Some harmonized values are {.val NA} by design:", bullets))
   }

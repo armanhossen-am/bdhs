@@ -59,7 +59,7 @@
 #'
 #' ir <- bdhs_simulate(2017, "IR")
 #' bdhs_estimate(ir, c("fp_cpr_modern", "ms_married_by_18"), by = "v025")
-bdhs_estimate <- function(data, indicators, by = NULL, survey = NULL, level = 0.95, scale = 100,
+bdhs_estimate <- function(data, indicators = NULL, by = NULL, survey = NULL, level = 0.95, scale = 100,
                           ci_method = c("logit", "wald"), design_args = list()) {
   ci_method <- rlang::arg_match(ci_method)
   check_by(data, by)
@@ -69,7 +69,7 @@ bdhs_estimate <- function(data, indicators, by = NULL, survey = NULL, level = 0.
     cli::cli_abort("{.arg design_args} must be a list of arguments for {.fn bdhs_design}.")
   }
   recode <- data_recode(data)
-  explicit <- !missing(indicators) && !is.null(indicators)
+  explicit <- !is.null(indicators)
   if (!explicit) indicators <- applicable_indicators(recode)
   inds <- resolve_indicators(indicators)
   wrong <- !vapply(inds, function(x) recode %in% x$recode, logical(1))

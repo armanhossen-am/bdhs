@@ -6,7 +6,7 @@
 \usage{
 bdhs_estimate(
   data,
-  indicators,
+  indicators = NULL,
   by = NULL,
   survey = NULL,
   level = 0.95,
