@@ -97,7 +97,8 @@ bdhs_inequality_official("RH_DELA_C_CSC")
 #> # ℹ 32 more rows
 #> # ℹ 4 more variables: ci_high <dbl>, lowest <chr>, highest <chr>,
 #> #   n_groups <int>
-bdhs_inequality_official("rh_del_facility", survey = c(2004, 2022), measures = c("difference", "ratio"))
+bdhs_inequality_official("rh_del_facility", survey = c(2004, 2022),
+                         measures = c("difference", "ratio"))
 #> # BDHS inequality: RH_DELP_C_DHF by Wealth quintile | BD2004DHS, BD2022DHS
 #> # A tibble: 4 × 13
 #>   survey_id indicator    label by    measure measure_label estimate    se ci_low

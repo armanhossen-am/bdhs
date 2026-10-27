@@ -340,6 +340,10 @@ Import and read the files you downloaded from the DHS Program.
 
 - [`bdhs_simulate()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_simulate.md)
   : Simulate synthetic BDHS-like recode data
+- [`bdhs_synthesize()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_synthesize.md)
+  : Calibrated synthetic BDHS data
+- [`bdhs_synthetic_fidelity()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_synthetic_fidelity.md)
+  : Fidelity of calibrated synthetic data to the official values
 
 ## Package
 

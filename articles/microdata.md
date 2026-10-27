@@ -129,7 +129,7 @@ haven::write_dta(bdhs_simulate(2017, "HR"), file.path(downloads, "BDHS2018HR.DTA
 ``` r
 
 bdhs_import(downloads)
-#> ✔ Imported 3 datasets into /tmp/RtmpMxJ0Pa/bdhs-store:
+#> ✔ Imported 3 datasets into /tmp/Rtmp0tCqPQ/bdhs-store:
 #> • BD2017DHS HR (BDHR7RFL): stored as Parquet, 600 rows x 18 variables
 #> • BD2022DHS IR (BDIR81FL): stored as Parquet, 552 rows x 116 variables
 #> • BD2022DHS KR (BDKR81FL): stored as Parquet, 296 rows x 49 variables
