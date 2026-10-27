@@ -48,7 +48,8 @@ rounded, so the measures are approximate.
 }
 \examples{
 bdhs_inequality_official("RH_DELA_C_CSC")
-bdhs_inequality_official("rh_del_facility", survey = c(2004, 2022), measures = c("difference", "ratio"))
+bdhs_inequality_official("rh_del_facility", survey = c(2004, 2022),
+                         measures = c("difference", "ratio"))
 }
 \references{
 Barros AJD, Victora CG (2013). Measuring coverage in MNCH: determining and

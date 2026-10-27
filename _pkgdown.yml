@@ -98,6 +98,8 @@ reference:
 - title: Synthetic data
   contents:
   - bdhs_simulate
+  - bdhs_synthesize
+  - bdhs_synthetic_fidelity
 - title: Package
   contents:
   - bdhs-package

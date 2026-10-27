@@ -298,7 +298,8 @@ inequality_round <- function(d, ind, survey_id, recode, by, measures, level, des
 #' @export
 #' @examples
 #' bdhs_inequality_official("RH_DELA_C_CSC")
-#' bdhs_inequality_official("rh_del_facility", survey = c(2004, 2022), measures = c("difference", "ratio"))
+#' bdhs_inequality_official("rh_del_facility", survey = c(2004, 2022),
+#'                          measures = c("difference", "ratio"))
 bdhs_inequality_official <- function(indicator, survey = NULL, measures = .inequality_measures, period = NULL) {
   measures <- rlang::arg_match(measures, .inequality_measures, multiple = TRUE)
   if (!is.character(indicator) || length(indicator) != 1L) {
