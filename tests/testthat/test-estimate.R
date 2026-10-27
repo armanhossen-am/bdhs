@@ -50,12 +50,22 @@ test_that("all-women indicators use the ratio estimator", {
   ok <- !is.na(y)
   expect_equal(est$estimate, 100 * sum(w[ok] * y[ok]) / sum(w[ok] * aw[ok]))
   expect_equal(est$n_weighted, sum(w[ok] * aw[ok]))
-  # Subgroups use the matching all-woman factor.
+  # Subgroups use the matching all-woman factor ...
   ir$awfactu <- ir$awfactt * 1.1
+  t <- bdhs_add_indicators(ir, "fe_teen_mothers")$fe_teen_mothers
+  okt <- !is.na(t) & ir$v025 == 1
+  teen <- bdhs_estimate(ir, "fe_teen_mothers", by = "v025")
+  expect_equal(teen$estimate[teen$v025 == "urban"], 100 * sum(w[okt] * t[okt]) / sum(w[okt] * ir$awfactu[okt] / 100))
+  expect_true(teen$se[1] > 0)
+  # ... except child marriage, which the DHS tables compute with awfactt for
+  # every subgroup (reproduces the official 2017-18 values exactly).
   byu <- bdhs_estimate(ir, "ms_married_by_18", by = "v025")
   u <- ok & ir$v025 == 1
-  expect_equal(byu$estimate[byu$v025 == "urban"], 100 * sum(w[u] * y[u]) / sum(w[u] * ir$awfactu[u] / 100))
-  expect_true(byu$se[1] > 0)
+  expect_equal(byu$estimate[byu$v025 == "urban"], 100 * sum(w[u] * y[u]) / sum(w[u] * aw[u]))
+  # Harmonized grouping variables get the same factor as the raw ones.
+  expect_equal(awfact_for_by("residence"), "awfactu")
+  expect_equal(awfact_for_by("division_trend6"), "awfactr")
+  expect_equal(awfact_for_by("wealth_quintile"), "awfactw")
   # Means: CEB to all women.
   ceb <- bdhs_estimate(ir, "fe_ceb_mean")
   expect_equal(ceb$estimate, sum(w * ir$v201) / sum(w * aw))

@@ -146,7 +146,9 @@ estimate_survey <- function(d, inds, survey_id, recode, by, level, scale, ci_met
     aw_var <- awfact_for_by(by)
     aw_needed <- any(vapply(plain, function(x) !is.null(x$all_women), logical(1)))
 
-    design_cols <- unique(c(unlist(.design_vars), "survey_id", "d005", "v000", "v007", "hv000", "hv007"))
+    # Weight columns that design_args$weight aliases ("dv", "male") may need.
+    design_cols <- unique(c(unlist(.design_vars), "survey_id", "d005", "md005", "hv028",
+                            "v000", "v007", "hv000", "hv007"))
     wcol <- design_args$weight
     if (is.character(wcol) && length(wcol) == 1L && !wcol %in% c("default", "dv")) design_cols <- c(design_cols, wcol)
     slim <- as.data.frame(d[, intersect(design_cols, names(d)), drop = FALSE])
@@ -163,6 +165,7 @@ estimate_survey <- function(d, inds, survey_id, recode, by, level, scale, ci_met
         }
       }
       slim$.bdhs_aw <- if (is.null(aw_var)) 1 else dv(d, aw_var) / 100
+      slim$.bdhs_awt <- if ("awfactt" %in% names(d)) dv(d, "awfactt") / 100 else slim$.bdhs_aw
     }
     attr(slim, "bdhs_survey_id") <- survey_id
     attr(slim, "bdhs_recode") <- recode
@@ -197,6 +200,11 @@ add_indicator_cols <- function(est, ind, survey_id, by) {
 
 # Proportion, mean, all-women ratio or median for one indicator.
 estimate_plain <- function(des, ind, yname, byn, q, ci_method, scale, quiet = FALSE) {
+  # Some all-women indicators are published with the total factor for every
+  # subgroup (DHS tables of child marriage); follow the published method.
+  if (isTRUE(ind$params$aw_total) && ".bdhs_awt" %in% names(des$variables)) {
+    des$variables$.bdhs_aw <- des$variables$.bdhs_awt
+  }
   vars <- des$variables
   keep <- !is.na(vars[[yname]])
   if (!any(keep)) {

@@ -129,6 +129,14 @@ bdhs_mortality <- function(data, period = 5, rates = c("nnmr", "pnnmr", "imr", "
   rates <- rlang::arg_match(rates, multiple = TRUE)
   check_period(period, "years")
   check_by(data, by)
+  rec <- tryCatch(data_recode(data), error = function(e) NA_character_)
+  if (identical(rec, "KR")) {
+    cli::cli_abort(c(
+      "Mortality rates need the full birth history, not the children's recode (KR).",
+      "i" = "KR holds only births in the last five years, so earlier cohorts would be missing.",
+      "i" = "Use the births recode ({.code bdhs_read(survey, \"BR\")}) or the women's recode (IR)."
+    ))
+  }
   births <- births_long(data, by)
   ids <- data_survey_ids(data, survey)
   groups <- if (!is_pooled(data)) {
@@ -154,6 +162,21 @@ bdhs_mortality <- function(data, period = 5, rates = c("nnmr", "pnnmr", "imr", "
 check_period <- function(period, unit, call = rlang::caller_env()) {
   if (!is.numeric(period) || length(period) != 1L || is.na(period) || period <= 0) {
     cli::cli_abort("{.arg period} must be a single positive number of {unit}.", call = call)
+  }
+  # Fertility periods are in months and mortality periods in years; flag the
+  # likely mix-up (e.g. period = 3 for a 3-year TFR) instead of silently
+  # computing an odd rate.
+  if (unit == "months" && period < 12) {
+    cli::cli_warn(c(
+      "{.arg period} is in months: {period} month{?s} is a very short fertility period.",
+      "i" = "For the usual three years use {.code period = 36}."
+    ), call = call)
+  }
+  if (unit == "years" && period > 25) {
+    cli::cli_warn(c(
+      "{.arg period} is in years: {period} years is longer than a birth history can support.",
+      "i" = "For the usual five years use {.code period = 5}."
+    ), call = call)
   }
 }
 
@@ -205,10 +228,11 @@ awfact_for_by <- function(by) {
     return("awfactt")
   }
   switch(by,
-    v025 = , v102 = "awfactu",
-    v024 = , v101 = "awfactr",
-    v106 = , v149 = "awfacte",
-    v190 = "awfactw",
+    v025 = , v102 = , residence = "awfactu",
+    v024 = , v101 = , division_surveyed = , division_trend6 = , division_trend5 = ,
+    division_backcast8 = "awfactr",
+    v106 = , v149 = , mother_edu_level = , mother_edu_attain = "awfacte",
+    v190 = , wealth_quintile = "awfactw",
     "awfactt"
   )
 }
@@ -218,12 +242,17 @@ fertility_components <- function(d, b3_vars, period, aw_var) {
   n <- nrow(d)
   v008 <- dv(d, "v008")
   v011 <- dv(d, "v011")
-  births <- matrix(0, n, 7L)
+  # Columns 1-7: births by mother's age group 15-19 ... 45-49 at the birth.
+  # Column 8: births to mothers under 15, which only count towards the GFR
+  # numerator (the DHS GFR counts all births in the period).
+  births <- matrix(0, n, 8L)
   for (v in b3_vars) {
     b3 <- dv(d, v)
     since <- v008 - b3
     g <- floor((b3 - v011) / 60) - 2
-    ok <- !is.na(since) & since >= 1 & since <= period & !is.na(g) & g >= 1 & g <= 7
+    in_period <- !is.na(since) & since >= 1 & since <= period & !is.na(g)
+    g[in_period & g < 1] <- 8L
+    ok <- in_period & g >= 1 & g <= 8
     if (any(ok)) {
       idx <- cbind(which(ok), g[ok])
       births[idx] <- births[idx] + 1
@@ -237,19 +266,21 @@ fertility_components <- function(d, b3_vars, period, aw_var) {
     pmax(0, pmin(upper, hi) - pmax(lower, lo) + 1) / 12
   }, numeric(n))
   if (n == 1L) exposure <- matrix(exposure, nrow = 1L)
+  exposure <- cbind(exposure, 0)
   aw <- if (is.null(aw_var)) rep(1, n) else dv(d, aw_var) / 100
   w <- dv(d, "v005") / 1e6
   list(
     psu = as.character(zap_all(d$v021)), w = w,
     num = births, den = exposure * aw,
-    n_events = rowSums(births), keep = !is.na(w) & w > 0 & !is.na(v008) & !is.na(v011)
+    n_events = rowSums(births[, 1:7, drop = FALSE]), keep = !is.na(w) & w > 0 & !is.na(v008) & !is.na(v011)
   )
 }
 
 fertility_stat <- function(B, E, type) {
-  asfr <- B / E
+  asfr <- B[1:7] / E[1:7]
   switch(type,
     tfr = 5 * sum(asfr),
+    # All births in the period (any age of mother) per woman-year at 15-44.
     gfr = 1000 * sum(B) / sum(E[1:6]),
     asfr = 1000 * asfr
   )

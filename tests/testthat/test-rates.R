@@ -15,8 +15,17 @@ test_that("fertility rates reproduce DHS.rates on simulated data", {
   expect_equal(ours$se, unname(tfr[1, "SE"]), tolerance = 1e-2)
   asfr <- quietly(DHS.rates::fert(fd, Indicator = "asfr", EverMW = "Yes", AWFact = "awfactt"))
   expect_equal(bdhs_fertility(ir, "asfr", se = FALSE)$estimate, asfr$ASFR, tolerance = 1e-4)
+  # GFR: DHS.rates leaves births to mothers under 15 out of the numerator; the
+  # official DHS values include them (BDHS 2017-18: 86.1 vs 85.3, official 86),
+  # so bdhs is at least as large and equal without such births.
   gfr <- quietly(DHS.rates::fert(fd, Indicator = "gfr", EverMW = "Yes", AWFact = "awfactt"))
-  expect_equal(bdhs_fertility(ir, "gfr", se = FALSE)$estimate, unname(gfr[1, "GFR"]), tolerance = 1e-4)
+  ours_gfr <- bdhs_fertility(ir, "gfr", se = FALSE)$estimate
+  expect_gte(ours_gfr, unname(gfr[1, "GFR"]) - 1e-8)
+  b3 <- as.matrix(as.data.frame(lapply(fd[grep("^b3_", names(fd))], as.numeric)))
+  young <- (b3 - fd$v011) < 15 * 12 & (fd$v008 - b3) >= 1 & (fd$v008 - b3) <= 36
+  if (!any(young, na.rm = TRUE)) {
+    expect_equal(ours_gfr, unname(gfr[1, "GFR"]), tolerance = 1e-4)
+  }
   # Subgroups with the matching all-woman factor.
   ir$awfactu <- ir$awfactt * c(1, 1.2)[as.numeric(ir$v025)]
   fd <- as.data.frame(haven::zap_labels(ir))
@@ -90,4 +99,22 @@ test_that("fertility output is tidy", {
   expect_equal(short$period, 12L)
   g <- bdhs_fertility(ir, "gfr", by = "v025")
   expect_equal(as.character(g$v025), c("urban", "rural"))
+})
+
+test_that("GFR counts births to mothers under 15 in the numerator", {
+  ir <- bdhs_simulate(2017, "IR", n_clusters = 6, households = 6)
+  base <- bdhs_fertility(ir, "gfr", se = FALSE)$estimate
+  # One extra birth, 12 months before the interview, to a woman who was 14.
+  i <- which(ir$v012 == 15)[1]
+  skip_if(is.na(i), "no woman aged 15 in the simulated data")
+  ir$b3_20[i] <- ir$v008[i] - 12
+  ir$v011[i] <- ir$v008[i] - 12 - 14 * 12 - 6
+  more <- bdhs_fertility(ir, "gfr", se = FALSE)$estimate
+  expect_gt(more, base)
+  # The TFR (ages 15-49) does not count it.
+  expect_equal(
+    bdhs_fertility(ir, se = FALSE)$estimate,
+    {ir$b3_20[i] <- NA; bdhs_fertility(ir, se = FALSE)$estimate},
+    tolerance = 0.05
+  )
 })

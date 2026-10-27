@@ -179,8 +179,12 @@ defs_marriage_fertility <- function() {
       requires = c("v012", "v511"),
       universe = age_universe(20, 24), value = married_by(15),
       all_women = "awfactt", api_id = "MA_MBAY_W_B15", vars = c("v012", "v511", "awfactt", "sqtype"),
+      params = list(aw_total = TRUE),
       definition = "Percentage of all women age 20-24 who were first married or in union before age 15 (child marriage, SDG 5.3.1).",
-      notes = paste("All-women denominator via awfactt (ever-married sample).", .note_2022_long),
+      notes = paste(
+        "All-women denominator via awfactt (ever-married sample), for subgroups too,",
+        "as in the DHS tables.", .note_2022_long
+      ),
       reference = .ref_ms
     ),
     new_indicator(
@@ -188,8 +192,12 @@ defs_marriage_fertility <- function() {
       requires = c("v012", "v511"),
       universe = age_universe(20, 24), value = married_by(18),
       all_women = "awfactt", api_id = "MA_MBAY_W_B18", vars = c("v012", "v511", "awfactt", "sqtype"),
+      params = list(aw_total = TRUE),
       definition = "Percentage of all women age 20-24 who were first married or in union before age 18 (child marriage, SDG 5.3.1).",
-      notes = paste("All-women denominator via awfactt (ever-married sample).", .note_2022_long),
+      notes = paste(
+        "All-women denominator via awfactt (ever-married sample), for subgroups too,",
+        "as in the DHS tables.", .note_2022_long
+      ),
       reference = .ref_ms
     ),
     median_afm("ms_median_afm_20_49", 20, "MA_AAFM_W_M2A"),
