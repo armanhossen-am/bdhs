@@ -317,6 +317,8 @@ sim_pr <- function(hh, wm, births, info) {
     list(
       hv101 = lbl(as.numeric(ifelse(all$hvidx == 1L, 1L, ifelse(all$hvidx == 2L, 2L, 3L))),
         c(head = 1, "wife or husband" = 2, "son/daughter" = 3), "relationship to head"),
+      hv102 = lbl(rep(1, n), c(no = 0, yes = 1), "usual resident"),
+      hv103 = lbl(as.numeric(stats::runif(n) < 0.97), c(no = 0, yes = 1), "slept last night"),
       hv104 = lbl(as.numeric(all$sex), c(male = 1, female = 2), "sex of household member"),
       hv105 = num(as.numeric(all$age), "age of household members"),
       hv112 = lbl(as.numeric(all$mother_line), c("mother not in household" = 0), "mother's line number"),
@@ -334,13 +336,22 @@ sim_pr <- function(hh, wm, births, info) {
 sim_ir <- function(wm, births, info) {
   n <- nrow(wm)
   d <- sim_design_cols(wm, info, prefix = "v")
-  b3_wide <- lapply(1:20, function(k) {
-    i <- births$bidx == k
-    out <- rep(NA_real_, n)
-    out[match(births$caseid_key[i], wm$hhid)] <- births$b3[i]
-    num(out, paste0("date of birth (cmc)"))
-  })
-  names(b3_wide) <- sprintf("b3_%02d", 1:20)
+  # Birth history in wide form (b3_01 ... b3_20 etc.), most recent birth first.
+  wide <- function(col, label, labels = NULL) {
+    out <- lapply(1:20, function(k) {
+      i <- births$bidx == k
+      x <- rep(NA_real_, n)
+      x[match(births$caseid_key[i], wm$hhid)] <- births[[col]][i]
+      if (is.null(labels)) num(x, label) else lbl(x, labels, label)
+    })
+    stats::setNames(out, sprintf("%s_%02d", col, 1:20))
+  }
+  b3_wide <- c(
+    wide("b3", "date of birth (cmc)"),
+    wide("b4", "sex of child", c(male = 1, female = 2)),
+    wide("b5", "child is alive", c(no = 0, yes = 1)),
+    wide("b7", "age at death (months, imputed)")
+  )
   agegrp <- pmin(7L, (wm$age - 15L) %/% 5L + 1L)
   tibble::as_tibble(c(
     list(caseid = num(sprintf("%12s%3d", wm$hhid, wm$line), "case identification")),

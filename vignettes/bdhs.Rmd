@@ -119,7 +119,7 @@ survey::svymean(~m17, des, na.rm = TRUE)
 correct standard errors, confidence intervals and denominators:
 
 ```{r}
-bdhs_estimate(kr, c("facility_delivery", "csection"), by = "v025")
+bdhs_estimate(kr, c("rh_del_facility", "rh_del_csection"), by = "v025")
 ```
 
 ## Where next

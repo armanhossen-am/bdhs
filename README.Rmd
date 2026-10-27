@@ -87,8 +87,9 @@ ir <- bdhs_read(2022, "IR")            # women, 2022
 kr <- bdhs_read("2017-18", "KR",       # children, only the columns you need
                 vars = c("m14", "m15", "m17", "hw70"))
 
-bdhs_estimate(kr, c("anc_4plus", "facility_delivery", "csection", "stunting"),
+bdhs_estimate(kr, c("rh_anc_4plus", "rh_del_facility", "rh_del_csection"),
               by = "v025")             # correct design, SEs, CIs
+bdhs_mortality(bdhs_read(2022, "BR"))  # NMR, IMR, U5MR with jackknife SEs
 
 bdhs_validate(kr)                      # compare with official DHS values
 ```

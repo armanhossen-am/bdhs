@@ -47,7 +47,8 @@ des
 peculiarities:
 
 ```{r}
-bdhs_design_info(recode = "IR")
+info <- bdhs_design_info(recode = "IR")
+info[, c("year_label", "psu", "strata", "weight", "n_strata", "strata_type")]
 ```
 
 A few points worth knowing:

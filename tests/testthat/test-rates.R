@@ -67,7 +67,7 @@ test_that("rate functions validate their inputs", {
   expect_error(bdhs_fertility(ir, period = -1), "positive")
   expect_error(bdhs_fertility(ir, by = "nope"), "not found")
   expect_error(bdhs_fertility(ir[, c("v001", "v005")], survey = 2017), "birth history")
-  expect_error(bdhs_mortality(ir), "ages at death")
+  expect_error(bdhs_mortality(ir[, !grepl("^b7_", names(ir))]), "ages at death")
   expect_error(bdhs_mortality(ir, rates = "nope"))
   expect_error(bdhs_fertility(ir, awfact = "nope"), "not found")
   noaw <- bdhs_fertility(ir, awfact = FALSE, se = FALSE)$estimate
