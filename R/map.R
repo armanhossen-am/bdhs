@@ -128,7 +128,8 @@ bdhs_map <- function(x, survey = NULL, value = NULL, title = NULL) {
   }
   p +
     ggplot2::labs(
-      title = title %||% info$title,
+      # Long indicator labels would be cut off in narrow plot panes.
+      title = paste(strwrap(title %||% info$title, width = 45), collapse = "\n"),
       subtitle = paste0(
         "Bangladesh DHS ", paste(levels(shp$year_label), collapse = ", "), ", by division",
         if (!is.null(info$layout)) paste0(" (", c(BD2007DHS = "six", BD1994DHS = "five")[[info$layout]], "-division trend layout)")
