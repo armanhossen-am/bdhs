@@ -1,6 +1,6 @@
 Package: bdhs
 Title: Tools and Data for the Bangladesh Demographic and Health Survey
-Version: 0.1.0.9000
+Version: 0.1.0
 Authors@R:
     person("Arman", "Hossen", , "hossena@miamioh.edu", role = c("aut", "cre", "cph"))
 Description: A complete toolkit for every round of the Bangladesh Demographic
