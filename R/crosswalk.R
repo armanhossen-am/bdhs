@@ -65,9 +65,11 @@ chr_vec <- function(x) {
 }
 
 cw_normalize_rule <- function(r) {
-  r$method <- as.character(r$method)
-  r$var <- chr_vec(r$var)
-  r$vars <- chr_vec(r$vars)
+  r$method <- as.character(r[["method"]])
+  # Always present (possibly empty) so that `$var` never partially matches
+  # `$vars`.
+  r[["var"]] <- chr_vec(r[["var"]]) %||% character()
+  r[["vars"]] <- chr_vec(r[["vars"]]) %||% character()
   if (!is.null(r$map)) {
     r$map <- named_chr(r$map)
     r$map_codes <- as.numeric(names(r$map))
@@ -174,11 +176,17 @@ expr_names <- function(e) {
 # Rule resolution ---------------------------------------------------------------
 
 # DHS design/geography variables that the household files carry under an `h`
-# prefix with identical codes (v024 -> hv024, v008 -> hv008, ...).
-is_hh_mirror <- function(x) grepl("^v0[0-3][0-9]$", x)
+# prefix with identical meaning and codes (v001 -> hv001, v008 -> hv008,
+# v024 -> hv024, ...). v009-v019 and v027+ are NOT mirrors (v012 is the
+# woman's age, hv012 the number of de jure household members).
+is_hh_mirror <- function(x) grepl("^v0(0[0-8]|2[0-6])$", x)
 
-# Does a harmonized variable apply to a recode at all?
-cw_applies <- function(spec, recode) {
+# Does a harmonized variable apply to a recode at all? Derived variables
+# apply wherever their source variable does.
+cw_applies <- function(spec, recode, cw = crosswalk()) {
+  if (!is.null(spec$derive) && !is.null(cw$vars[[spec$derive$from]])) {
+    return(cw_applies(cw$vars[[spec$derive$from]], recode, cw))
+  }
   unit <- spec$unit
   if (identical(unit, "any")) {
     return(TRUE)

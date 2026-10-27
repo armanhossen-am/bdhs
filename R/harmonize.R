@@ -90,7 +90,7 @@ bdhs_harmonize <- function(data, vars = NULL, survey = NULL, recode = NULL, pref
       ))
     }
   } else {
-    vars <- all_vars[vapply(cw$vars, cw_applies, logical(1), recode = recode)]
+    vars <- all_vars[vapply(cw$vars, cw_applies, logical(1), recode = recode, cw = cw)]
   }
   # Derived variables need their source variable, computed but not returned
   # unless requested.
@@ -203,7 +203,10 @@ harmonize_one <- function(cw, spec, data, row_sets, recode, n, log) {
     }
     if (rule$method == "external_file") {
       if (!is.null(rule$apply) && rule$var %in% names(data)) {
-        rule <- c(rule$apply, list(var = rule$var, src = stats::setNames(rule$var, rule$var)))
+        ext_var <- rule$var
+        rule <- rule$apply
+        rule[["var"]] <- ext_var
+        rule[["src"]] <- stats::setNames(ext_var, ext_var)
       } else {
         status[[sid]] <- "external"
         detail[[sid]] <- rule

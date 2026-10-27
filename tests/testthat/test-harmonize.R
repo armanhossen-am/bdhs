@@ -29,7 +29,9 @@ test_that("bdhs_harmonized_vars() lists variables and per-round rules", {
   expect_true("BD2022DHS" %in% d6$rounds[[1]])
   expect_match(d6$sources, "2022: v024", fixed = TRUE)
   wq <- v[v$name == "wealth_quintile", ]
-  expect_equal(wq$external_rounds[[1]], c("BD1994DHS", "BD2000DHS"))
+  expect_equal(wq$external_rounds[[1]], c("BD1994DHS", "BD1997DHS", "BD2000DHS"))
+  # Every DHS round has a rule for every variable (possibly "unavailable").
+  expect_true(all(lengths(lapply(crosswalk()$vars, function(x) x$rounds)) == 9L))
   expect_equal(wq$household_var, "hv270")
 
   r <- bdhs_harmonized_vars(2022)
@@ -59,6 +61,25 @@ test_that("division codes are harmonized with each round's rules", {
   ))
   expect_false(anyNA(h22$division_trend6))
   expect_match(attr(h22$division_trend6, "label"), "trend")
+})
+
+test_that("1996-97 rules come from the DHS-III codebook", {
+  kr97 <- sim(1997, "KR")
+  h <- quiet(bdhs_harmonize(kr97, vars = c("division_surveyed", "division_trend6", "child_sex", "csection")))
+  code <- codes(kr97$v024)
+  expect_true(all(h$division_surveyed[code == 6] == "sylhet"))
+  expect_true(all(h$division_trend6[code == 5] == "rajshahi"))
+  expect_equal(as.integer(h$child_sex), as.integer(codes(kr97$b4)))
+  expect_true(all(is.na(h$csection)))
+  r <- bdhs_harmonized_vars(1997)
+  expect_match(r$note[r$name == "religion"], "codebook")
+})
+
+test_that("household files only use true household equivalents", {
+  pr <- sim(2022, "PR")
+  h <- quiet(bdhs_harmonize(pr))
+  expect_false(any(c("mother_age", "mother_agegroup", "religion") %in% names(h)))
+  expect_true(all(c("residence", "division_trend6", "haz_who", "stunted_who") %in% names(h)))
 })
 
 test_that("pooled data are harmonized row by row", {
@@ -185,7 +206,8 @@ test_that("absent sources, factor sources and unknown rounds are reported", {
   expect_message(h <- bdhs_harmonize(kf, vars = "residence"), "factor")
   expect_false("residence" %in% names(h))
 
-  expect_message(h <- bdhs_harmonize(sim(1997, "KR"), vars = "residence"), "No verified harmonization rules")
+  expect_message(h <- bdhs_harmonize(kr, vars = "residence", survey = "spa2014"), "No verified harmonization rules")
+  expect_false("residence" %in% names(h))
   expect_error(bdhs_harmonize(kr, vars = "not_a_variable"), "Unknown harmonized variable")
   expect_error(bdhs_harmonize(list(a = 1)), "data frame")
 })
@@ -235,16 +257,53 @@ wpct <- function(x, w) 100 * sum(w[!is.na(x)] * x[!is.na(x)]) / sum(w[!is.na(x)]
 
 test_that("local KR files harmonize and reproduce official aggregates", {
   skip_if_no_local_data()
+  # Official DHS API values (CH_DIAR_C_DIA, CH_VACC_C_DP3, urban share of living children).
   diarrhea <- c(
     BD1994DHS = 12.4, BD2000DHS = 6.1, BD2004DHS = 7.5, BD2007DHS = 9.8,
     BD2011DHS = 4.6, BD2014DHS = 5.7, BD2017DHS = 4.7, BD2022DHS = 4.8
   )
+  dpt3 <- c(
+    BD1994DHS = 66.0, BD2000DHS = 72.1, BD2004DHS = 81.0, BD2007DHS = 91.1,
+    BD2011DHS = 93.4, BD2014DHS = 91.3, BD2017DHS = 95.9
+  )
+  urban <- c(
+    BD2000DHS = 16.5, BD2004DHS = 19.7, BD2007DHS = 20.9, BD2011DHS = 22.3,
+    BD2014DHS = 25.6, BD2017DHS = 27.4, BD2022DHS = 27.0
+  )
   for (sid in names(local_kr_files)) {
     kr <- read_local(local_kr_files[[sid]], sid, "KR")
-    h <- suppressMessages(bdhs_harmonize(kr))
+    expect_no_warning(h <- suppressMessages(bdhs_harmonize(kr)))
     expect_true(all(c("division_trend6", "residence", "child_sex") %in% names(h)), info = sid)
     expect_false(anyNA(h$division_trend6), info = sid)
-    alive <- h$child_alive == 1
-    expect_equal(wpct(h$diarrhea_2wk[alive], h$wt[alive]), diarrhea[[sid]], tolerance = 0.02, info = sid)
+    alive <- h$child_alive %in% 1
+    age <- h$child_age_months
+    expect_lt(abs(wpct(h$diarrhea_2wk[alive], h$wt[alive]) - diarrhea[[sid]]), 0.15)
+    if (sid %in% names(dpt3)) {
+      ok <- alive & age >= 12 & age <= 23
+      expect_lt(abs(wpct(h$vacc_dpt3[ok] %in% 1, h$wt[ok]) - dpt3[[sid]]), 0.15)
+    }
+    if (sid %in% names(urban)) {
+      expect_lt(abs(wpct(h$residence[alive] == "urban", h$wt[alive]) - urban[[sid]]), 0.15)
+    }
+  }
+})
+
+test_that("local IR and PR files harmonize without unexpected codes", {
+  skip_if_no_local_data()
+  files <- list(
+    list("BDHS NPD/BDIR7RDT/BDIR7RFL.DTA", "BD2017DHS", "IR"),
+    list("BDHS Data/BDIR81FL.DTA", "BD2022DHS", "IR"),
+    list("BDHS NPD/BDPR7RDT/BDPR7RFL.DTA", "BD2017DHS", "PR", 28.3),
+    list("BDHS Pre-hypertension/BDPR81FL.DTA", "BD2022DHS", "PR", 28.4)
+  )
+  for (f in files) {
+    d <- read_local(f[[1]], f[[2]], f[[3]])
+    expect_no_warning(h <- suppressMessages(bdhs_harmonize(d)))
+    expect_false(anyNA(h$division_surveyed))
+    if (f[[3]] == "PR") {
+      first <- !duplicated(d$hhid)
+      # Official urban share of households (HC_ELEC_H_ELC denominators)
+      expect_lt(abs(wpct(h$residence[first] == "urban", h$wt[first]) - f[[4]]), 0.15)
+    }
   }
 })

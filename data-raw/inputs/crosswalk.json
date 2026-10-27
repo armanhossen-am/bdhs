@@ -20,7 +20,7 @@
         "kr": "BDKR3AFL",
         "kr_window_months": null,
         "verified": false,
-        "note": "No local file; rules for this round are NOT included. Expect 6 divisions and separate WI/HW files (per DHS API dataset list)."
+        "note": "No local file. Rules (crosswalk 0.2.0) were copied from 1993-94 or 1999-2000 only where the DHS-III recode codebook for 1996-97 (World Bank microdata catalog DDI, study 1335) has the same variables, codes and value labels; they are NOT verified against the data. 6 divisions; separate WI and HW files."
       },
       {
         "survey_id": "BD2000DHS",
@@ -100,7 +100,7 @@
       "HW": "WHO height/weight z-scores (1996-97, 1999-2000, 2004)"
     },
     "notes": ["Every v-variable rule written for KR applies unchanged to IR and BR of the same round (same v-section; verified for 2017-18 IR/BR and 2022 IR).", "`pr_hr_equivalent` names the household-file variable; codes verified identical for 2017-18 (HR, PR) and 2022 (PR) only.", "Value labels in DHS files can be wrong: see religion 1993-94, roof 1999-2000, wall 2017-18 KR/IR.",
-      "0.2.0: vacc_basic_all gets an evaluable expression; external_file rules carry an `apply` rule (map/numeric) used when the WI/HW variable has been merged into the data with bdhs_merge()."]
+      "0.2.0: vacc_basic_all gets an evaluable expression; external_file rules carry an `apply` rule (map/numeric) used when the WI/HW variable has been merged into the data with bdhs_merge(); BD1997DHS rules added from the 1996-97 recode codebook (unverified against data)."]
   },
   "lookups": {
     "district_bbs": [
@@ -588,6 +588,10 @@
           "method": "constant",
           "value": "BD1994DHS"
         },
+        "BD1997DHS": {
+          "method": "constant",
+          "value": "BD1997DHS"
+        },
         "BD2000DHS": {
           "method": "constant",
           "value": "BD2000DHS"
@@ -629,6 +633,12 @@
           "method": "numeric",
           "file": "KR",
           "var": "v001"
+        },
+        "BD1997DHS": {
+          "method": "numeric",
+          "file": "KR",
+          "var": "v001",
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "numeric",
@@ -679,6 +689,12 @@
           "method": "numeric",
           "file": "KR",
           "var": "v021"
+        },
+        "BD1997DHS": {
+          "method": "numeric",
+          "file": "KR",
+          "var": "v021",
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "numeric",
@@ -731,6 +747,12 @@
           "file": "KR",
           "var": "v022"
         },
+        "BD1997DHS": {
+          "method": "numeric",
+          "file": "KR",
+          "var": "v022",
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "numeric",
           "file": "KR",
@@ -782,6 +804,13 @@
           "file": "KR",
           "var": "v005",
           "divide_by": 1000000
+        },
+        "BD1997DHS": {
+          "method": "numeric",
+          "file": "KR",
+          "var": "v005",
+          "divide_by": 1000000,
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "numeric",
@@ -842,6 +871,13 @@
           "var": "awfactt",
           "divide_by": 100
         },
+        "BD1997DHS": {
+          "method": "numeric",
+          "file": "KR",
+          "var": "awfactt",
+          "divide_by": 100,
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "numeric",
           "file": "KR",
@@ -899,6 +935,12 @@
           "file": "KR",
           "var": "v008"
         },
+        "BD1997DHS": {
+          "method": "numeric",
+          "file": "KR",
+          "var": "v008",
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "numeric",
           "file": "KR",
@@ -949,6 +991,13 @@
           "file": "KR",
           "vars": ["v008"],
           "expr": "1900 + (v008 - 1) %/% 12"
+        },
+        "BD1997DHS": {
+          "method": "expr",
+          "file": "KR",
+          "vars": ["v008"],
+          "expr": "1900 + (v008 - 1) %/% 12",
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "expr",
@@ -1055,6 +1104,28 @@
             "4": "khulna",
             "5": "raj"
           }
+        },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "v024",
+          "map": {
+            "1": "barishal",
+            "2": "chattogram",
+            "3": "dhaka",
+            "4": "khulna",
+            "5": "rajshahi",
+            "6": "sylhet"
+          },
+          "value_label_check": {
+            "1": "baris",
+            "2": "chatt|chitt",
+            "3": "dhaka",
+            "4": "khulna",
+            "5": "raj",
+            "6": "sylhet"
+          },
+          "note": "Rule of BD2000DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "map",
@@ -1262,6 +1333,20 @@
           "expr": "ifelse(sdistr %in% c(36, 58, 90, 91), 'sylhet', c('barishal','chattogram','dhaka','khulna','rajshahi')[v024])",
           "note": "sdistr uses BBS district geocodes (verified identical to 2022 sdist codes). Districts 36 Habiganj, 58 Maulvibazar, 90 Sunamganj, 91 Sylhet are all coded v024=2 (Chittagong) in 1993-94. 1 record has sdistr=79 (Pirojpur) with v024=5: keep v024."
         },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "v024",
+          "map": {
+            "1": "barishal",
+            "2": "chattogram",
+            "3": "dhaka",
+            "4": "khulna",
+            "5": "rajshahi",
+            "6": "sylhet"
+          },
+          "note": "Rule of BD2000DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "map",
           "file": "KR",
@@ -1402,6 +1487,20 @@
             "4": "khulna",
             "5": "rajshahi"
           }
+        },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "v024",
+          "map": {
+            "1": "barishal",
+            "2": "chattogram",
+            "3": "dhaka",
+            "4": "khulna",
+            "5": "rajshahi",
+            "6": "chattogram"
+          },
+          "note": "Rule of BD2000DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "map",
@@ -1550,6 +1649,10 @@
           "expr": "lookup$district_bbs$division_2022[match(sdistr, lookup$district_bbs$code)]",
           "note": "Uses lookups.district_bbs (64 BBS district codes -> 2022 division, from BDKR81FL sdist labels x v024)."
         },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "The 1996-97 files have a district variable (sdist) whose codes have not been verified."
+        },
         "BD2000DHS": {
           "method": "unavailable",
           "reason": "No district variable in KR; needs cluster->district join (GPS/BDGE files), not available locally."
@@ -1615,6 +1718,10 @@
           "var": "sdistr",
           "note": "Unlabelled in file; 61 of 64 districts observed; names via lookups.district_bbs."
         },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "The 1996-97 files have a district variable (sdist) whose codes have not been verified."
+        },
         "BD2000DHS": {
           "method": "unavailable",
           "reason": "No district variable in the recode file."
@@ -1677,6 +1784,20 @@
             "1": "urban",
             "2": "rural"
           }
+        },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "v025",
+          "map": {
+            "1": "urban",
+            "2": "rural"
+          },
+          "value_label_check": {
+            "1": "urban",
+            "2": "rural"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "map",
@@ -1785,6 +1906,12 @@
           "file": "KR",
           "var": "v012"
         },
+        "BD1997DHS": {
+          "method": "numeric",
+          "file": "KR",
+          "var": "v012",
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "numeric",
           "file": "KR",
@@ -1869,6 +1996,13 @@
           "file": "KR",
           "vars": ["v012"],
           "expr": "cut(v012, c(9, 14, 19, 24, 29, 34, 39, 44, 49), labels = c('10_14','15_19','20_24','25_29','30_34','35_39','40_44','45_49'))"
+        },
+        "BD1997DHS": {
+          "method": "expr",
+          "file": "KR",
+          "vars": ["v012"],
+          "expr": "cut(v012, c(9, 14, 19, 24, 29, 34, 39, 44, 49), labels = c('10_14','15_19','20_24','25_29','30_34','35_39','40_44','45_49'))",
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "expr",
@@ -1956,6 +2090,24 @@
             "2": "secondary",
             "3": "higher"
           }
+        },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "v106",
+          "map": {
+            "0": "none",
+            "1": "primary",
+            "2": "secondary",
+            "3": "higher"
+          },
+          "value_label_check": {
+            "0": "no educ",
+            "1": "primary",
+            "2": "secondary",
+            "3": "higher"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "map",
@@ -2088,6 +2240,13 @@
           "var": "v133",
           "na_codes": [97, 98, 99]
         },
+        "BD1997DHS": {
+          "method": "numeric",
+          "file": "KR",
+          "var": "v133",
+          "na_codes": [97, 98, 99],
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "numeric",
           "file": "KR",
@@ -2179,6 +2338,21 @@
             "5": "higher"
           },
           "na_codes": [9]
+        },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "v149",
+          "map": {
+            "0": "none",
+            "1": "incomplete_primary",
+            "2": "complete_primary",
+            "3": "incomplete_secondary",
+            "4": "complete_secondary",
+            "5": "higher"
+          },
+          "na_codes": [9],
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "map",
@@ -2322,6 +2496,24 @@
             "5": "other"
           },
           "note": "FILE VALUE LABELS ARE WRONG: BDKR31FL labels 1=islam 2=christianity 3=hinduism 4=buddhism 5=other (copied from questionnaire Q113). Data follow 1=islam 2=hinduism 3=buddhism 4=christianity: code 2 = 10.9% (weighted, KR) vs 1993-94 final report (FR60) Hinduism 11.6% / Christianity 0.4%; all 10 mothers with code 3 live in Chittagong division (Buddhist geography, as code 3 in 1999-2014); code-4 mothers are in Dhaka/Rajshahi."
+        },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "v130",
+          "map": {
+            "1": "islam",
+            "2": "hinduism",
+            "3": "buddhism",
+            "4": "christianity",
+            "5": "other"
+          },
+          "value_label_check": {
+            "2": "hindu",
+            "3": "buddh",
+            "4": "christ"
+          },
+          "note": "Codebook: 1 Islam, 2 Hinduism, 3 Buddhism, 4 Christianity, 5 Other; checked against the DHS-III recode codebook for 1996-97 (World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "map",
@@ -2488,6 +2680,19 @@
             "5": "separated"
           }
         },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "v501",
+          "map": {
+            "1": "married",
+            "2": "living_together",
+            "3": "widowed",
+            "4": "divorced",
+            "5": "separated"
+          },
+          "note": "Rule of BD2000DHS; codes checked against the DHS-III recode codebook for 1996-97 (World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "map",
           "file": "KR",
@@ -2592,6 +2797,17 @@
             "2": "0"
           }
         },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "v502",
+          "map": {
+            "0": "0",
+            "1": "1",
+            "2": "0"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "map",
           "file": "KR",
@@ -2680,6 +2896,16 @@
             "1": "1"
           }
         },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "v714",
+          "map": {
+            "0": "0",
+            "1": "1"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "map",
           "file": "KR",
@@ -2757,6 +2983,10 @@
           "method": "unavailable",
           "reason": "v731 labelled 'na' (constant 2 in all records).",
           "check_var": "v731"
+        },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "Not available in 1993-94 nor 1999-2000; assumed unavailable in 1996-97 (unverified)."
         },
         "BD2000DHS": {
           "method": "unavailable",
@@ -2896,6 +3126,25 @@
           },
           "na_codes": [98]
         },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "v717",
+          "map": {
+            "0": "not_working",
+            "1": "prof_tech_manag",
+            "2": "clerical",
+            "3": "sales",
+            "4": "agri_self",
+            "5": "agri_employee",
+            "6": "household_domestic",
+            "7": "services",
+            "8": "skilled_manual",
+            "9": "unskilled_manual"
+          },
+          "na_codes": [98],
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "map",
           "file": "KR",
@@ -3026,6 +3275,16 @@
             "2": "female"
           }
         },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "v151",
+          "map": {
+            "1": "male",
+            "2": "female"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "map",
           "file": "KR",
@@ -3105,6 +3364,13 @@
           "var": "v152",
           "na_codes": [98, 99]
         },
+        "BD1997DHS": {
+          "method": "numeric",
+          "file": "KR",
+          "var": "v152",
+          "na_codes": [98, 99],
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "numeric",
           "file": "KR",
@@ -3162,6 +3428,12 @@
           "method": "numeric",
           "file": "KR",
           "var": "v136"
+        },
+        "BD1997DHS": {
+          "method": "numeric",
+          "file": "KR",
+          "var": "v136",
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "numeric",
@@ -3247,6 +3519,24 @@
           "join": "WI.whhid == substr(KR.caseid, 1, 12)",
           "status": "unverified_no_local_file",
           "note": "BDWI31FL; not in KR/IR. Join key per DHS convention (unverified locally)."
+        },
+        "BD1997DHS": {
+          "method": "external_file",
+          "file": "WI",
+          "var": "wlthind5",
+          "apply": {
+            "method": "map",
+            "map": {
+              "1": "poorest",
+              "2": "poorer",
+              "3": "middle",
+              "4": "richer",
+              "5": "richest"
+            }
+          },
+          "join": "WI.whhid == substr(KR.caseid, 1, 12)",
+          "status": "unverified_no_local_file",
+          "note": "BDWI3AFL; not in KR/IR. Join key per DHS convention (unverified locally). (1996-97: BDWI3AFL)"
         },
         "BD2000DHS": {
           "method": "external_file",
@@ -3361,6 +3651,18 @@
           "status": "unverified_no_local_file",
           "note": "BDWI31FL"
         },
+        "BD1997DHS": {
+          "method": "external_file",
+          "file": "WI",
+          "var": "wlthindf",
+          "apply": {
+            "method": "numeric",
+            "divide_by": 100000
+          },
+          "join": "WI.whhid == substr(KR.caseid, 1, 12)",
+          "status": "unverified_no_local_file",
+          "note": "BDWI3AFL (1996-97: BDWI3AFL)"
+        },
         "BD2000DHS": {
           "method": "external_file",
           "file": "WI",
@@ -3445,6 +3747,10 @@
           "method": "unavailable",
           "reason": "v190a not present before 2017-18."
         },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "Not available in 1993-94 nor 1999-2000; assumed unavailable in 1996-97 (unverified)."
+        },
         "BD2000DHS": {
           "method": "unavailable",
           "reason": "v190a not present before 2017-18."
@@ -3508,6 +3814,17 @@
             "1": "1"
           },
           "na_codes": [7, 9]
+        },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "v119",
+          "map": {
+            "0": "0",
+            "1": "1"
+          },
+          "na_codes": [7, 9],
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "map",
@@ -3600,6 +3917,17 @@
           },
           "na_codes": [7, 9]
         },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "v120",
+          "map": {
+            "0": "0",
+            "1": "1"
+          },
+          "na_codes": [7, 9],
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "map",
           "file": "KR",
@@ -3691,6 +4019,17 @@
           },
           "na_codes": [7, 9]
         },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "v121",
+          "map": {
+            "0": "0",
+            "1": "1"
+          },
+          "na_codes": [7, 9],
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "map",
           "file": "KR",
@@ -3777,6 +4116,10 @@
           "reason": "v122 missing or labelled 'na' in this round.",
           "check_var": "v122"
         },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "Not available in 1993-94 nor 1999-2000; assumed unavailable in 1996-97 (unverified)."
+        },
         "BD2000DHS": {
           "method": "unavailable",
           "reason": "v122 missing or labelled 'na' in this round.",
@@ -3857,6 +4200,17 @@
             "1": "1"
           },
           "na_codes": [7, 9]
+        },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "v123",
+          "map": {
+            "0": "0",
+            "1": "1"
+          },
+          "na_codes": [7, 9],
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "map",
@@ -3942,6 +4296,11 @@
         "BD1994DHS": {
           "method": "unavailable",
           "reason": "v124 missing or labelled 'na' in this round.",
+          "check_var": "v124"
+        },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "v124 labelled 'NA' (not collected) in the 1996-97 recode codebook.",
           "check_var": "v124"
         },
         "BD2000DHS": {
@@ -4030,6 +4389,10 @@
           "reason": "v125 missing or labelled 'na' in this round.",
           "check_var": "v125"
         },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "Not available in 1993-94 nor 1999-2000; assumed unavailable in 1996-97 (unverified)."
+        },
         "BD2000DHS": {
           "method": "unavailable",
           "reason": "v125 missing or labelled 'na' in this round.",
@@ -4099,6 +4462,11 @@
         "BD1994DHS": {
           "method": "unavailable",
           "reason": "v153 missing or labelled 'na' in this round.",
+          "check_var": "v153"
+        },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "v153 labelled 'NA' (not collected) in the 1996-97 recode codebook.",
           "check_var": "v153"
         },
         "BD2000DHS": {
@@ -4247,6 +4615,24 @@
             "96": "other"
           },
           "note": "'22=surface/other well' -> unprotected_well (dug wells not split)."
+        },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "v113",
+          "map": {
+            "11": "piped_dwelling",
+            "12": "piped_other",
+            "21": "tubewell_borehole",
+            "22": "unprotected_well",
+            "31": "surface_water",
+            "32": "surface_water",
+            "41": "rainwater",
+            "96": "other",
+            "51": "tanker_cart",
+            "61": "bottled"
+          },
+          "note": "Rule of BD2000DHS; codes checked against the DHS-III recode codebook for 1996-97 (World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "map",
@@ -4422,6 +4808,10 @@
           "method": "derive",
           "from": "water_source_cat"
         },
+        "BD1997DHS": {
+          "method": "derive",
+          "from": "water_source_cat"
+        },
         "BD2000DHS": {
           "method": "derive",
           "from": "water_source_cat"
@@ -4533,6 +4923,21 @@
             "96": "other"
           },
           "note": "File labels only group headers (10/20/30/96); sub-codes 11,21-24,31 interpreted with the 1999-2000 labels (identical code set, similar shares)."
+        },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "v116",
+          "map": {
+            "11": "flush_sewer_septic_pit",
+            "21": "pit_improved",
+            "22": "pit_unimproved",
+            "23": "pit_unimproved",
+            "24": "hanging",
+            "31": "no_facility",
+            "96": "other"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "map",
@@ -4696,6 +5101,10 @@
           "method": "derive",
           "from": "toilet_cat"
         },
+        "BD1997DHS": {
+          "method": "derive",
+          "from": "toilet_cat"
+        },
         "BD2000DHS": {
           "method": "derive",
           "from": "toilet_cat"
@@ -4794,6 +5203,35 @@
             }
           ],
           "na_codes": [97, 99]
+        },
+        "BD1997DHS": {
+          "method": "range_map",
+          "file": "KR",
+          "var": "v127",
+          "ranges": [
+            {
+              "from": 10,
+              "to": 19,
+              "level": "natural"
+            },
+            {
+              "from": 20,
+              "to": 29,
+              "level": "rudimentary"
+            },
+            {
+              "from": 30,
+              "to": 39,
+              "level": "finished"
+            },
+            {
+              "from": 96,
+              "to": 96,
+              "level": "other"
+            }
+          ],
+          "na_codes": [97, 99],
+          "note": "Rule of BD2000DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "range_map",
@@ -5043,6 +5481,22 @@
             "32": "tin"
           }
         },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "v128",
+          "map": {
+            "11": "natural",
+            "21": "wood",
+            "31": "cement_brick_stone",
+            "32": "tin",
+            "96": "other"
+          },
+          "value_label_check": {
+            "32": "tin"
+          },
+          "note": "Rule of BD1994DHS; codes checked against the DHS-III recode codebook for 1996-97 (World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "map",
           "file": "KR",
@@ -5263,6 +5717,21 @@
             "21": "tin"
           }
         },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "v129",
+          "map": {
+            "11": "natural",
+            "21": "tin_metal",
+            "31": "cement_concrete",
+            "96": "other"
+          },
+          "value_label_check": {
+            "21": "tin"
+          },
+          "note": "Rule of BD1994DHS; codes checked against the DHS-III recode codebook for 1996-97 (World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "map",
           "file": "KR",
@@ -5426,6 +5895,10 @@
           "method": "unavailable",
           "reason": "v161 absent."
         },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "Not available in 1993-94 nor 1999-2000; assumed unavailable in 1996-97 (unverified)."
+        },
         "BD2000DHS": {
           "method": "unavailable",
           "reason": "v161 absent."
@@ -5554,6 +6027,13 @@
           "var": "m14",
           "na_codes": [98, 99]
         },
+        "BD1997DHS": {
+          "method": "numeric",
+          "file": "KR",
+          "var": "m14",
+          "na_codes": [98, 99],
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "numeric",
           "file": "KR",
@@ -5611,6 +6091,13 @@
           "file": "KR",
           "vars": ["m14"],
           "expr": "ifelse(m14 >= 4 & m14 <= 90, 1, ifelse(m14 <= 3 | m14 == 98, 0, NA))"
+        },
+        "BD1997DHS": {
+          "method": "expr",
+          "file": "KR",
+          "vars": ["m14"],
+          "expr": "ifelse(m14 >= 4 & m14 <= 90, 1, ifelse(m14 <= 3 | m14 == 98, 0, NA))",
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "expr",
@@ -5719,6 +6206,40 @@
             }
           ],
           "na_codes": [99]
+        },
+        "BD1997DHS": {
+          "method": "range_map",
+          "file": "KR",
+          "var": "m15",
+          "ranges": [
+            {
+              "from": 10,
+              "to": 19,
+              "level": "home"
+            },
+            {
+              "from": 20,
+              "to": 29,
+              "level": "public"
+            },
+            {
+              "from": 30,
+              "to": 39,
+              "level": "private"
+            },
+            {
+              "from": 40,
+              "to": 49,
+              "level": "ngo"
+            },
+            {
+              "from": 96,
+              "to": 96,
+              "level": "other"
+            }
+          ],
+          "na_codes": [99],
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "range_map",
@@ -5965,6 +6486,10 @@
           "method": "derive",
           "from": "delivery_place_cat"
         },
+        "BD1997DHS": {
+          "method": "derive",
+          "from": "delivery_place_cat"
+        },
         "BD2000DHS": {
           "method": "derive",
           "from": "delivery_place_cat"
@@ -6023,6 +6548,17 @@
           "label_check": {
             "m3a": "doctor"
           }
+        },
+        "BD1997DHS": {
+          "method": "any_of",
+          "file": "KR",
+          "vars": ["m3a"],
+          "true_codes": [1],
+          "na_rule": "NA if all source vars NA; else 1 if any in true_codes, else 0",
+          "label_check": {
+            "m3a": "doctor"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "any_of",
@@ -6113,6 +6649,17 @@
             "m3b": "nurse|midwi"
           }
         },
+        "BD1997DHS": {
+          "method": "any_of",
+          "file": "KR",
+          "vars": ["m3b"],
+          "true_codes": [1],
+          "na_rule": "NA if all source vars NA; else 1 if any in true_codes, else 0",
+          "label_check": {
+            "m3b": "nurse|midwi"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "any_of",
           "file": "KR",
@@ -6202,6 +6749,17 @@
             "m3d": "family welf|fwv"
           }
         },
+        "BD1997DHS": {
+          "method": "any_of",
+          "file": "KR",
+          "vars": ["m3d"],
+          "true_codes": [1],
+          "na_rule": "NA if all source vars NA; else 1 if any in true_codes, else 0",
+          "label_check": {
+            "m3d": "family welf|fwv|cs health profess"
+          },
+          "note": "Rule of BD1994DHS; codes checked against the DHS-III recode codebook for 1996-97 (World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "any_of",
           "file": "KR",
@@ -6286,6 +6844,10 @@
           "method": "unavailable",
           "reason": "No such category in this round's questionnaire."
         },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "Not available in 1993-94 nor 1999-2000; assumed unavailable in 1996-97 (unverified)."
+        },
         "BD2000DHS": {
           "method": "unavailable",
           "reason": "No such category in this round's questionnaire."
@@ -6357,6 +6919,10 @@
         "BD1994DHS": {
           "method": "unavailable",
           "reason": "No such category in this round's questionnaire."
+        },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "Not available in 1993-94 nor 1999-2000; assumed unavailable in 1996-97 (unverified)."
         },
         "BD2000DHS": {
           "method": "unavailable",
@@ -6440,6 +7006,17 @@
           "label_check": {
             "m3f": "trained birth|trad|tba"
           }
+        },
+        "BD1997DHS": {
+          "method": "any_of",
+          "file": "KR",
+          "vars": ["m3f"],
+          "true_codes": [1],
+          "na_rule": "NA if all source vars NA; else 1 if any in true_codes, else 0",
+          "label_check": {
+            "m3f": "trained birth|trad|tba"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "any_of",
@@ -6531,6 +7108,17 @@
             "m3g": "trad|untrained"
           }
         },
+        "BD1997DHS": {
+          "method": "any_of",
+          "file": "KR",
+          "vars": ["m3g"],
+          "true_codes": [1],
+          "na_rule": "NA if all source vars NA; else 1 if any in true_codes, else 0",
+          "label_check": {
+            "m3g": "trad|untrained"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "any_of",
           "file": "KR",
@@ -6620,6 +7208,17 @@
             "m3h": "relative|friend|neighbo"
           }
         },
+        "BD1997DHS": {
+          "method": "any_of",
+          "file": "KR",
+          "vars": ["m3h"],
+          "true_codes": [1],
+          "na_rule": "NA if all source vars NA; else 1 if any in true_codes, else 0",
+          "label_check": {
+            "m3h": "relative|friend|neighbo"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "any_of",
           "file": "KR",
@@ -6705,6 +7304,11 @@
         "BD1994DHS": {
           "method": "unavailable",
           "reason": "No such category in this round's questionnaire."
+        },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "m3i is 'NA' (not collected) in the 1996-97 recode codebook.",
+          "check_var": "m3i"
         },
         "BD2000DHS": {
           "method": "any_of",
@@ -6794,6 +7398,17 @@
           "label_check": {
             "m3n": "no one"
           }
+        },
+        "BD1997DHS": {
+          "method": "any_of",
+          "file": "KR",
+          "vars": ["m3n"],
+          "true_codes": [1],
+          "na_rule": "NA if all source vars NA; else 1 if any in true_codes, else 0",
+          "label_check": {
+            "m3n": "no one"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "any_of",
@@ -6885,6 +7500,19 @@
             "m3b": "doctor|nurse|midwi|family welf|fwv|skilled birth|csba|sacmo|sub-assistant",
             "m3d": "doctor|nurse|midwi|family welf|fwv|skilled birth|csba|sacmo|sub-assistant"
           }
+        },
+        "BD1997DHS": {
+          "method": "any_of",
+          "file": "KR",
+          "vars": ["m3a", "m3b", "m3d"],
+          "true_codes": [1],
+          "na_rule": "NA if all source vars NA; else 1 if any in true_codes, else 0",
+          "label_check": {
+            "m3a": "doctor|nurse|midwi|family welf|fwv|skilled birth|csba|sacmo|sub-assistant",
+            "m3b": "doctor|nurse|midwi|family welf|fwv|skilled birth|csba|sacmo|sub-assistant",
+            "m3d": "doctor|nurse|midwi|family welf|fwv|skilled birth|csba|sacmo|sub-assistant|cs health profess"
+          },
+          "note": "Rule of BD1994DHS; codes checked against the DHS-III recode codebook for 1996-97 (World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "any_of",
@@ -7002,6 +7630,18 @@
             "m3b": "doctor|nurse|midwi|family welf|fwv|skilled birth|csba|sacmo|sub-assistant"
           }
         },
+        "BD1997DHS": {
+          "method": "any_of",
+          "file": "KR",
+          "vars": ["m3a", "m3b"],
+          "true_codes": [1],
+          "na_rule": "NA if all source vars NA; else 1 if any in true_codes, else 0",
+          "label_check": {
+            "m3a": "doctor|nurse|midwi|family welf|fwv|skilled birth|csba|sacmo|sub-assistant",
+            "m3b": "doctor|nurse|midwi|family welf|fwv|skilled birth|csba|sacmo|sub-assistant"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "any_of",
           "file": "KR",
@@ -7109,6 +7749,11 @@
           "reason": "m17 labelled '-na' in BDKR31FL (not asked in 1993-94).",
           "check_var": "m17"
         },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "m17 labelled 'NA' (not collected) in the 1996-97 recode codebook.",
+          "check_var": "m17"
+        },
         "BD2000DHS": {
           "method": "map",
           "file": "KR",
@@ -7213,6 +7858,11 @@
           "reason": "m18 '-na'.",
           "check_var": "m18"
         },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "m18 labelled 'NA' (not collected) in the 1996-97 recode codebook.",
+          "check_var": "m18"
+        },
         "BD2000DHS": {
           "method": "map",
           "file": "KR",
@@ -7295,6 +7945,10 @@
           "reason": "m19 labelled na/empty (birth weight not collected).",
           "check_var": "m19"
         },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "Not available in 1993-94 nor 1999-2000; assumed unavailable in 1996-97 (unverified)."
+        },
         "BD2000DHS": {
           "method": "unavailable",
           "reason": "m19 labelled na/empty (birth weight not collected).",
@@ -7350,6 +8004,10 @@
           "method": "unavailable",
           "reason": "m19 not collected."
         },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "Not available in 1993-94 nor 1999-2000; assumed unavailable in 1996-97 (unverified)."
+        },
         "BD2000DHS": {
           "method": "unavailable",
           "reason": "m19 not collected."
@@ -7396,6 +8054,13 @@
           "file": "KR",
           "vars": ["m4"],
           "expr": "ifelse(is.na(m4) | m4 == 99, NA, as.integer(m4 != 94))"
+        },
+        "BD1997DHS": {
+          "method": "expr",
+          "file": "KR",
+          "vars": ["m4"],
+          "expr": "ifelse(is.na(m4) | m4 == 99, NA, as.integer(m4 != 94))",
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "expr",
@@ -7455,6 +8120,13 @@
           "vars": ["m4"],
           "expr": "ifelse(is.na(m4) | m4 == 99, NA, as.integer(m4 == 95))"
         },
+        "BD1997DHS": {
+          "method": "expr",
+          "file": "KR",
+          "vars": ["m4"],
+          "expr": "ifelse(is.na(m4) | m4 == 99, NA, as.integer(m4 == 95))",
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "expr",
           "file": "KR",
@@ -7511,6 +8183,13 @@
           "file": "KR",
           "vars": ["m34"],
           "expr": "ifelse(is.na(m34) | m34 >= 999, NA, as.integer(m34 %in% c(0, 100)))"
+        },
+        "BD1997DHS": {
+          "method": "expr",
+          "file": "KR",
+          "vars": ["m34"],
+          "expr": "ifelse(is.na(m34) | m34 >= 999, NA, as.integer(m34 %in% c(0, 100)))",
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "expr",
@@ -7569,6 +8248,13 @@
           "file": "KR",
           "var": "m1",
           "na_codes": [8, 9]
+        },
+        "BD1997DHS": {
+          "method": "numeric",
+          "file": "KR",
+          "var": "m1",
+          "na_codes": [8, 9],
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "numeric",
@@ -7638,6 +8324,16 @@
             "1": "male",
             "2": "female"
           }
+        },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "b4",
+          "map": {
+            "1": "male",
+            "2": "female"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "map",
@@ -7720,6 +8416,16 @@
             "1": "1"
           }
         },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "b5",
+          "map": {
+            "0": "0",
+            "1": "1"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "map",
           "file": "KR",
@@ -7798,6 +8504,13 @@
           "vars": ["v008", "b3"],
           "expr": "v008 - b3"
         },
+        "BD1997DHS": {
+          "method": "expr",
+          "file": "KR",
+          "vars": ["v008", "b3"],
+          "expr": "v008 - b3",
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "expr",
           "file": "KR",
@@ -7855,6 +8568,12 @@
           "file": "KR",
           "var": "b7"
         },
+        "BD1997DHS": {
+          "method": "numeric",
+          "file": "KR",
+          "var": "b7",
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "numeric",
           "file": "KR",
@@ -7905,6 +8624,12 @@
           "file": "KR",
           "var": "bord"
         },
+        "BD1997DHS": {
+          "method": "numeric",
+          "file": "KR",
+          "var": "bord",
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "numeric",
           "file": "KR",
@@ -7953,6 +8678,12 @@
           "method": "numeric",
           "file": "KR",
           "var": "b11"
+        },
+        "BD1997DHS": {
+          "method": "numeric",
+          "file": "KR",
+          "var": "b11",
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "numeric",
@@ -8003,6 +8734,13 @@
           "file": "KR",
           "vars": ["b0"],
           "expr": "as.integer(b0 > 0)"
+        },
+        "BD1997DHS": {
+          "method": "expr",
+          "file": "KR",
+          "vars": ["b0"],
+          "expr": "as.integer(b0 > 0)",
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "expr",
@@ -8058,6 +8796,10 @@
         "BD1994DHS": {
           "method": "unavailable",
           "reason": "b16 absent"
+        },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "Not available in 1993-94 nor 1999-2000; assumed unavailable in 1996-97 (unverified)."
         },
         "BD2000DHS": {
           "method": "unavailable",
@@ -8126,6 +8868,25 @@
             "2": "reported by mother",
             "3": "marked on card"
           }
+        },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "h2",
+          "map": {
+            "0": "0",
+            "1": "1",
+            "2": "1",
+            "3": "1",
+            "8": "0"
+          },
+          "na_codes": [9],
+          "value_label_check": {
+            "1": "date on card",
+            "2": "reported by mother",
+            "3": "marked on card"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "map",
@@ -8268,6 +9029,25 @@
             "3": "marked on card"
           }
         },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "h3",
+          "map": {
+            "0": "0",
+            "1": "1",
+            "2": "1",
+            "3": "1",
+            "8": "0"
+          },
+          "na_codes": [9],
+          "value_label_check": {
+            "1": "date on card",
+            "2": "reported by mother",
+            "3": "marked on card"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "map",
           "file": "KR",
@@ -8408,6 +9188,25 @@
             "2": "reported by mother",
             "3": "marked on card"
           }
+        },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "h5",
+          "map": {
+            "0": "0",
+            "1": "1",
+            "2": "1",
+            "3": "1",
+            "8": "0"
+          },
+          "na_codes": [9],
+          "value_label_check": {
+            "1": "date on card",
+            "2": "reported by mother",
+            "3": "marked on card"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "map",
@@ -8550,6 +9349,25 @@
             "3": "marked on card"
           }
         },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "h7",
+          "map": {
+            "0": "0",
+            "1": "1",
+            "2": "1",
+            "3": "1",
+            "8": "0"
+          },
+          "na_codes": [9],
+          "value_label_check": {
+            "1": "date on card",
+            "2": "reported by mother",
+            "3": "marked on card"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "map",
           "file": "KR",
@@ -8678,6 +9496,10 @@
           "reason": "h0 absent or 'na' in this round.",
           "check_var": "h0"
         },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "Not available in 1993-94 nor 1999-2000; assumed unavailable in 1996-97 (unverified)."
+        },
         "BD2000DHS": {
           "method": "unavailable",
           "reason": "h0 absent or 'na' in this round.",
@@ -8792,6 +9614,25 @@
             "2": "reported by mother",
             "3": "marked on card"
           }
+        },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "h4",
+          "map": {
+            "0": "0",
+            "1": "1",
+            "2": "1",
+            "3": "1",
+            "8": "0"
+          },
+          "na_codes": [9],
+          "value_label_check": {
+            "1": "date on card",
+            "2": "reported by mother",
+            "3": "marked on card"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "map",
@@ -8934,6 +9775,25 @@
             "3": "marked on card"
           }
         },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "h6",
+          "map": {
+            "0": "0",
+            "1": "1",
+            "2": "1",
+            "3": "1",
+            "8": "0"
+          },
+          "na_codes": [9],
+          "value_label_check": {
+            "1": "date on card",
+            "2": "reported by mother",
+            "3": "marked on card"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "map",
           "file": "KR",
@@ -9074,6 +9934,25 @@
             "2": "reported by mother",
             "3": "marked on card"
           }
+        },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "h8",
+          "map": {
+            "0": "0",
+            "1": "1",
+            "2": "1",
+            "3": "1",
+            "8": "0"
+          },
+          "na_codes": [9],
+          "value_label_check": {
+            "1": "date on card",
+            "2": "reported by mother",
+            "3": "marked on card"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "map",
@@ -9216,6 +10095,25 @@
             "3": "marked on card"
           }
         },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "h9",
+          "map": {
+            "0": "0",
+            "1": "1",
+            "2": "1",
+            "3": "1",
+            "8": "0"
+          },
+          "na_codes": [9],
+          "value_label_check": {
+            "1": "date on card",
+            "2": "reported by mother",
+            "3": "marked on card"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "map",
           "file": "KR",
@@ -9344,6 +10242,10 @@
           "reason": "h9a absent or 'na' in this round.",
           "check_var": "h9a"
         },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "Not available in 1993-94 nor 1999-2000; assumed unavailable in 1996-97 (unverified)."
+        },
         "BD2000DHS": {
           "method": "unavailable",
           "reason": "h9a absent or 'na' in this round.",
@@ -9406,6 +10308,10 @@
           "method": "unavailable",
           "reason": "h53 absent or 'na' in this round.",
           "check_var": "h53"
+        },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "Not available in 1993-94 nor 1999-2000; assumed unavailable in 1996-97 (unverified)."
         },
         "BD2000DHS": {
           "method": "unavailable",
@@ -9470,6 +10376,10 @@
           "reason": "h56 absent or 'na' in this round.",
           "check_var": "h56"
         },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "Not available in 1993-94 nor 1999-2000; assumed unavailable in 1996-97 (unverified)."
+        },
         "BD2000DHS": {
           "method": "unavailable",
           "reason": "h56 absent or 'na' in this round.",
@@ -9532,6 +10442,10 @@
           "method": "unavailable",
           "reason": "h60 absent or 'na' in this round.",
           "check_var": "h60"
+        },
+        "BD1997DHS": {
+          "method": "unavailable",
+          "reason": "Not available in 1993-94 nor 1999-2000; assumed unavailable in 1996-97 (unverified)."
         },
         "BD2000DHS": {
           "method": "unavailable",
@@ -9597,6 +10511,13 @@
           "vars": ["h2", "h3", "h5", "h7", "h4", "h6", "h8", "h9"],
           "expr": "ifelse(is.na(h2) & is.na(h3) & is.na(h5) & is.na(h7) & is.na(h4) & is.na(h6) & is.na(h8) & is.na(h9), NA, as.integer(h2 %in% 1:3 & h3 %in% 1:3 & h5 %in% 1:3 & h7 %in% 1:3 & h4 %in% 1:3 & h6 %in% 1:3 & h8 %in% 1:3 & h9 %in% 1:3))",
           "note": "1 when every one of h2,h3,h5,h7,h4,h6,h8,h9 is in 1:3 (card date, mother's report, marked on card); missing/don't know count as not vaccinated, as in the validated DHS tabulation."
+        },
+        "BD1997DHS": {
+          "method": "expr",
+          "file": "KR",
+          "vars": ["h2", "h3", "h5", "h7", "h4", "h6", "h8", "h9"],
+          "expr": "ifelse(is.na(h2) & is.na(h3) & is.na(h5) & is.na(h7) & is.na(h4) & is.na(h6) & is.na(h8) & is.na(h9), NA, as.integer(h2 %in% 1:3 & h3 %in% 1:3 & h5 %in% 1:3 & h7 %in% 1:3 & h4 %in% 1:3 & h6 %in% 1:3 & h8 %in% 1:3 & h9 %in% 1:3))",
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "expr",
@@ -9684,6 +10605,19 @@
             "3": "no_longer"
           },
           "na_codes": [9]
+        },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "h1",
+          "map": {
+            "0": "no_card",
+            "1": "seen",
+            "2": "not_seen",
+            "3": "no_longer"
+          },
+          "na_codes": [9],
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "map",
@@ -9785,6 +10719,22 @@
           "value_label_check": {
             "2": "two weeks"
           }
+        },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "h11",
+          "map": {
+            "0": "0",
+            "1": "1",
+            "2": "1",
+            "8": "0"
+          },
+          "na_codes": [9],
+          "value_label_check": {
+            "2": "two weeks"
+          },
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "map",
@@ -9907,6 +10857,18 @@
           "reason": "h22 '-na' in BDKR31FL.",
           "check_var": "h22"
         },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "h22",
+          "map": {
+            "0": "0",
+            "1": "1",
+            "8": "0"
+          },
+          "na_codes": [9],
+          "note": "Rule of BD2000DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "map",
           "file": "KR",
@@ -10005,6 +10967,19 @@
             "8": "0"
           },
           "na_codes": [9]
+        },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "h31",
+          "map": {
+            "0": "0",
+            "1": "1",
+            "2": "1",
+            "8": "0"
+          },
+          "na_codes": [9],
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "map",
@@ -10105,6 +11080,13 @@
           "vars": ["h31", "h31b"],
           "expr": "ifelse(is.na(h31), NA, as.integer(h31 %in% c(1, 2) & h31b %in% 1))"
         },
+        "BD1997DHS": {
+          "method": "expr",
+          "file": "KR",
+          "vars": ["h31", "h31b"],
+          "expr": "ifelse(is.na(h31), NA, as.integer(h31 %in% c(1, 2) & h31b %in% 1))",
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "expr",
           "file": "KR",
@@ -10162,6 +11144,13 @@
           "file": "KR",
           "vars": ["h31", "h31b"],
           "expr": "ifelse(is.na(h31), NA, as.integer(h31 %in% c(1, 2) & h31b %in% 1))"
+        },
+        "BD1997DHS": {
+          "method": "expr",
+          "file": "KR",
+          "vars": ["h31", "h31b"],
+          "expr": "ifelse(is.na(h31), NA, as.integer(h31 %in% c(1, 2) & h31b %in% 1))",
+          "note": "Rule of BD1994DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "expr",
@@ -10221,6 +11210,19 @@
         "BD1994DHS": {
           "method": "unavailable",
           "reason": "No anthropometry in BDHS 1993-94 (hw* labelled 'na')."
+        },
+        "BD1997DHS": {
+          "method": "external_file",
+          "file": "HW",
+          "var": "hc70",
+          "apply": {
+            "method": "numeric",
+            "na_codes": [9996, 9997, 9998, 9999],
+            "divide_by": 100
+          },
+          "join": "HW.hwhhid/hwline -> PR hhid/hvidx (no b16 in 1999-2000 KR)",
+          "status": "unverified_no_local_file",
+          "note": "WHO z-scores only in BDHW3AFL (not local). (1996-97: BDHW3AFL)"
         },
         "BD2000DHS": {
           "method": "external_file",
@@ -10299,6 +11301,19 @@
           "method": "unavailable",
           "reason": "No anthropometry in BDHS 1993-94 (hw* labelled 'na')."
         },
+        "BD1997DHS": {
+          "method": "external_file",
+          "file": "HW",
+          "var": "hc71",
+          "apply": {
+            "method": "numeric",
+            "na_codes": [9996, 9997, 9998, 9999],
+            "divide_by": 100
+          },
+          "join": "HW.hwhhid/hwline -> PR hhid/hvidx (no b16 in 1999-2000 KR)",
+          "status": "unverified_no_local_file",
+          "note": "WHO z-scores only in BDHW3AFL (not local). (1996-97: BDHW3AFL)"
+        },
         "BD2000DHS": {
           "method": "external_file",
           "file": "HW",
@@ -10373,6 +11388,19 @@
         "BD1994DHS": {
           "method": "unavailable",
           "reason": "No anthropometry in BDHS 1993-94 (hw* labelled 'na')."
+        },
+        "BD1997DHS": {
+          "method": "external_file",
+          "file": "HW",
+          "var": "hc72",
+          "apply": {
+            "method": "numeric",
+            "na_codes": [9996, 9997, 9998, 9999],
+            "divide_by": 100
+          },
+          "join": "HW.hwhhid/hwline -> PR hhid/hvidx (no b16 in 1999-2000 KR)",
+          "status": "unverified_no_local_file",
+          "note": "WHO z-scores only in BDHW3AFL (not local). (1996-97: BDHW3AFL)"
         },
         "BD2000DHS": {
           "method": "external_file",
@@ -10449,6 +11477,19 @@
           "method": "unavailable",
           "reason": "No anthropometry in BDHS 1993-94 (hw* labelled 'na')."
         },
+        "BD1997DHS": {
+          "method": "external_file",
+          "file": "HW",
+          "var": "hc73",
+          "apply": {
+            "method": "numeric",
+            "na_codes": [9996, 9997, 9998, 9999],
+            "divide_by": 100
+          },
+          "join": "HW.hwhhid/hwline -> PR hhid/hvidx (no b16 in 1999-2000 KR)",
+          "status": "unverified_no_local_file",
+          "note": "WHO z-scores only in BDHW3AFL (not local). (1996-97: BDHW3AFL)"
+        },
         "BD2000DHS": {
           "method": "external_file",
           "file": "HW",
@@ -10524,6 +11565,14 @@
           "method": "unavailable",
           "reason": "No anthropometry in 1993-94."
         },
+        "BD1997DHS": {
+          "method": "numeric",
+          "file": "KR",
+          "var": "hw5",
+          "na_codes": [9996, 9997, 9998, 9999],
+          "divide_by": 100,
+          "note": "Rule of BD2000DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "numeric",
           "file": "KR",
@@ -10585,6 +11634,14 @@
           "method": "unavailable",
           "reason": "No anthropometry in 1993-94."
         },
+        "BD1997DHS": {
+          "method": "numeric",
+          "file": "KR",
+          "var": "hw8",
+          "na_codes": [9996, 9997, 9998, 9999],
+          "divide_by": 100,
+          "note": "Rule of BD2000DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
+        },
         "BD2000DHS": {
           "method": "numeric",
           "file": "KR",
@@ -10643,6 +11700,14 @@
         "BD1994DHS": {
           "method": "unavailable",
           "reason": "No anthropometry in 1993-94."
+        },
+        "BD1997DHS": {
+          "method": "numeric",
+          "file": "KR",
+          "var": "hw11",
+          "na_codes": [9996, 9997, 9998, 9999],
+          "divide_by": 100,
+          "note": "Rule of BD2000DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "numeric",
@@ -10703,6 +11768,10 @@
           "method": "derive",
           "from": "haz_who"
         },
+        "BD1997DHS": {
+          "method": "derive",
+          "from": "haz_who"
+        },
         "BD2000DHS": {
           "method": "derive",
           "from": "haz_who"
@@ -10745,6 +11814,10 @@
       "comparability": "full",
       "rounds": {
         "BD1994DHS": {
+          "method": "derive",
+          "from": "whz_who"
+        },
+        "BD1997DHS": {
           "method": "derive",
           "from": "whz_who"
         },
@@ -10793,6 +11866,10 @@
           "method": "derive",
           "from": "waz_who"
         },
+        "BD1997DHS": {
+          "method": "derive",
+          "from": "waz_who"
+        },
         "BD2000DHS": {
           "method": "derive",
           "from": "waz_who"
@@ -10837,6 +11914,14 @@
         "BD1994DHS": {
           "method": "unavailable",
           "reason": "No anthropometry."
+        },
+        "BD1997DHS": {
+          "method": "numeric",
+          "file": "KR",
+          "var": "hw2",
+          "na_codes": [9994, 9995, 9996, 9999],
+          "divide_by": 10,
+          "note": "Rule of BD2000DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "numeric",
@@ -10900,6 +11985,14 @@
         "BD1994DHS": {
           "method": "unavailable",
           "reason": "No anthropometry."
+        },
+        "BD1997DHS": {
+          "method": "numeric",
+          "file": "KR",
+          "var": "hw3",
+          "na_codes": [9994, 9995, 9996, 9998, 9999],
+          "divide_by": 10,
+          "note": "Rule of BD2000DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "numeric",
@@ -10977,6 +12070,18 @@
         "BD1994DHS": {
           "method": "unavailable",
           "reason": "No anthropometry."
+        },
+        "BD1997DHS": {
+          "method": "map",
+          "file": "KR",
+          "var": "hw15",
+          "map": {
+            "0": "not_measured",
+            "1": "lying",
+            "2": "standing"
+          },
+          "na_codes": [9],
+          "note": "Rule of BD2000DHS (same codes and labels in the DHS-III recode codebook for 1996-97, World Bank microdata catalog DDI); not verified against the data file."
         },
         "BD2000DHS": {
           "method": "map",
