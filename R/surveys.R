@@ -122,21 +122,24 @@ survey_file_code <- function(survey_id) {
   .rounds$file_code[match(survey_id, .rounds$survey_id)]
 }
 
-# Resolve survey id from a DHS country-phase code (v000 / hv000), e.g. "BD7".
-# Several rounds share a phase code, so the interview year breaks ties.
+# Resolve the survey id from the country-phase code (v000 / hv000, e.g. "BD7")
+# and the interview years (v007 / hv007). The interview year decides: every
+# BDHS round was fielded in different years, while the phase digit is
+# unreliable (the 1999-2000 files say "BD3" although they are DHS-IV).
+# Early rounds store two-digit years, and 1999-2000 codes 2000 as 0.
 survey_from_v000 <- function(v000, year = NULL) {
-  phase_digit <- substr(toupper(trimws(v000)), 3, 3)
   dhs <- .rounds[.rounds$survey_type == "DHS", ]
+  year <- as.numeric(year)
+  year <- year[!is.na(year)]
+  if (length(year)) {
+    year <- ifelse(year < 100, year + 1900, year)
+    year <- ifelse(year < 1950, year + 100, year)
+    gap <- abs(dhs$year - stats::median(year))
+    return(if (min(gap) <= 1.5) dhs$survey_id[[which.min(gap)]] else NA_character_)
+  }
+  phase_digit <- substr(toupper(trimws(v000)), 3, 3)
   cand <- dhs[substr(dhs$file_code, 1, 1) == phase_digit, ]
-  if (!nrow(cand)) {
-    return(NA_character_)
-  }
-  if (nrow(cand) == 1L || is.null(year) || all(is.na(year))) {
-    return(if (nrow(cand) == 1L) cand$survey_id else NA_character_)
-  }
-  year <- stats::median(year, na.rm = TRUE)
-  if (year < 100) year <- year + 1900
-  cand$survey_id[[which.min(abs(cand$year - year))]]
+  if (nrow(cand) == 1L) cand$survey_id else NA_character_
 }
 
 # Survey and recode detection for data frames -----------------------------------

@@ -28,6 +28,11 @@ test_that("survey_from_v000() breaks phase ties with the interview year", {
   expect_equal(survey_from_v000("BD7", c(2017, 2018)), "BD2017DHS")
   expect_equal(survey_from_v000("BD7", 2014), "BD2014DHS")
   expect_equal(survey_from_v000("BD3", 93), "BD1994DHS")
+  # The 1999-2000 files say "BD3" and code the year 2000 as 0.
+  expect_equal(survey_from_v000("BD3", c(99, 99, 0)), "BD2000DHS")
+  expect_equal(survey_from_v000("BD3", c(96, 97)), "BD1997DHS")
+  expect_equal(survey_from_v000("BD7", c(2017, 2018, 2018, 2018)), "BD2017DHS")
+  expect_true(is.na(survey_from_v000("BD7", 2030)))
   expect_equal(survey_from_v000("BD8", NULL), "BD2022DHS")
   expect_true(is.na(survey_from_v000("BD4", NULL)))
 })
