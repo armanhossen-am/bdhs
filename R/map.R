@@ -57,7 +57,8 @@ bdhs_boundaries <- function(survey = 2022) {
 #' `bdhs_estimate(..., by = "v024")`.
 #'
 #' A data frame needs a region column (`region_code`, `v024`, `hv024`,
-#' `mv024`, `region`, `division` or `region_name`) holding region codes as in
+#' `mv024`, `region`, `division`, `region_name`, or the harmonized
+#' `division_surveyed`, `division_trend6` or `division_trend5`) holding region codes as in
 #' the recode files or division names (old and new spellings such as
 #' "Barisal"/"Barishal" are both understood), and a value column (`value`
 #' argument; by default `estimate` or `value`). The survey round comes from
@@ -93,7 +94,16 @@ bdhs_map <- function(x, survey = NULL, value = NULL, title = NULL) {
   }
   d <- info$data
   sid <- unique(d$survey_id)
-  shp <- bdhs_boundaries(sid)
+  shp <- if (is.null(info$layout)) {
+    bdhs_boundaries(sid)
+  } else {
+    # One copy of the trend-layout boundaries per round in the data.
+    base <- bdhs_boundaries(info$layout)
+    do.call(rbind, lapply(sid, function(s) {
+      base$survey_id <- s
+      base
+    }))
+  }
   shp$value <- d$value[match(paste(shp$survey_id, shp[[info$key]]), paste(d$survey_id, d$key))]
   unmatched <- setdiff(paste(d$survey_id, d$key), paste(shp$survey_id, shp[[info$key]]))
   if (length(unmatched) && is.data.frame(x)) {
@@ -119,7 +129,10 @@ bdhs_map <- function(x, survey = NULL, value = NULL, title = NULL) {
   p +
     ggplot2::labs(
       title = title %||% info$title,
-      subtitle = paste0("Bangladesh DHS ", paste(levels(shp$year_label), collapse = ", "), ", by division"),
+      subtitle = paste0(
+        "Bangladesh DHS ", paste(levels(shp$year_label), collapse = ", "), ", by division",
+        if (!is.null(info$layout)) paste0(" (", c(BD2007DHS = "six", BD1994DHS = "five")[[info$layout]], "-division trend layout)")
+      ),
       x = NULL, y = NULL,
       caption = paste0(
         info$source, "\n",
@@ -192,8 +205,12 @@ map_user_data <- function(x, survey = NULL, value = NULL, call = rlang::caller_e
   names(x) <- tolower(names(x))
   region_col <- first_present(x, c(
     "region_code", "v024", "hv024", "mv024", "region", "division",
-    "region_name", "division_name", "division_surveyed"
+    "region_name", "division_name", "division_surveyed", "division_trend6", "division_trend5"
   ))
+  # Harmonized trend layouts are drawn with the boundaries of the round whose
+  # divisions they reproduce: six divisions as in 1996-97 to 2007, five as in
+  # 1993-94.
+  layout <- switch(region_col %||% "", division_trend6 = "BD2007DHS", division_trend5 = "BD1994DHS", NULL)
   if (is.null(region_col)) {
     cli::cli_abort(
       c(
@@ -259,9 +276,14 @@ map_user_data <- function(x, survey = NULL, value = NULL, call = rlang::caller_e
     key_col <- "region_code"
   } else {
     names_key <- explore_region_key(as.character(region))
-    shp_rows <- shp[shp$survey_id %in% sid, ]
-    lookup <- paste(shp_rows$survey_id, explore_region_key(shp_rows$region_name))
-    key <- shp_rows$region_code[match(paste(x$survey_id, names_key), lookup)]
+    if (is.null(layout)) {
+      shp_rows <- shp[shp$survey_id %in% sid, ]
+      lookup <- paste(shp_rows$survey_id, explore_region_key(shp_rows$region_name))
+      key <- shp_rows$region_code[match(paste(x$survey_id, names_key), lookup)]
+    } else {
+      shp_rows <- shp[shp$survey_id == layout, ]
+      key <- shp_rows$region_code[match(names_key, explore_region_key(shp_rows$region_name))]
+    }
     key_col <- "region_code"
     bad <- unique(as.character(region)[is.na(key) & !is.na(region)])
     if (length(bad)) {
@@ -287,6 +309,7 @@ map_user_data <- function(x, survey = NULL, value = NULL, call = rlang::caller_e
     title = label,
     legend = if (identical(label, value_col)) value_col else "Estimate",
     digits = NULL,
+    layout = layout,
     source = if (is_estimate) "Estimates computed with bdhs from DHS microdata." else "Estimates: user-supplied data."
   )
 }

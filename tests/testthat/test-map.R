@@ -97,3 +97,20 @@ test_that("bdhs_map() errors and warns helpfully", {
   expect_error(bdhs_map(42), "indicator id or a data frame")
   expect_error(bdhs_boundaries(2030), "Can't resolve")
 })
+
+test_that("bdhs_map() draws harmonized trend layouts with matching boundaries", {
+  skip_if_not_installed("sf")
+  skip_if_not_installed("ggplot2")
+  est <- tibble::tibble(
+    survey_id = rep(c("BD2004DHS", "BD2022DHS"), each = 6),
+    division_trend6 = factor(rep(c("barishal", "chattogram", "dhaka", "khulna", "rajshahi", "sylhet"), 2)),
+    estimate = 1:12
+  )
+  p <- bdhs_map(est)
+  expect_s3_class(p, "ggplot")
+  d <- p$data
+  expect_equal(nrow(d), 12)
+  expect_false(anyNA(d$value))
+  expect_setequal(unique(d$survey_id), c("BD2004DHS", "BD2022DHS"))
+  expect_match(ggplot2::get_labs(p)$subtitle, "six-division trend layout")
+})

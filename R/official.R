@@ -115,10 +115,13 @@ explore_official_rows <- function(indicator = NULL, survey = NULL, breakdown = "
       c(
         "No official estimates match this selection.",
         "i" = if (!is.null(ids)) {
-          "{length(ids)} indicator{?s} matched, but not with the requested {.arg survey}/{.arg breakdown}/{.arg characteristic}."
+          "{length(ids)} indicator{?s} matched, but {?has/have} no values for the requested round(s) and breakdown."
         },
-        "i" = "Find indicators with {.code bdhs_search(\"<keyword>\", where = \"indicators\")}.",
-        "i" = "Try {.code breakdown = \"all\"} to see every breakdown that exists."
+        "i" = if (!is.null(ids) && length(ids) <= 3) {
+          "See which rounds and breakdowns exist with {.code bdhs_official({deparse(ids)}, breakdown = \"all\")}."
+        } else {
+          "Find indicators with {.code bdhs_search(\"<keyword>\", where = \"indicators\")}."
+        }
       ),
       call = call
     )
