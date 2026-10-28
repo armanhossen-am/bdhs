@@ -1,6 +1,6 @@
 Package: bdhs
 Title: Tools and Data for the Bangladesh Demographic and Health Survey
-Version: 0.1.0
+Version: 0.2.0
 Authors@R:
     person("Arman", "Hossen", , "hossena@miamioh.edu", role = c("aut", "cre", "cph"))
 Description: A complete toolkit for every round of the Bangladesh Demographic
@@ -12,7 +12,10 @@ Description: A complete toolkit for every round of the Bangladesh Demographic
     redistributed, it imports a user's own downloads into a fast local store,
     harmonizes variables across rounds, builds correct complex survey designs,
     and computes indicators that are validated against official DHS
-    estimates. See <https://dhsprogram.com>.
+    estimates. Further tools cover data-quality diagnostics, tests of change,
+    inequality indices, decomposition of change, progress towards the
+    Sustainable Development Goals, and synthetic data calibrated to the
+    official estimates. See <https://dhsprogram.com>.
 License: MIT + file LICENSE
 URL: https://github.com/armanhossen-am/bdhs, https://armanhossen-am.github.io/bdhs/
 BugReports: https://github.com/armanhossen-am/bdhs/issues

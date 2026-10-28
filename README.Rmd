@@ -124,7 +124,9 @@ bdhs_estimate(kr, c("rh_anc_4plus", "rh_del_facility", "rh_del_csection"), by = 
 | Your files | `bdhs_import()`, `bdhs_read()`, `bdhs_inventory()`, `bdhs_download()` |
 | Cross-round work | `bdhs_harmonize()`, `bdhs_pool()`, `bdhs_merge()`, `bdhs_na()` |
 | Estimation | `bdhs_design()`, `bdhs_estimate()`, `bdhs_fertility()`, `bdhs_mortality()`, `bdhs_validate()` |
-| Teaching and testing | `bdhs_simulate()` |
+| Change and inequality | `bdhs_compare()`, `bdhs_inequality()`, `bdhs_decompose()`, `bdhs_sdg()` |
+| Data quality | `bdhs_quality()` |
+| Teaching and testing | `bdhs_simulate()`, `bdhs_synthesize()` (synthetic data calibrated to official estimates) |
 
 ## Things bdhs handles for you
 
