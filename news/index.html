@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bdhs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,6 +25,7 @@
     <li><a class="dropdown-item" href="../articles/survey-design.html">Survey design, weights and pooling</a></li>
     <li><a class="dropdown-item" href="../articles/harmonization.html">Harmonizing 30 years of BDHS</a></li>
     <li><a class="dropdown-item" href="../articles/indicators.html">Indicators, rates and validation</a></li>
+    <li><a class="dropdown-item" href="../articles/beyond-estimates.html">Synthetic data, data quality and inequality</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Explore</h6></li>
     <li><a class="dropdown-item" href="../articles/maps-and-trends.html">Official estimates: trends and maps</a></li>
@@ -45,6 +46,22 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="bdhs-020">bdhs 0.2.0<a class="anchor" aria-label="anchor" href="#bdhs-020"></a></h2>
+<ul><li>
+<code><a href="../reference/bdhs_synthesize.html">bdhs_synthesize()</a></code> creates synthetic BDHS data calibrated to the official estimates (national, division and residence), built from published aggregates only, and <code><a href="../reference/bdhs_synthetic_fidelity.html">bdhs_synthetic_fidelity()</a></code> reports how closely they match. Across all rounds the largest deviation is 0.21 percentage points.</li>
+<li>
+<code><a href="../reference/bdhs_quality.html">bdhs_quality()</a></code> runs DHS data-quality diagnostics: age heaping, age displacement at the eligibility boundaries, birth-date completeness, births by calendar year, heaping of age at death and anthropometric quality.</li>
+<li>
+<code><a href="../reference/bdhs_compare.html">bdhs_compare()</a></code> tests changes between rounds and differences between groups with design-based standard errors.</li>
+<li>
+<code><a href="../reference/bdhs_inequality.html">bdhs_inequality()</a></code> and <code><a href="../reference/bdhs_inequality_official.html">bdhs_inequality_official()</a></code> compute rich-poor gaps, the slope and relative indices of inequality and (Erreygers’) concentration indices.</li>
+<li>
+<code><a href="../reference/bdhs_decompose.html">bdhs_decompose()</a></code> splits change between rounds into composition and within-group effects (Kitagawa decomposition, jackknife SEs).</li>
+<li>
+<code><a href="../reference/bdhs_sdg.html">bdhs_sdg()</a></code> tracks progress towards SDG-related targets.</li>
+<li>New vignette: “Synthetic data, data quality and inequality”.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="bdhs-010">bdhs 0.1.0<a class="anchor" aria-label="anchor" href="#bdhs-010"></a></h2>
 <ul><li>First release. Covers all nine BDHS rounds (1993-94 to 2022), the three Bangladesh Service Provision Assessments and the 2001 maternal mortality survey.</li>
 <li>Bundled data: official DHS estimates for Bangladesh (<code>bdhs_indicators</code>), indicator definitions, survey and dataset catalogues, cross-round codebooks, division crosswalks, pooling populations and division boundaries.</li>
@@ -56,7 +73,8 @@
 <li>
 <code>data-raw/00-rebuild-from-local.R</code> rebuilds codebooks and the validation record from new DHS downloads (zips included) in one command.</li>
 </ul></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

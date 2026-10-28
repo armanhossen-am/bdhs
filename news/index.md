@@ -1,5 +1,33 @@
 # Changelog
 
+## bdhs 0.2.0
+
+- [`bdhs_synthesize()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_synthesize.md)
+  creates synthetic BDHS data calibrated to the official estimates
+  (national, division and residence), built from published aggregates
+  only, and
+  [`bdhs_synthetic_fidelity()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_synthetic_fidelity.md)
+  reports how closely they match. Across all rounds the largest
+  deviation is 0.21 percentage points.
+- [`bdhs_quality()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_quality.md)
+  runs DHS data-quality diagnostics: age heaping, age displacement at
+  the eligibility boundaries, birth-date completeness, births by
+  calendar year, heaping of age at death and anthropometric quality.
+- [`bdhs_compare()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_compare.md)
+  tests changes between rounds and differences between groups with
+  design-based standard errors.
+- [`bdhs_inequality()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_inequality.md)
+  and
+  [`bdhs_inequality_official()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_inequality_official.md)
+  compute rich-poor gaps, the slope and relative indices of inequality
+  and (Erreygers’) concentration indices.
+- [`bdhs_decompose()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_decompose.md)
+  splits change between rounds into composition and within-group effects
+  (Kitagawa decomposition, jackknife SEs).
+- [`bdhs_sdg()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_sdg.md)
+  tracks progress towards SDG-related targets.
+- New vignette: “Synthetic data, data quality and inequality”.
+
 ## bdhs 0.1.0
 
 - First release. Covers all nine BDHS rounds (1993-94 to 2022), the

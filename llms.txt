@@ -167,7 +167,9 @@ bdhs_estimate(kr, c("rh_anc_4plus", "rh_del_facility", "rh_del_csection"), by = 
 | Your files | [`bdhs_import()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_import.md), [`bdhs_read()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_read.md), [`bdhs_inventory()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_inventory.md), [`bdhs_download()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_download.md) |
 | Cross-round work | [`bdhs_harmonize()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_harmonize.md), [`bdhs_pool()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_pool.md), [`bdhs_merge()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_merge.md), [`bdhs_na()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_na.md) |
 | Estimation | [`bdhs_design()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_design.md), [`bdhs_estimate()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_estimate.md), [`bdhs_fertility()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_fertility.md), [`bdhs_mortality()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_mortality.md), [`bdhs_validate()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_validate.md) |
-| Teaching and testing | [`bdhs_simulate()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_simulate.md) |
+| Change and inequality | [`bdhs_compare()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_compare.md), [`bdhs_inequality()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_inequality.md), [`bdhs_decompose()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_decompose.md), [`bdhs_sdg()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_sdg.md) |
+| Data quality | [`bdhs_quality()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_quality.md) |
+| Teaching and testing | [`bdhs_simulate()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_simulate.md), [`bdhs_synthesize()`](https://armanhossen-am.github.io/bdhs/reference/bdhs_synthesize.md) (synthetic data calibrated to official estimates) |
 
 ## Things bdhs handles for you
 
@@ -369,6 +371,8 @@ Import and read the files you downloaded from the DHS Program.
   BDHS](https://armanhossen-am.github.io/bdhs/articles/harmonization.md):
 - [Indicators, rates and
   validation](https://armanhossen-am.github.io/bdhs/articles/indicators.md):
+- [Synthetic data, data quality and
+  inequality](https://armanhossen-am.github.io/bdhs/articles/beyond-estimates.md):
 
 ### Exploring official estimates
 

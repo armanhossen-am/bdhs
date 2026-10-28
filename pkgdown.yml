@@ -3,12 +3,13 @@ pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   bdhs: bdhs.html
+  beyond-estimates: beyond-estimates.html
   harmonization: harmonization.html
   indicators: indicators.html
   maps-and-trends: maps-and-trends.html
   microdata: microdata.html
   survey-design: survey-design.html
-last_built: 2026-10-27T22:02Z
+last_built: 2026-10-28T13:20Z
 urls:
   reference: https://armanhossen-am.github.io/bdhs/reference
   article: https://armanhossen-am.github.io/bdhs/articles

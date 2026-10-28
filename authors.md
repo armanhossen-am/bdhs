@@ -10,14 +10,14 @@ Source:
 [`inst/CITATION`](https://github.com/armanhossen-am/bdhs/blob/main/inst/CITATION)
 
 Hossen A (2026). bdhs: Tools and Data for the Bangladesh Demographic and
-Health Survey. R package version 0.1.0.
+Health Survey. R package version 0.2.0.
 https://github.com/armanhossen-am/bdhs
 
     @Manual{,
       title = {{bdhs}: Tools and Data for the Bangladesh Demographic and Health Survey},
       author = {Arman Hossen},
       year = {2026},
-      note = {R package version 0.1.0},
+      note = {R package version 0.2.0},
       url = {https://github.com/armanhossen-am/bdhs},
     }
 

@@ -15,6 +15,8 @@
   BDHS](https://armanhossen-am.github.io/bdhs/articles/harmonization.md):
 - [Indicators, rates and
   validation](https://armanhossen-am.github.io/bdhs/articles/indicators.md):
+- [Synthetic data, data quality and
+  inequality](https://armanhossen-am.github.io/bdhs/articles/beyond-estimates.md):
 
 ### Exploring official estimates
 
