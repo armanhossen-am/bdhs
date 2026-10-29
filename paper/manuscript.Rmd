@@ -457,6 +457,11 @@ save_fig(g1, "Figure1", 5.5, 5.2)
 
 ## Case study: caesarean delivery, 2004-2022
 
+We previously examined the determinants of caesarean section in Bangladesh
+over the same period with survey-weighted logistic regression [@rony2026].
+Here the same trend is used to illustrate the package's descriptive tools:
+change between rounds, wealth-related inequality and decomposition.
+
 The share of births delivered by caesarean section rose from 4.5% in 2004 to
 44.0% in 2022 (Figure 2), an increase of 39.5 percentage points, or 2.13
 points a year. Every change between consecutive rounds was statistically
@@ -606,8 +611,11 @@ households, absolute inequality widened while relative inequality fell.
 Changes in maternal education and household wealth explain only a small part
 of the rise which occurred within every group. That pattern points to
 changes in health-system practice rather than in the characteristics of the
-mothers. Separating these components with proper standard errors is
-straightforward once the design and indicator definitions are right.
+mothers, and is consistent with our earlier finding that caesarean delivery
+has spread through the private sector and become less tied to medical
+indications [@rony2026]. Separating these components with proper standard
+errors is straightforward once the design and indicator definitions are
+right.
 
 bdhs complements existing tools rather than replacing them. IPUMS-DHS
 remains the better choice for comparisons between countries with harmonised
