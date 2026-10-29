@@ -114,7 +114,7 @@ haven::write_dta(bdhs_simulate(2022, "KR", n_clusters = 4, households = 3),
 haven::write_dta(bdhs_simulate(2022, "HR", n_clusters = 4, households = 3),
                  file.path(dl, "BDHS2022HR.dta"))
 bdhs_import(dl, format = "dta")
-#> ✔ Imported 2 datasets into /tmp/RtmpaceObh/bdhs-import-example:
+#> ✔ Imported 2 datasets into /tmp/RtmpEtYflJ/bdhs-import-example:
 #> • BD2022DHS HR (BDHR81FL): copied (.dta), 12 rows x 18 variables
 #> • BD2022DHS KR (BDKR81FL): copied (.dta), 2 rows x 49 variables
 bdhs_inventory(2022)
