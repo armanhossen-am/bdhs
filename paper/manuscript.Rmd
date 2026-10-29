@@ -10,10 +10,13 @@ link-citations: true
 params:
   submission: false
   figure_dir: "submission"
+  journal: "bmc"
 ---
 
 ```{r setup, include = FALSE}
 sub <- isTRUE(params$submission)
+# Cureus uses its own section names and abstract and takes declarations in its online form.
+cureus <- identical(params$journal, "cureus")
 # In the submission version, figures go to separate high-resolution files.
 save_fig <- function(plot, name, width, height) {
   if (!sub) return(plot)
@@ -21,6 +24,10 @@ save_fig <- function(plot, name, width, height) {
   ggplot2::ggsave(file.path(params$figure_dir, paste0(name, ".tiff")), plot, width = width, height = height,
                   dpi = 600, compression = "lzw", bg = "white")
   ggplot2::ggsave(file.path(params$figure_dir, paste0(name, ".pdf")), plot, width = width, height = height)
+  if (cureus) {
+    ggplot2::ggsave(file.path(params$figure_dir, paste0(name, ".png")), plot, width = width, height = height,
+                    dpi = 300, bg = "white")
+  }
   invisible(NULL)
 }
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, dpi = 300)
@@ -77,6 +84,36 @@ Corresponding author: Arman Hossen, hossena@miamioh.edu, ORCID 0009-0003-4346-10
 
 # Abstract
 
+```{asis, echo = cureus}
+**Introduction:** Secondary analyses of the Bangladesh Demographic and Health
+Survey (BDHS) are common, but their estimates are rarely checked against the
+official values, and several features of the survey are easy to mishandle.
+We assessed how closely official BDHS estimates can be reproduced, how much
+common analytic errors matter, and how data quality has changed since 1993.
+
+**Methods:** We developed bdhs, an open-source R package covering all nine
+BDHS rounds (1993-94 to 2022), and used it to recompute every indicator with
+a published national value from the original recode files. We quantified
+common analytic errors, design effects and data quality, developed synthetic
+data calibrated to the official estimates, and analysed the rise of
+caesarean delivery from 2004 to 2022.
+
+**Results:** Of 355 national estimates, 353 matched the official value
+(median absolute difference 0.03 percentage points). Ignoring the 2022 short
+questionnaire lowered unmet need for family planning from 10.0% to 6.7%, and
+treating the ever-married sample as all women inflated child marriage by
+about ten percentage points. Ignoring the sample design made standard errors
+up to 1.8 times too small. Caesarean delivery rose from 4.5% to 44.0%, about
+80% of it within education groups. Synthetic data reproduced 1,278 official
+values within 0.21 percentage points.
+
+**Conclusions:** Official BDHS estimates can be reproduced almost exactly
+when the ever-married sample, questionnaire changes and survey design are
+handled correctly. The bdhs package makes these decisions explicit and
+checkable.
+```
+
+```{asis, echo = !cureus}
 **Background:** The Bangladesh Demographic and Health Survey (BDHS) has been
 conducted nine times since 1993 and is the main source of population and
 health statistics for the country. Secondary analyses of the respondent-level
@@ -123,11 +160,12 @@ handled correctly. The bdhs package makes these decisions explicit and
 checkable. Calibrated synthetic data allows methods to be taught and analysis
 code to be shared without the restricted files, although they do not
 preserve associations between variables.
+```
 
 **Keywords:** Demographic and Health Surveys; Bangladesh; complex survey
 design; reproducibility; validation; synthetic data; health inequality; R
 
-# Background
+# `r if (cureus) "Introduction" else "Background"`
 
 Demographic and Health Surveys (DHS) provide much of what is known about
 fertility, family planning, maternal and child health and nutrition in low-
@@ -173,7 +211,7 @@ caesarean delivery between 2004 and 2022, and the bundled official estimates
 with an assessment of progress towards selected Sustainable Development Goal
 (SDG) targets.
 
-# Methods
+# `r if (cureus) "Materials & Methods" else "Methods"`
 
 ## Data
 
@@ -647,6 +685,7 @@ analyses more accurate, quicker to carry out and easier to check. We suggest
 that analyses of DHS data routinely report how their national estimates
 compare with the official figures.
 
+```{asis, echo = !cureus}
 # List of abbreviations
 
 AARC: average annual rate of change; BDHS: Bangladesh Demographic and Health
@@ -703,6 +742,7 @@ and making the data available. An AI assistant (Claude, Anthropic) was used to
 help write and test software code and to draft parts of the manuscript. The
 authors reviewed and verified all code, analyses and text and take full
 responsibility for the content of the article.
+```
 
 `r if (sub) "# Figure legends"`
 
@@ -710,7 +750,7 @@ responsibility for the content of the article.
 
 `r if (sub) "**Figure 2.** Caesarean and facility delivery among births in the three years before each survey, Bangladesh 1999-2000 to 2022. Vertical bars show 95% confidence intervals."`
 
-# Additional files
+# `r if (cureus) "Appendices" else "Additional files"`
 
 **Additional file 1.** Validation of every computed national estimate against
 the official value (XLSX). Survey, recode file, indicator, computed value,
