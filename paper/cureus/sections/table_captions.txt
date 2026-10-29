@@ -1,0 +1,8 @@
+Table 1. Agreement between estimates computed with bdhs and the official DHS values (percentage points)
+Table 2. Effect of common analytic errors on BDHS estimates. Values are percentages, except the general fertility rate, which is births per 1,000 women.
+Table 3. Design effects for headline indicators. rh_del_csection, caesarean delivery; rh_del_facility, delivery in a health facility; rh_anc_4plus, four or more antenatal care visits; nt_stunting, stunting in children under 5; fp_cpr_modern, modern contraceptive use; ch_vac_basic, basic vaccination coverage. SE, standard error (percentage points).
+Table 4. Data-quality indicators by survey round (unweighted). A dash means the statistic needs a recode file that was not available.
+Table 5. Agreement of calibrated synthetic data with the official estimates (percentage points)
+Table 6. Wealth-related inequality in caesarean delivery
+Table 7. Decomposition of the change in caesarean delivery
+Table 8. Progress towards SDG-related targets, from the official estimates

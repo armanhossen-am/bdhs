@@ -1,0 +1,62 @@
+Data
+
+The package bundles all 310,528 official estimates published for Bangladesh through the DHS Program’s indicator service, covering every indicator, round and breakdown. It also bundles the definitions of 2,607 indicators, catalogues of the 13 Bangladesh surveys listed by the DHS Program (the nine BDHS rounds and other surveys) and their 441 data files, codebooks with variable names and labels but no respondent values, and the division boundaries used in each survey. No respondent-level data is distributed, in line with the DHS terms of use.
+
+The analyses in this paper used our licensed copies of the recode files: the children’s recode for 1993-94, 1999-2000, 2004, 2007, 2011, 2014, 2017-18 and 2022; the births, household, women’s and household-member recode for 2017-18; and the women’s and household-member recodes for 2022. No recode files from 1996-97 were analysed, so that round is not included in the validation, and for rounds before 2017-18 only indicators from the children recode could be checked. Only aggregate results are reported, and the analysis scripts are publicly available.
+
+The bdhs package
+
+bdhs identifies DHS files by their names or, for renamed files, by their contents, and keeps a fast local copy. It harmonises 112 variables across rounds using 1,008 round-specific rules. Each rule is checked against the value labels in the data, so a recoding error raises a warning instead of passing silently. Survey designs use the DHS sampling-error strata, the enumeration areas as primary sampling units, and normalised sample weights. Pooled analyses keep each round’s strata and clusters separate and offer normalised, de-normalised and equal weighting.
+
+Indicators are defined in code. Each definition records the denominator, reference period, recode file, weight and, where needed, the all-woman factor. A single function call therefore returns any of the 97 indicators with design-based standard errors. Fertility and childhood mortality rates use the DHS synthetic-cohort methods with jackknife standard errors. The package documentation lists every function.
+
+Validation
+
+For every indicator with an official value, we computed the national estimate from each available recode file and compared it with the official value for the same reference period. A comparison passed if the absolute difference was no more than 0.5 percentage points (or the equivalent for rates), plus half a unit of the precision to which the official value is rounded. For a value published to one decimal place, for example, the tolerance is 0.55 points, which is why a matched estimate can differ by slightly more than 0.5 points (Table 1). This tolerance is smaller than the design-based standard error of most headline indicators (Table 3), so any accepted difference is small relative to the survey’s own uncertainty.
+
+Analytic pitfalls and design effects
+
+Whenever an analytic decision changed a result during validation, we kept both versions: the estimate a straightforward but naive analysis gives, and the correct one that reproduces the official value. A naive analysis here means one that overlooks a feature of the Bangladesh data, such as the ever-married sample, a questionnaire change or the sampling weights. The pitfalls in Table 2 are therefore the decisions we encountered while reproducing the official estimates, not a systematic review of errors in the published literature. Design effects for headline indicators were computed as the ratio of the design-based variance to the variance under simple random sampling with the same number of observations; the square root of the design effect is the factor by which a simple-random-sample analysis understates the standard error.
+
+Data quality
+
+The data-quality module implements the standard DHS diagnostics [8]. These cover:
+
+- age heaping in the household roster, measured by the Whipple index for ages 23-62 and by Myers’ blended index;
+- the ratio of women recorded at age 50 to those at 49, which detects ages being shifted at the upper boundary of eligibility for the women’s interview;
+- completeness of birth dates;
+- the ratio of births in the fifth year before the survey to those in the fourth year, which detects births being displaced out of the window for the health questions;
+- heaping of reported ages at death at 12 months;
+- the dispersion of anthropometric z-scores, the share of flagged values and terminal-digit preference in measured height [9].
+
+As in the DHS data-quality tables, these statistics are unweighted.
+
+Calibrated synthetic data
+
+Synthetic data is generated without access to any microdata, in three steps.
+
+1.  Structure. A synthetic population is created with the same files, variables, codes, labels, clusters, strata and weights as the real survey. Its size and its allocation to division-by-residence strata follow the official sample sizes and weighted distributions.
+2.  Calibration. For each target indicator (four to seven per recode file, for example facility delivery, contraceptive use and child stunting), the probability of the outcome in each division-by-residence cell is modelled on the logit scale as an intercept plus a division effect and a residence effect. These effects are found by iterative proportional fitting [10], so that the weighted national, division and residence values equal the official estimates for the indicator’s reference period.
+3.  Assignment. Outcomes are assigned deterministically within cells, so the calibrated values are reproduced up to rounding rather than up to random error. Stratum weights are then raked to the official denominators of all targets.
+
+The idea follows fully synthetic data for statistical disclosure limitation [11, 12], with one important difference: it uses only published aggregates, so the synthetic files contain no information about any respondent. They reproduce the calibrated values, but not the associations between indicators or the variables that were not calibrated.
+
+The synthetic files are therefore suited to teaching, to developing and testing analysis code, and to sharing reproducible workflows, but not to estimating relationships between variables or evaluating statistical models.
+
+Trends, inequality and decomposition
+
+Changes between rounds were tested as differences between independent survey estimates and expressed per year using the midpoints of fieldwork. Within a round, contrasts between groups used the full design-based covariance matrix.
+
+Inequality by household wealth was measured with:
+
+- the difference and the ratio between the richest and poorest quintiles;
+- the slope and relative indices of inequality, estimated by design-based regression on the weighted ridit of the wealth quintiles [13];
+- the concentration index [14, 15], and for binary outcomes Erreygers’ corrected index [16].
+
+Changes between two rounds were split into a part due to shifts in the composition of mothers and a part due to changes within groups, using Kitagawa’s method with symmetric weights [17, 18] and delete-one-cluster jackknife standard errors.
+
+Progress towards the Sustainable Development Goals (SDGs) was assessed from the official estimates by comparing the average annual rate of change since 2014 with the rate needed to reach each 2030 target. Where no numerical SDG target exists, published benchmarks were used [19].
+
+Because these calculations use only the official estimates bundled with the package, they can be reproduced without access to any microdata.
+
+All analyses were done in R [7] with bdhs version 0.2.0 and the survey package [5].

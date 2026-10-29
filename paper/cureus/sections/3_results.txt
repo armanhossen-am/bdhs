@@ -1,0 +1,66 @@
+Agreement with the official estimates
+
+Of the 355 national estimates we could compute, 353 matched the official value (Table 1). The median absolute difference was 0.03 percentage points, and it was below 0.04 points in every round. The two estimates that did not match were women’s thinness and overweight in 2022 computed from the women’s recode. The DHS Program calculates these from the household-member recode, which includes all women in the biomarker subsample rather than only those who have ever been married. Computed from that file, both match the official values.
+
+[INSERT TABLE 1 HERE]
+
+How much common errors matter
+
+Table 2 shows, for each pitfall we identified, the estimate from a naive analysis next to the correct estimate. The two largest errors come from the structure of the sample.
+
+Every BDHS women’s sample consists of women who have ever been married. Analysing it as if it represented all women puts the share of women aged 20-24 who married before 18 at 68.8% in 2017-18; the correct figure is 58.9%.
+
+In 2022, a third of women answered a short questionnaire with no family planning questions. Counting them as having no unmet need gives 6.7% instead of 10.0%.
+
+The other pitfalls produced smaller but still material differences:
+
+- counting the country-specific liquids lowers exclusive breastfeeding in 2007 from 49.8% to 42.9%;
+- leaving out births to mothers under 15 lowers the general fertility rate;
+- ignoring the measles-rubella vaccine lowers measles coverage;
+- using the subgroup all-woman factor for child marriage, rather than the total factor that the official tables use for every subgroup, shifts the urban estimate by 2.5 points.
+
+Division codes add a trap of a different kind: code 5 means Rajshahi in 2014 but Mymensingh in 2017-18, so comparing codes across rounds compares different places.
+
+[INSERT TABLE 2 HERE]
+
+Design effects for headline indicators ranged from 1.6 to 3.1 (Table 3). An analysis that treats the survey as a simple random sample would therefore report confidence intervals up to 1.8 times too narrow. The largest design effects were for delivery care, which is strongly clustered by area.
+
+[INSERT TABLE 3 HERE]
+
+Data quality
+
+Birth dates were reported almost completely in every round, and we found no sign of births being shifted out of the five-year window for the health questions (Table 4). Anthropometric quality improved considerably. Flagged height-for-age z-scores fell from 7.7% in 2007 to 0.3% in 2022. Child heights ending in 0 or 5 fell from 31.6% in 1999-2000 to 17.4% in 2022, close to the 20% expected without digit preference. Even so, the standard deviation of height-for-age z-scores stayed between 1.27 and 1.41, above the range of 1.0 to 1.2 expected for good-quality data [9].
+
+Age reporting in the household roster was much less precise for men than for women. In 2017-18 the Whipple index was 264 for men and 114 for women, where 100 means no heaping and 500 means every age ends in 0 or 5. By 2022 heaping had fallen for men (216) but risen for women (137). Far fewer women were recorded at age 50 than at 49, with ratios of 0.31 in 2017-18 and 0.61 in 2022 against about 1 expected, which suggests that some women’s ages were moved above the upper limit of eligibility for the women’s interview. Ages at death were heaped at 12 months, with a heaping index of 228 in 2017-18 and 179 in 2022 (100 means no heaping); this heaping can shift deaths between the infant and child age groups.
+
+[INSERT TABLE 4 HERE]
+
+Calibrated synthetic data
+
+Synthetic files were generated for every round and for the children’s, women’s and household-member recodes. Together they reproduced 1,278 official national, division and residence values. Because the outcomes are calibrated to these values, close agreement is expected by design; the check confirms that the calibration and the raking of the weights converged for every file. The mean absolute deviation per round and file ranged from 0.01 to 0.07 percentage points, and the largest single deviation was 0.21 points (Table 5, Figure 1). A full-size file took between 2.1 and 7.8 seconds to generate.
+
+[INSERT TABLE 5 HERE]
+
+[INSERT FIGURE 1 HERE]
+
+Case study: caesarean delivery, 2004-2022
+
+We previously examined the determinants of caesarean section in Bangladesh over the same period with survey-weighted logistic regression [20]. Here the same trend is used to illustrate the package’s descriptive tools: change between rounds, wealth-related inequality and decomposition.
+
+The share of births delivered by caesarean section rose from 4.5% in 2004 to 44.0% in 2022 (Figure 2), an increase of 39.5 percentage points, or 2.13 points a year. Every change between consecutive rounds was statistically significant. Relative to its starting level, facility delivery grew more slowly than caesarean delivery, so that by 2022 about 69% of births in health facilities were by caesarean section (44.0% of all births against 63.5% delivered in a facility).
+
+[INSERT FIGURE 2 HERE]
+
+Absolute inequality by wealth grew as caesarean delivery spread. The slope index of inequality rose from 18.3 percentage points in 2004 to 56.0 in 2017-18 and stood at 53.1 (95% CI 47.5 to 58.7) in 2022. Relative inequality moved the other way. The relative index of inequality fell from 469.6 in 2004, when caesarean delivery was rare in the poorest households, to 3.4 in 2022, as women in the poorest households increasingly delivered by caesarean section (Table 6). Every index computed from the microdata agreed closely with the same index derived from the official estimates by wealth quintile; in 2022, for example, Erreygers’ index was 0.339 by both methods.
+
+[INSERT TABLE 6 HERE]
+
+Changes in the characteristics of mothers explained only a small part of the increase (Table 7). Between 2004 and 2022, the shift towards more educated mothers accounted for 7.7 of the 39.5 percentage-point increase (20%), and changes in the wealth distribution of 0.8 points (2%). The remaining 80% to 98% reflected higher caesarean rates within education and wealth groups. The pattern was similar between 2017-18 and 2022, when composition accounted for 10% of the 11.3-point increase by education and none of it by wealth (-3.5%). These components describe how the change is distributed and should not be read as causal effects.
+
+[INSERT TABLE 7 HERE]
+
+Progress towards the Sustainable Development Goals
+
+On the official estimates, under-five mortality and child stunting were on course to meet their 2030 targets (Table 8). Neonatal mortality, wasting and skilled attendance at birth were not. Child marriage was falling but remained far from elimination.
+
+[INSERT TABLE 8 HERE]

@@ -1,0 +1,2 @@
+Figure 1. Official estimates and the corresponding estimates from calibrated synthetic data, for every calibrated indicator, survey round and margin (national, division and residence). The line marks perfect agreement.
+Figure 2. Caesarean and facility delivery among births in the three years before each survey, Bangladesh 1999-2000 to 2022. Vertical bars show 95% confidence intervals.
