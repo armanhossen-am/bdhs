@@ -244,7 +244,7 @@ understates the standard error.
 ## Data quality
 
 The data-quality module implements the standard DHS diagnostics
-[@pullum2006]. These covers:
+[@pullum2006]. These cover:
 
 - age heaping in the household roster, measured by the Whipple index for
   ages 23-62 and by Myers' blended index;
@@ -318,7 +318,7 @@ target exists, published benchmarks were used [@fabic2015].
 Because these calculations use only the official estimates bundled with the
 package, they can be reproduced without access to any microdata.
 
-All analyses were done in R [@rcore] with bdhs version 0.1.0 and the survey
+All analyses were done in R [@rcore] with bdhs version 0.2.0 and the survey
 package [@lumley2004].
 
 # Results
@@ -559,7 +559,7 @@ having no unmet need understates it by a third and would suggest much faster
 progress since 2017-18 than actually took place.
 
 Other conventions matter less but are still worth getting right. Some are
-documented only implicitly; in the way the official tables were produced. The
+documented only implicitly, in the way the official tables were produced. The
 child-marriage tables use the total all-woman factor for every subgroup,
 while the subgroup factors are used elsewhere. The exclusive breastfeeding
 indicator leaves out the country-specific liquids that the questionnaire
@@ -618,7 +618,7 @@ round, the original files, validation against the official estimates, and
 Bangladesh-specific harmonisation and documentation.
 
 The study has limitations. Validation was limited to the recode files
-available to the author, mainly the children's records for the earlier
+available to the authors, mainly the children's records for the earlier
 rounds, with complete sets only for 2017-18 and 2022. No files from 1996-97
 were available, and its harmonisation rules, taken from the published
 codebook, remain unverified. A tolerance of half a percentage point for
@@ -670,12 +670,12 @@ https://github.com/armanhossen-am/bdhs under the MIT licence, with
 documentation at https://armanhossen-am.github.io/bdhs/. The analysis
 scripts and all aggregate results reported here are in the repository's
 paper folder. The BDHS microdata is available from The DHS Program to
-registered users (https://dhsprogram.com); the author is not permitted to
+registered users (https://dhsprogram.com); the authors are not permitted to
 share them.
 
 ## Competing interests
 
-The author declares no competing interests.
+The authors declare no competing interests.
 
 ## Funding
 
@@ -684,16 +684,17 @@ This research received no specific funding.
 ## Authors' contributions
 
 AH conceived the study, developed the software and carried out the analyses.
-AH and KSAN and wrote the manuscript. ARR, ASA and KSAN contributed to the
+AH and KSAN wrote the manuscript. ARR, ASA and KSAN contributed to the
 interpretation of the results and critically revised the manuscript. All
-authors read and approved of the final manuscript.
+authors read and approved the final manuscript.
 
 ## Acknowledgements
 
-The author thanks NIPORT, ICF and The DHS Program for conducting the surveys
-and making the data available. An AI coding assistant (Claude, Anthropic) was
-used to help write software code. The author reviewed and verified all codes
-and takes full responsibility for the content of the article.
+The authors thank NIPORT, ICF and The DHS Program for conducting the surveys
+and making the data available. An AI assistant (Claude, Anthropic) was used to
+help write and test software code and to draft parts of the manuscript. The
+authors reviewed and verified all code, analyses and text and take full
+responsibility for the content of the article.
 
 `r if (sub) "# Figure legends"`
 
