@@ -67,5 +67,5 @@ bdhs_identify_file(f)
 #> # A tibble: 1 × 8
 #>   path                    file_stem survey_id recode format method derived note 
 #>   <chr>                   <chr>     <chr>     <chr>  <chr>  <chr>  <lgl>   <chr>
-#> 1 /tmp/Rtmp7On83P/BDHS20… BDKR81FL  BD2022DHS KR     dta    filen… FALSE   NA   
+#> 1 /tmp/RtmpYZSXMt/BDHS20… BDKR81FL  BD2022DHS KR     dta    filen… FALSE   NA   
 ```
