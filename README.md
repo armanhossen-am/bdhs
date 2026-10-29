@@ -189,6 +189,15 @@ bdhs_estimate(kr, c("rh_anc_4plus", "rh_del_facility", "rh_del_csection"), by = 
   in the early rounds, renamed and re-saved files, and recodes that only
   exist for some rounds.
 
+## Getting help and contributing
+
+Questions, bug reports and feature requests are welcome as
+[GitHub issues](https://github.com/armanhossen-am/bdhs/issues), or by email to
+hossena@miamioh.edu. Please never attach DHS microdata; use
+`bdhs_simulate()` to make a reproducible example. See the
+[contributing guide](https://github.com/armanhossen-am/bdhs/blob/main/.github/CONTRIBUTING.md)
+for how to report problems and submit changes.
+
 ## Citation and conditions of use
 
 Please cite bdhs and the data sources (`citation("bdhs")`). When you
