@@ -8,6 +8,8 @@ How much common errors matter
 
 Table 2 shows, for each pitfall we identified, the estimate from a naive analysis next to the correct estimate. The two largest errors come from the structure of the sample.
 
+[INSERT TABLE 2 HERE]
+
 Every BDHS women’s sample consists of women who have ever been married. Analysing it as if it represented all women puts the share of women aged 20-24 who married before 18 at 68.8% in 2017-18; the correct figure is 58.9%.
 
 In 2022, a third of women answered a short questionnaire with no family planning questions. Counting them as having no unmet need gives 6.7% instead of 10.0%.
@@ -21,8 +23,6 @@ The other pitfalls produced smaller but still material differences:
 
 Division codes add a trap of a different kind: code 5 means Rajshahi in 2014 but Mymensingh in 2017-18, so comparing codes across rounds compares different places.
 
-[INSERT TABLE 2 HERE]
-
 Design effects for headline indicators ranged from 1.6 to 3.1 (Table 3). An analysis that treats the survey as a simple random sample would therefore report confidence intervals up to 1.8 times too narrow. The largest design effects were for delivery care, which is strongly clustered by area.
 
 [INSERT TABLE 3 HERE]
@@ -31,9 +31,9 @@ Data quality
 
 Birth dates were reported almost completely in every round, and we found no sign of births being shifted out of the five-year window for the health questions (Table 4). Anthropometric quality improved considerably. Flagged height-for-age z-scores fell from 7.7% in 2007 to 0.3% in 2022. Child heights ending in 0 or 5 fell from 31.6% in 1999-2000 to 17.4% in 2022, close to the 20% expected without digit preference. Even so, the standard deviation of height-for-age z-scores stayed between 1.27 and 1.41, above the range of 1.0 to 1.2 expected for good-quality data [9].
 
-Age reporting in the household roster was much less precise for men than for women. In 2017-18 the Whipple index was 264 for men and 114 for women, where 100 means no heaping and 500 means every age ends in 0 or 5. By 2022 heaping had fallen for men (216) but risen for women (137). Far fewer women were recorded at age 50 than at 49, with ratios of 0.31 in 2017-18 and 0.61 in 2022 against about 1 expected, which suggests that some women’s ages were moved above the upper limit of eligibility for the women’s interview. Ages at death were heaped at 12 months, with a heaping index of 228 in 2017-18 and 179 in 2022 (100 means no heaping); this heaping can shift deaths between the infant and child age groups.
-
 [INSERT TABLE 4 HERE]
+
+Age reporting in the household roster was much less precise for men than for women. In 2017-18 the Whipple index was 264 for men and 114 for women, where 100 means no heaping and 500 means every age ends in 0 or 5. By 2022 heaping had fallen for men (216) but risen for women (137). Far fewer women were recorded at age 50 than at 49, with ratios of 0.31 in 2017-18 and 0.61 in 2022 against about 1 expected, which suggests that some women’s ages were moved above the upper limit of eligibility for the women’s interview. Ages at death were heaped at 12 months, with a heaping index of 228 in 2017-18 and 179 in 2022 (100 means no heaping); this heaping can shift deaths between the infant and child age groups.
 
 Calibrated synthetic data
 
