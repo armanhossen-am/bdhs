@@ -17,6 +17,9 @@ params:
 sub <- isTRUE(params$submission)
 # Cureus uses its own section names and abstract and takes declarations in its online form.
 cureus <- identical(params$journal, "cureus")
+# The Statistical Journal of the IAOS reviews an anonymized manuscript; author details go on a separate title page.
+sji <- identical(params$journal, "sjiaos")
+supp <- if (sji) "Supplemental file" else "Additional file"
 # In the submission version, figures go to separate high-resolution files.
 save_fig <- function(plot, name, width, height) {
   if (!sub) return(plot)
@@ -68,6 +71,7 @@ n_margins <- sum(syn$margins)
 yr4 <- function(x) sub("^BD(\\d{4})DHS$", "\\1", x)
 ```
 
+```{asis, echo = !sji}
 Arman Hossen^1^, Ashiqur Rahman Rony^2,3^, Abida Sultana Asha^4^, Kazi Sabbir Ahmad Nahin^4,5^
 
 ^1^ Department of Statistics, Miami University, Oxford, Ohio, USA
@@ -81,6 +85,7 @@ Arman Hossen^1^, Ashiqur Rahman Rony^2,3^, Abida Sultana Asha^4^, Kazi Sabbir Ah
 ^5^ Department of Quantitative Sciences, International University of Business Agriculture and Technology, Dhaka, Bangladesh
 
 Corresponding author: Arman Hossen, hossena@miamioh.edu, ORCID 0009-0003-4346-1026
+```
 
 # Abstract
 
@@ -113,7 +118,27 @@ handled correctly. The bdhs package makes these decisions explicit and
 checkable.
 ```
 
-```{asis, echo = !cureus}
+```{asis, echo = sji}
+Secondary analyses of Demographic and Health Survey (DHS) microdata are rarely
+checked against the official estimates they should reproduce. We developed
+bdhs, an open-source R package covering all nine rounds of the Bangladesh
+Demographic and Health Survey (1993-94 to 2022), and used it to assess how
+closely official statistics can be reproduced from the released recode files.
+Of 355 national estimates recomputed across eight rounds, 353 matched the
+published value, with a median absolute difference of 0.03 percentage points.
+The validation exposed analytic pitfalls that change results substantially:
+ignoring the 2022 short questionnaire understated unmet need for family
+planning by a third, and treating the ever-married sample as all women
+overstated child marriage by about ten percentage points. Ignoring the sample
+design made standard errors up to 1.8 times too small. We also present a
+method for generating synthetic microdata from published aggregates only,
+which reproduced 1,278 official estimates within 0.21 percentage points and
+contains no respondent information. Making these decisions explicit in
+validated software allows official statistics to be reproduced, checked and
+taught without access to restricted data.
+```
+
+```{asis, echo = !cureus && !sji}
 **Background:** The Bangladesh Demographic and Health Survey (BDHS) has been
 conducted nine times since 1993 and is the main source of population and
 health statistics for the country. Secondary analyses of the respondent-level
@@ -165,7 +190,7 @@ preserve associations between variables.
 **Keywords:** Demographic and Health Surveys; Bangladesh; complex survey
 design; reproducibility; validation; synthetic data; health inequality; R
 
-# `r if (cureus) "Introduction" else "Background"`
+# `r if (cureus || sji) "Introduction" else "Background"`
 
 Demographic and Health Surveys (DHS) provide much of what is known about
 fertility, family planning, maternal and child health and nutrition in low-
@@ -495,7 +520,7 @@ save_fig(g1, "Figure1", 5.5, 5.2)
 
 ## Case study: caesarean delivery, 2004-2022
 
-We previously examined the determinants of caesarean section in Bangladesh
+`r if (sji) "Rony et al. examined" else "We previously examined"` the determinants of caesarean section in Bangladesh
 over the same period with survey-weighted logistic regression [@rony2026].
 Here the same trend is used to illustrate the package's descriptive tools:
 change between rounds, wealth-related inequality and decomposition.
@@ -649,7 +674,7 @@ households, absolute inequality widened while relative inequality fell.
 Changes in maternal education and household wealth explain only a small part
 of the rise which occurred within every group. That pattern points to
 changes in health-system practice rather than in the characteristics of the
-mothers, and is consistent with our earlier finding that caesarean delivery
+mothers, and is consistent with `r if (sji) "the earlier finding" else "our earlier finding"` that caesarean delivery
 has spread through the private sector and become less tied to medical
 indications [@rony2026]. Separating these components with proper standard
 errors is straightforward once the design and indicator definitions are
@@ -685,7 +710,7 @@ analyses more accurate, quicker to carry out and easier to check. We suggest
 that analyses of DHS data routinely report how their national estimates
 compare with the official figures.
 
-```{asis, echo = !cureus}
+```{asis, echo = !cureus && !sji}
 # List of abbreviations
 
 AARC: average annual rate of change; BDHS: Bangladesh Demographic and Health
@@ -750,16 +775,16 @@ responsibility for the content of the article.
 
 `r if (sub) "**Figure 2.** Caesarean and facility delivery among births in the three years before each survey, Bangladesh 1999-2000 to 2022. Vertical bars show 95% confidence intervals."`
 
-# `r if (cureus) "Appendices" else "Additional files"`
+# `r if (cureus) "Appendices" else if (sji) "Supplemental material" else "Additional files"`
 
-**Additional file 1.** Validation of every computed national estimate against
+**`r supp` 1.** Validation of every computed national estimate against
 the official value (XLSX). Survey, recode file, indicator, computed value,
 official value and whether the comparison passed.
 
-**Additional file 2.** Agreement of calibrated synthetic data with the
+**`r supp` 2.** Agreement of calibrated synthetic data with the
 official estimates for every indicator, survey round and margin (XLSX).
 
-**Additional file 3.** Full results of the data-quality diagnostics for every
+**`r supp` 3.** Full results of the data-quality diagnostics for every
 survey round and recode file (XLSX).
 
 # References
