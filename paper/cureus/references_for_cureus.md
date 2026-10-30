@@ -14,8 +14,8 @@ R Core Team: R: A Language and Environment for Statistical Computing. R Foundati
 Pullum TW: An Assessment of Age and Date Reporting in the DHS Surveys, 1985-2003. DHS Methodological Reports No. 5. Macro International, Calverton, MD; 2006. https://dhsprogram.com/publications/publication-MR5-Methodological-Reports.cfm
 World Health Organization, United Nations Children's Fund: Recommendations for Data Collection, Analysis and Reporting on Anthropometric Indicators in Children Under 5 Years Old. World Health Organization, Geneva; 2019. https://www.who.int/publications/i/item/9789241515559
 Deming WE, Stephan FF: On a least squares adjustment of a sampled frequency table when the expected marginal totals are known. Ann Math Stat. 1940, 11:427-44. 10.1214/aoms/1177731829
-Rubin DB: Statistical disclosure limitation. J Off Stat. 1993, 9:461-8.
-Raghunathan TE, Reiter JP, Rubin DB: Multiple imputation for statistical disclosure limitation. J Off Stat. 2003, 19:1-16.
+Rubin DB: Discussion: statistical disclosure limitation. J Off Stat. 1993, 9:461-8. https://www.scb.se/contentassets/ca21efb41fee47d293bbee5bf7be7fb3/discussion-statistical-disclosure-limitation2.pdf
+Raghunathan TE, Reiter JP, Rubin DB: Multiple imputation for statistical disclosure limitation. J Off Stat. 2003, 19:1-16. https://www.scb.se/contentassets/ca21efb41fee47d293bbee5bf7be7fb3/multiple-imputation-for-statistical-disclosure-limitation.pdf
 Barros AJ, Victora CG: Measuring coverage in MNCH: determining and interpreting inequalities in coverage of maternal, newborn, and child health interventions. PLoS Med. 2013, 10:e1001390. 10.1371/journal.pmed.1001390
 Wagstaff A, Paci P, van Doorslaer E: On the measurement of inequalities in health. Soc Sci Med. 1991, 33:545-57. 10.1016/0277-9536(91)90212-U
 Kakwani N, Wagstaff A, van Doorslaer E: Socioeconomic inequalities in health: measurement, computation, and statistical inference. J Econom. 1997, 77:87-103. 10.1016/S0304-4076(96)01807-6
